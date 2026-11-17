@@ -25,8 +25,8 @@ O app roda **dentro do Claude**, como uma página publicada no claude.ai (Artifa
    - `3-sumiu-ha-3-dias.png`: lead que parou de responder há 3 dias.
 3. **Cadastre os imóveis reais**: no fim da tela inicial, toque em **Painel do gestor** (só você vê esse botão) → aba **Imóveis**. Edite os 2 de EXEMPLO com os dados reais (ou apague) e adicione os outros, com foto. A IA só usa o que estiver ali.
 4. **Ajustes**: na aba **Acesso e ajustes**, coloque o WhatsApp do suporte (aparece no botão "Falar com o suporte" da Schay).
-5. **Dê acesso à Schay**: no topo da página do app no Claude, toque em **Compartilhar** e convide a Schay **pelo e-mail dela, com o nível Editor**. Não ative o link público (com link público, convidados de fora não conseguem salvar). Ela precisa de uma **conta Claude própria**.
-6. **Mande a mensagem de boas-vindas**: na aba **Acesso e ajustes**, toque em **Enviar pelo WhatsApp**. A mensagem já explica como abrir, permitir a IA e colocar o app na tela do celular.
+5. **Mande a porta de entrada para a Schay**: na aba **Acesso e ajustes**, toque em **Enviar pelo WhatsApp**. O link abre a página https://theusmkt.github.io/CO-PILOTO/, que leva ela a baixar o Claude, criar a conta (grátis) e te avisar o e-mail.
+6. **Libere o acesso**: quando ela mandar o e-mail, toque em **Compartilhar** no topo da página do app no Claude e convide **esse e-mail com o nível Editor**. Não ative o link público (com link público, convidados de fora não conseguem salvar). Depois disso, ela abre o Copiloto pelo botão **Abrir o Copiloto** da porta de entrada.
 
 ## Como a Schay usa
 
@@ -52,6 +52,10 @@ Como os números são medidos:
 - *Lead recebido*: hora da 1ª mensagem do cliente lida no print (quando é de hoje); senão, a hora em que ela mandou o print ao app.
 - *Tempo até a 1ª resposta*: do 1º contato até ela tocar em "Copiar" pela primeira vez. É uma aproximação.
 - *Conversas, visitas, propostas e vendas*: quantos clientes chegaram a cada etapa dentro do período.
+
+## Porta de entrada (GitHub Pages)
+
+A pasta `entrada/` é uma página pública e simples, para quem ainda não tem o Claude: botão para baixar o app (Play Store ou App Store, detectado sozinho), criar a conta, avisar o gestor e abrir o Copiloto. Ela é publicada no GitHub Pages a cada envio para a `main` (`.github/workflows/pages.yml`), em **https://theusmkt.github.io/CO-PILOTO/**. Não tem dado de cliente nenhum.
 
 ## Mudar o app
 

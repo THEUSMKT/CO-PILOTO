@@ -2632,6 +2632,8 @@ const ETAPAS_FUNIL = [
 const NOME_ETAPA = Object.fromEntries(ETAPAS_FUNIL);
 const ATIVAS = new Set(["novo", "conversando", "visita_marcada", "proposta"]);
 const HORA = 3_600_000;
+const LINK_ENTRADA = "https://theusmkt.github.io/CO-PILOTO/";
+const linkEntrada = () => config.linkEntrada || LINK_ENTRADA;
 const gestor = { aba: "relatorio", periodo: "semana", busca: "", editandoImovel: null, fotoNova: undefined, apagando: null };
 
 const ms = (v) => (v ? Date.parse(v) : NaN);
@@ -2909,17 +2911,11 @@ function abaImoveis() {
 }
 
 function mensagemParaSchay() {
-  const link = config.link || "(cole aqui o link do Copiloto)";
-  return `Oi, ${nomeCorretora()}! Este é o seu Copiloto de Vendas 💛
+  return `Oi, ${nomeCorretora()}! Preparei o seu Copiloto de Vendas 💛
 
-1. Abra este link no navegador do celular (Chrome ou Safari): ${link}
-2. Entre com a sua conta do Claude (a mesma do e-mail em que você recebeu o convite).
-3. Na primeira vez, o Claude pergunta se o app pode usar a inteligência dele: toque em Permitir.
-4. Para deixar o app na tela do celular:
-   • Android: 3 pontinhos ⋮ → Adicionar à tela inicial
-   • iPhone: botão Compartilhar → Adicionar à Tela de Início
+Toque no link e siga os passos (é rapidinho): ${linkEntrada()}
 
-Qualquer dúvida, toque em "Preciso de ajuda" dentro do app.`;
+Quando criar a sua conta no Claude, me mande o e-mail que você usou para eu liberar o seu acesso.`;
 }
 
 function abaAcesso() {
@@ -2928,12 +2924,12 @@ function abaAcesso() {
     <section class="cartao">
       <h2>Como dar acesso à ${esc(nomeCorretora())}</h2>
       <ol class="passos-lista">
-        <li>No topo desta página no Claude, toque em <b>Compartilhar</b>.</li>
-        <li>Convide a ${esc(nomeCorretora())} pelo e-mail dela com o nível <b>Editor</b>. É esse nível que deixa ela salvar os clientes.</li>
+        <li>Mande para ela a mensagem abaixo. O link abre a <b>porta de entrada</b>: ela baixa o Claude, cria a conta (grátis) e te avisa o e-mail.</li>
+        <li>Quando ela avisar, toque em <b>Compartilhar</b> no topo desta página e convide <b>esse e-mail</b> com o nível <b>Editor</b>. É esse nível que deixa ela salvar os clientes.</li>
         <li>Não ative o link público: com link público, convidados de fora não conseguem salvar.</li>
-        <li>Ela precisa de uma conta do Claude própria. A IA usa os limites da conta dela.</li>
-        <li>Mande para ela a mensagem abaixo.</li>
+        <li>Pronto: ela toca em <b>Abrir o Copiloto</b> na porta de entrada. A IA usa os limites da conta Claude dela.</li>
       </ol>
+      <p class="sub">Porta de entrada: <a href="${esc(linkEntrada())}" target="_blank" rel="noopener noreferrer">${esc(linkEntrada())}</a></p>
       <div class="caixa-texto" id="g-mensagem">${esc(msg)}</div>
       <div class="acoes">
         <button class="botao forte" type="button" data-acao="g-copiar-mensagem">Copiar mensagem</button>
@@ -2946,6 +2942,7 @@ function abaAcesso() {
         <div><label class="nome-campo" for="cfg-nome">Nome da corretora</label><input id="cfg-nome" class="campo" value="${esc(config.nomeCorretora || "Schay")}"></div>
         <div><label class="nome-campo" for="cfg-suporte">WhatsApp do suporte (com DDD)</label><input id="cfg-suporte" class="campo" inputmode="tel" value="${esc(config.suporteWhatsapp || "")}" placeholder="51 99999-9999"></div>
         <div><label class="nome-campo" for="cfg-link">Link do Copiloto (do Claude)</label><input id="cfg-link" class="campo" inputmode="url" value="${esc(config.link || "")}"></div>
+        <div><label class="nome-campo" for="cfg-entrada">Link da porta de entrada</label><input id="cfg-entrada" class="campo" inputmode="url" value="${esc(linkEntrada())}"></div>
       </div>
       <div class="acoes"><button class="botao forte" type="button" data-acao="g-salvar-config">Salvar ajustes</button></div>
     </section>
@@ -3134,6 +3131,7 @@ Object.assign(ACOES, {
       nomeCorretora: lerCampo("cfg-nome") || "Schay",
       suporteWhatsapp: soNumeros(lerCampo("cfg-suporte")),
       link: lerCampo("cfg-link"),
+      linkEntrada: lerCampo("cfg-entrada") || LINK_ENTRADA,
       atualizadoEm: iso(new Date()),
     };
     guardar.gravar(CHAVES.config, config);
