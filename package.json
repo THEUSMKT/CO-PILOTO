@@ -1,0 +1,14 @@
+{
+  "name": "co-piloto",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Copiloto de Vendas Schay: app que roda dentro do Claude (Artifact) para responder clientes do WhatsApp.",
+  "scripts": {
+    "montar": "node scripts/montar.mjs",
+    "testar-local": "node scripts/montar.mjs && node teste/servir.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

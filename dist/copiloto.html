@@ -1,0 +1,3211 @@
+<title>Copiloto de Vendas Schay</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="App da Schay para responder clientes do WhatsApp, lembrar quem chamar e acompanhar o funil.">
+<meta name="theme-color" content="#0E2A47">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+<style>
+/* Copiloto de Vendas Schay — visual acolhedor, letras grandes, botões fáceis de tocar.
+   Cores do site dela: azul escuro, azul claro, branco e detalhes dourados.
+   Tema claro de propósito (mesmo visual em qualquer celular); todas as cores são definidas aqui.
+   Layout: coluna única de até 560px; faixa azul no topo; cartões grandes empilhados. */
+
+:root {
+  --azul-escuro: #0E2A47;
+  --azul-escuro-2: #17406B;
+  --azul: #2563A6;
+  --azul-claro: #DCEBFA;
+  --azul-claro-2: #EEF5FD;
+  --dourado: #C9A24A;
+  --dourado-escuro: #8A6A1F;
+  --dourado-claro: #F6EBCD;
+  --branco: #FFFFFF;
+  --fundo: #F5F8FC;
+  --texto: #13223A;
+  --texto-2: #42536B;
+  --linha: #D6E0EC;
+  --verde: #15803D;
+  --verde-escuro: #116A32;
+  --verde-balao: #DCF8C6;
+  --vermelho: #D42A1E;
+  --quente: #C2410C;
+  --quente-fundo: #FFEDD5;
+  --morno: #9A6700;
+  --morno-fundo: #FEF3C7;
+  --frio: #1D5FA8;
+  --frio-fundo: #DBEAFE;
+  --sombra: 0 1px 2px rgba(14, 42, 71, .06), 0 8px 24px rgba(14, 42, 71, .08);
+  --sombra-forte: 0 2px 4px rgba(14, 42, 71, .08), 0 14px 34px rgba(14, 42, 71, .16);
+  --raio: 22px;
+  --raio-pequeno: 16px;
+  --fonte: "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --margem-esq: max(18px, env(safe-area-inset-left, 0px));
+  --margem-dir: max(18px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--fundo);
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--fonte);
+  font-size: 20px;
+  line-height: 1.45;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+button, input, textarea, select { font: inherit; color: inherit; }
+img, svg { display: block; max-width: 100%; }
+p { margin: 0; }
+h1, h2, h3 { margin: 0; line-height: 1.2; }
+a { color: var(--azul); }
+
+.escondido {
+  position: fixed !important;
+  left: -9999px !important;
+  width: 1px; height: 1px; opacity: 0;
+}
+
+:focus-visible {
+  outline: 4px solid var(--dourado);
+  outline-offset: 3px;
+}
+
+#app {
+  max-width: 560px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+}
+
+.tela {
+  animation: entrar .32s ease-out both;
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.conteudo {
+  padding-top: 8px;
+  padding-left: var(--margem-esq);
+  padding-right: var(--margem-dir);
+  display: grid;
+  gap: 18px;
+}
+
+/* ---------- Carregando inicial ---------- */
+.carregando-inicial {
+  min-height: 80vh;
+  display: grid;
+  place-content: center;
+  gap: 16px;
+  text-align: center;
+  color: var(--texto-2);
+}
+
+/* ---------- Topo da tela inicial ---------- */
+.topo {
+  position: relative;
+  background: radial-gradient(120% 140% at 85% -10%, #2A5C8F 0%, var(--azul-escuro) 55%);
+  color: var(--branco);
+  padding-block: 26px 74px;
+  padding-left: max(22px, env(safe-area-inset-left, 0px));
+  padding-right: max(22px, env(safe-area-inset-right, 0px));
+  border-radius: 0 0 36px 36px;
+  overflow: hidden;
+}
+
+.topo::after {
+  content: "";
+  position: absolute;
+  left: 22px; bottom: 60px;
+  width: 64px; height: 3px;
+  border-radius: 3px;
+  background: var(--dourado);
+}
+
+.topo-marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dourado-claro);
+  letter-spacing: .02em;
+}
+
+.topo-marca svg { width: 34px; height: 34px; flex: none; }
+
+.topo h1 {
+  margin-top: 18px;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.topo p {
+  margin-top: 6px;
+  font-size: 20px;
+  color: #C9DDF3;
+}
+
+.botoes-inicio {
+  display: grid;
+  gap: 18px;
+  padding-left: var(--margem-esq);
+  padding-right: var(--margem-dir);
+  margin-top: -46px;
+  position: relative;
+}
+
+/* ---------- Botão grande de escolha (tela inicial) ---------- */
+.escolha {
+  position: relative;
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  min-height: 124px;
+  padding: 20px 20px;
+  border: 0;
+  border-radius: var(--raio);
+  background: var(--branco);
+  box-shadow: var(--sombra);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .2s ease;
+}
+
+.escolha:active { transform: scale(.98); box-shadow: var(--sombra-forte); }
+
+.escolha .icone {
+  width: 68px; height: 68px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  font-size: 36px;
+  background: var(--azul-claro-2);
+  box-shadow: inset 0 0 0 2px var(--azul-claro);
+}
+
+.escolha strong {
+  display: block;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--azul-escuro);
+}
+
+.escolha span.sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 18px;
+  color: var(--texto-2);
+  line-height: 1.35;
+}
+
+.escolha.principal {
+  background: linear-gradient(160deg, #1B4C7E 0%, var(--azul-escuro) 70%);
+  box-shadow: var(--sombra-forte), inset 0 0 0 2px rgba(201, 162, 74, .55);
+}
+
+.escolha.principal strong { color: var(--branco); }
+.escolha.principal span.sub { color: #CFE0F2; }
+.escolha.principal .icone { background: rgba(255, 255, 255, .1); box-shadow: inset 0 0 0 2px rgba(201, 162, 74, .7); }
+
+.escolha.discreta { background: var(--azul-claro-2); box-shadow: inset 0 0 0 2px var(--azul-claro); }
+.escolha.discreta .icone { background: var(--branco); }
+
+.bolinha {
+  position: absolute;
+  top: -8px; right: -6px;
+  min-width: 38px; height: 38px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--vermelho);
+  color: var(--branco);
+  font-size: 20px;
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--fundo);
+  animation: pulsar 2.4s ease-in-out infinite;
+}
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.rodape-inicio {
+  margin-top: 26px;
+  padding-left: var(--margem-esq);
+  padding-right: var(--margem-dir);
+  text-align: center;
+  font-size: 18px;
+  color: var(--texto-2);
+}
+
+/* ---------- Barra de cima (Voltar + passo) ---------- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--fundo);
+}
+
+.barra {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: rgba(245, 248, 252, .94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 60px;
+  padding: 0 20px 0 14px;
+  border: 2px solid var(--linha);
+  border-radius: 999px;
+  background: var(--branco);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--azul-escuro);
+  cursor: pointer;
+}
+
+.voltar:active { background: var(--azul-claro-2); }
+.voltar span[aria-hidden] { font-size: 26px; line-height: 1; }
+
+.passos {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--texto-2);
+}
+
+.passos .trilho { display: flex; gap: 6px; }
+.passos .trilho i {
+  width: 30px; height: 8px;
+  border-radius: 99px;
+  background: var(--linha);
+}
+.passos .trilho i.feito { background: var(--dourado); }
+
+/* ---------- Títulos ---------- */
+.titulo h1 {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--azul-escuro);
+}
+
+.titulo p {
+  margin-top: 8px;
+  font-size: 20px;
+  color: var(--texto-2);
+}
+
+/* ---------- Botões ---------- */
+.botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 68px;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: var(--raio-pequeno);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .12s ease, filter .2s ease, background .2s ease;
+}
+
+.botao:active { transform: scale(.98); }
+.botao[disabled] { opacity: .55; cursor: default; }
+
+.botao.forte {
+  background: var(--azul-escuro);
+  color: var(--branco);
+  box-shadow: 0 8px 20px rgba(14, 42, 71, .25), inset 0 -3px 0 rgba(0, 0, 0, .18);
+}
+
+.botao.whats {
+  min-height: 80px;
+  background: var(--verde);
+  color: var(--branco);
+  font-size: 23px;
+  letter-spacing: .01em;
+  box-shadow: 0 10px 22px rgba(21, 128, 61, .3), inset 0 -4px 0 rgba(0, 0, 0, .18);
+}
+
+.botao.whats:active { background: var(--verde-escuro); }
+.botao.whats svg { width: 34px; height: 34px; flex: none; }
+
+.botao.claro {
+  background: var(--branco);
+  color: var(--azul-escuro);
+  box-shadow: inset 0 0 0 2px var(--linha);
+}
+
+.botao.dourado {
+  background: var(--dourado-claro);
+  color: #5B4510;
+  box-shadow: inset 0 0 0 2px #E5D3A4;
+}
+
+.botao.gigante {
+  min-height: 132px;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: var(--raio);
+  font-size: 24px;
+}
+
+.botao.gigante .emoji { font-size: 44px; line-height: 1; }
+
+.botao.destaque { animation: chamar 1.6s ease-in-out 2; }
+@keyframes chamar {
+  0%, 100% { box-shadow: 0 8px 20px rgba(14, 42, 71, .25); }
+  50% { box-shadow: 0 0 0 8px rgba(201, 162, 74, .45); }
+}
+
+.link {
+  display: block;
+  width: 100%;
+  min-height: 60px;
+  padding: 12px;
+  border: 0;
+  background: none;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--azul);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.link.pequeno { font-size: 18px; font-weight: 700; }
+
+/* ---------- Cartões ---------- */
+.cartao {
+  background: var(--branco);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 20px;
+}
+
+.cartao h2 {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--azul-escuro);
+}
+
+.rotulo {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--dourado-escuro);
+}
+
+/* ---------- Passo 1: foto ---------- */
+.ilustracao {
+  background: linear-gradient(180deg, var(--azul-claro-2), var(--branco));
+  border-radius: var(--raio);
+  padding: 18px 18px 14px;
+  box-shadow: inset 0 0 0 2px var(--azul-claro);
+}
+
+.ilustracao svg { margin: 0 auto; width: 100%; max-width: 360px; height: auto; }
+
+.ilustracao p {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 19px;
+  color: var(--texto-2);
+}
+
+.campo {
+  width: 100%;
+  min-height: 64px;
+  padding: 16px 18px;
+  border: 2px solid var(--linha);
+  border-radius: var(--raio-pequeno);
+  background: var(--branco);
+  font-size: 20px;
+}
+
+textarea.campo { min-height: 220px; resize: vertical; line-height: 1.4; }
+.campo:focus { border-color: var(--azul); outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 166, .18); }
+
+.fotos-escolhidas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--raio-pequeno);
+  background: #DCFCE7;
+  color: #14532D;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.fotos-escolhidas img {
+  width: 40px; height: 56px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 6px;
+  box-shadow: var(--sombra);
+}
+
+/* ---------- Passo 2: imóveis ---------- */
+.lista-imoveis { display: grid; gap: 16px; }
+
+.imovel {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  min-height: 112px;
+  padding: 12px;
+  border: 0;
+  border-radius: var(--raio);
+  background: var(--branco);
+  box-shadow: var(--sombra);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .12s ease;
+}
+
+.imovel:active { transform: scale(.98); }
+
+.imovel img {
+  width: 112px; height: 88px;
+  object-fit: cover;
+  border-radius: 14px;
+  background: var(--azul-claro-2);
+}
+
+.imovel strong { display: block; font-size: 21px; font-weight: 900; color: var(--azul-escuro); line-height: 1.2; }
+.imovel span { display: block; margin-top: 4px; font-size: 18px; color: var(--texto-2); }
+
+.imovel .etiqueta {
+  display: inline-block;
+  width: auto;
+  margin-bottom: 6px;
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: var(--dourado-claro);
+  color: #6B5113;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.imovel.pular {
+  grid-template-columns: 112px 1fr;
+  background: var(--azul-claro-2);
+  box-shadow: inset 0 0 0 2px var(--azul-claro);
+}
+
+.imovel.pular .icone-pular {
+  width: 112px; height: 88px;
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  border-radius: 14px;
+  background: var(--branco);
+}
+
+/* ---------- Pensando ---------- */
+.pensando {
+  min-height: 60vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 22px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.pensando h1 { font-size: 28px; font-weight: 900; color: var(--azul-escuro); }
+.pensando p { font-size: 20px; color: var(--texto-2); min-height: 2.9em; }
+
+.balao-digitando {
+  display: inline-flex;
+  gap: 10px;
+  padding: 22px 28px;
+  border-radius: 28px 28px 28px 8px;
+  background: var(--branco);
+  box-shadow: var(--sombra-forte);
+}
+
+.pontinhos { display: inline-flex; gap: 10px; justify-content: center; }
+.pontinhos span, .balao-digitando span {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--dourado);
+  animation: pulo 1.2s ease-in-out infinite;
+}
+.pontinhos span:nth-child(2), .balao-digitando span:nth-child(2) { animation-delay: .15s; background: var(--azul); }
+.pontinhos span:nth-child(3), .balao-digitando span:nth-child(3) { animation-delay: .3s; background: var(--azul-escuro); }
+
+@keyframes pulo {
+  0%, 60%, 100% { transform: translateY(0); opacity: .7; }
+  30% { transform: translateY(-12px); opacity: 1; }
+}
+
+/* ---------- Resultado ---------- */
+.selo {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  border-radius: var(--raio);
+}
+
+.selo .emoji { font-size: 52px; line-height: 1; }
+.selo strong { display: block; font-size: 26px; font-weight: 900; line-height: 1.1; }
+.selo p { margin-top: 6px; font-size: 19px; line-height: 1.35; color: var(--texto); }
+
+.selo.quente { background: var(--quente-fundo); box-shadow: inset 0 0 0 2px #FDBA74; }
+.selo.quente strong { color: var(--quente); }
+.selo.morno { background: var(--morno-fundo); box-shadow: inset 0 0 0 2px #FCD34D; }
+.selo.morno strong { color: var(--morno); }
+.selo.frio { background: var(--frio-fundo); box-shadow: inset 0 0 0 2px #93C5FD; }
+.selo.frio strong { color: var(--frio); }
+
+.responda h2 {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--azul-escuro);
+  margin-bottom: 12px;
+}
+
+.conversa-fundo {
+  padding: 18px 14px;
+  border-radius: var(--raio);
+  background-color: #EFE7DD;
+  background-image: radial-gradient(rgba(14, 42, 71, .06) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+}
+
+.balao {
+  position: relative;
+  margin-left: auto;
+  max-width: 94%;
+  padding: 14px 16px 26px;
+  border-radius: 18px 4px 18px 18px;
+  background: var(--verde-balao);
+  box-shadow: 0 1px 1.5px rgba(0, 0, 0, .15);
+  font-size: 20px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.balao::after {
+  content: "";
+  position: absolute;
+  top: 0; right: -9px;
+  border-width: 0 0 12px 12px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--verde-balao);
+}
+
+.balao .hora {
+  position: absolute;
+  right: 12px; bottom: 6px;
+  font-size: 14px;
+  color: #5E7466;
+}
+
+.balao.audio { background: var(--branco); margin-left: 0; border-radius: 4px 18px 18px 18px; }
+.balao.audio::after { right: auto; left: -9px; border-width: 0 12px 12px 0; border-color: transparent var(--branco) transparent transparent; }
+
+.titulo-audio {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+  font-size: 20px; font-weight: 900; color: var(--azul-escuro);
+}
+
+.pilha { display: grid; gap: 12px; }
+
+.lembrete {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.lembrete .emoji { font-size: 36px; line-height: 1; }
+.lembrete strong { display: block; font-size: 21px; font-weight: 900; color: var(--azul-escuro); }
+.lembrete p { margin-top: 4px; font-size: 19px; color: var(--texto-2); }
+
+.ok-verde {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 10px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: #DCFCE7;
+  color: #14532D;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.dica {
+  padding: 18px 20px;
+  border-radius: var(--raio);
+  background: var(--dourado-claro);
+  box-shadow: inset 4px 0 0 var(--dourado);
+}
+
+.dica strong { display: block; font-size: 20px; font-weight: 900; color: #5B4510; }
+.dica p { margin-top: 6px; font-size: 19px; color: #3D3010; }
+
+.objetivo { font-size: 19px; color: var(--texto-2); }
+
+.nota-instalar {
+  padding: 16px 18px;
+  border-radius: var(--raio);
+  background: var(--dourado-claro);
+  box-shadow: inset 4px 0 0 var(--dourado);
+  font-size: 19px;
+  color: #3D3010;
+}
+.objetivo b { color: var(--azul-escuro); }
+
+/* ---------- Quem chamar hoje ---------- */
+.lista-chamar { display: grid; gap: 16px; }
+
+.pessoa {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: var(--raio);
+  background: var(--branco);
+  box-shadow: var(--sombra);
+}
+
+.pessoa-topo { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; }
+
+.avatar {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--azul-escuro);
+  background: linear-gradient(135deg, var(--azul-claro), var(--dourado-claro));
+}
+
+.pessoa h2 { font-size: 24px; font-weight: 900; color: var(--azul-escuro); line-height: 1.15; }
+.pessoa .imovel-nome { margin-top: 2px; font-size: 18px; color: var(--texto-2); }
+
+.situacao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.situacao.urgente { background: #FEE2E2; color: #8F1D14; }
+.situacao.hoje { background: var(--azul-claro-2); color: var(--azul-escuro); }
+.situacao.visita { background: var(--dourado-claro); color: #5B4510; }
+
+.vazio {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.vazio .emoji { font-size: 72px; line-height: 1; animation: balancar 2.6s ease-in-out infinite; }
+.vazio h1 { font-size: 30px; font-weight: 900; color: var(--azul-escuro); }
+.vazio p { font-size: 20px; color: var(--texto-2); }
+
+@keyframes balancar {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+/* ---------- Novidades (resultado do cliente) ---------- */
+.novidades { display: grid; gap: 12px; }
+.novidades h2 { font-size: 22px; font-weight: 900; color: var(--azul-escuro); }
+
+.grade-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grade-2 .botao { min-height: 76px; font-size: 20px; }
+
+.opcoes { display: grid; gap: 12px; }
+.opcoes .botao { justify-content: flex-start; text-align: left; }
+
+/* ---------- Lista de clientes ---------- */
+.linha-cliente {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  min-height: 84px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: var(--raio-pequeno);
+  background: var(--branco);
+  box-shadow: var(--sombra);
+  text-align: left;
+  cursor: pointer;
+}
+
+.linha-cliente .avatar { display: grid; width: 52px; height: 52px; font-size: 22px; }
+.linha-cliente strong { display: block; font-size: 21px; font-weight: 900; color: var(--azul-escuro); line-height: 1.2; }
+.linha-cliente span { display: block; font-size: 18px; color: var(--texto-2); }
+.linha-cliente .seta { font-size: 28px; color: var(--texto-2); }
+
+.estado, .linha-cliente .estado {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 16px !important;
+  font-weight: 800;
+  background: var(--azul-claro-2);
+  color: var(--azul-escuro) !important;
+}
+
+.estado.vendido { background: #DCFCE7; color: #14532D !important; }
+.estado.perdido { background: #F1F5F9; color: #475569 !important; }
+.estado.visita_marcada { background: var(--dourado-claro); color: #5B4510 !important; }
+
+.dados-cliente { display: grid; gap: 12px; }
+.dados-cliente div { display: grid; gap: 2px; }
+.dados-cliente dt, .dados-cliente .nome-campo { font-size: 17px; font-weight: 800; color: var(--texto-2); text-transform: uppercase; letter-spacing: .04em; }
+.dados-cliente dd { margin: 0; font-size: 20px; }
+
+/* ---------- Ajuda ---------- */
+.passo-ajuda {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.numero {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--azul-escuro);
+  color: var(--dourado-claro);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.passo-ajuda h2 { font-size: 22px; font-weight: 900; color: var(--azul-escuro); }
+.passo-ajuda p { margin-top: 4px; font-size: 19px; color: var(--texto-2); }
+.passo-ajuda svg { margin-top: 12px; width: 100%; max-width: 320px; height: auto; border-radius: 14px; }
+
+/* ---------- Passeio (primeiro acesso) ---------- */
+.passeio {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  align-items: end;
+  background: rgba(10, 26, 46, .62);
+  animation: aparecer .25s ease-out both;
+}
+
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+
+.passeio-cartao {
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding-block: 26px calc(26px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(22px, env(safe-area-inset-left, 0px));
+  padding-right: max(22px, env(safe-area-inset-right, 0px));
+  border-radius: 32px 32px 0 0;
+  background: var(--branco);
+  display: grid;
+  gap: 18px;
+  text-align: center;
+  animation: subir .35s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes subir { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.passeio-cartao .emoji-grande {
+  width: 104px; height: 104px;
+  margin: 0 auto;
+  border-radius: 30px;
+  display: grid;
+  place-items: center;
+  font-size: 56px;
+  background: var(--azul-claro-2);
+  box-shadow: inset 0 0 0 3px var(--dourado);
+}
+
+.passeio-cartao h2 { font-size: 28px; font-weight: 900; color: var(--azul-escuro); }
+.passeio-cartao p { font-size: 21px; color: var(--texto-2); }
+
+.bolinhas-passeio { display: flex; justify-content: center; gap: 10px; }
+.bolinhas-passeio i { width: 12px; height: 12px; border-radius: 50%; background: var(--linha); }
+.bolinhas-passeio i.ativa { background: var(--dourado); width: 30px; border-radius: 99px; }
+
+/* ---------- Acesso ---------- */
+.acesso {
+  min-height: 92vh;
+  display: grid;
+  align-content: center;
+  gap: 22px;
+  padding: 24px 22px;
+  text-align: center;
+}
+
+.acesso .logo { width: 96px; height: 96px; margin: 0 auto; }
+.acesso h1 { font-size: 30px; font-weight: 900; color: var(--azul-escuro); }
+.acesso p { font-size: 20px; color: var(--texto-2); }
+
+.divisor {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 18px; color: var(--texto-2);
+}
+.divisor::before, .divisor::after { content: ""; flex: 1; height: 2px; background: var(--linha); }
+
+.erro-texto { color: #8F1D14; font-weight: 800; }
+
+/* ---------- Ops (erro amigável) ---------- */
+.ops {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 30px 6px 10px;
+  text-align: center;
+}
+
+.ops .emoji { font-size: 68px; line-height: 1; }
+.ops h1 { font-size: 28px; font-weight: 900; color: var(--azul-escuro); }
+.ops p { font-size: 20px; color: var(--texto-2); }
+
+/* ---------- Aviso (toast) ---------- */
+.aviso {
+  position: fixed;
+  left: 50%;
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  z-index: 60;
+  width: min(92vw, 520px);
+  transform: translateX(-50%);
+  padding: 18px 22px;
+  border-radius: 20px;
+  background: var(--azul-escuro);
+  color: var(--branco);
+  font-size: 21px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(14, 42, 71, .35), inset 0 0 0 2px rgba(201, 162, 74, .6);
+  animation: aviso-entrar .3s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes aviso-entrar { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ---------- Festa (comprou) ---------- */
+.festa {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 70;
+  overflow: hidden;
+}
+
+.festa span {
+  position: absolute;
+  top: -40px;
+  font-size: 30px;
+  animation: cair 2.6s ease-in forwards;
+}
+
+@keyframes cair {
+  to { transform: translateY(110vh) rotate(540deg); opacity: .9; }
+}
+
+.sem-js { padding: 24px; font-size: 20px; text-align: center; }
+
+/* ================================================================
+   Painel do gestor (só o dono vê). Mais denso: é para analisar números.
+   ================================================================ */
+#app.largo { max-width: 1200px; }
+
+.gestor { display: grid; gap: 16px; padding-top: 4px; padding-left: var(--margem-esq); padding-right: var(--margem-dir); font-size: 17px; }
+.gestor h1 { font-size: 26px; font-weight: 900; color: var(--azul-escuro); }
+.gestor h2 { font-size: 19px; font-weight: 900; color: var(--azul-escuro); }
+.gestor .sub { margin-top: 2px; font-size: 15px; color: var(--texto-2); }
+.gestor .cartao { padding: 18px; border-radius: 16px; display: grid; gap: 10px; }
+.gestor .campo { min-height: 46px; padding: 10px 12px; font-size: 16px; border-width: 1.5px; border-radius: 12px; }
+.gestor textarea.campo { min-height: 80px; }
+.gestor label.nome-campo { font-size: 13px; font-weight: 800; color: var(--texto-2); text-transform: uppercase; letter-spacing: .04em; }
+.gestor .botao { width: auto; min-height: 46px; padding: 10px 16px; font-size: 16px; border-radius: 12px; }
+.gestor .botao.perigo { background: var(--branco); color: #B91C1C; box-shadow: inset 0 0 0 1.5px #FECACA; }
+.gestor .botao.perigo.confirmar { background: #B91C1C; color: var(--branco); }
+.gestor .acoes { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.abas-gestor { display: flex; flex-wrap: wrap; gap: 6px; }
+.abas-gestor button { flex: none; min-height: 44px; padding: 0 14px; border: 1.5px solid var(--linha); border-radius: 999px; background: var(--branco); font-size: 15px; font-weight: 800; color: var(--azul-escuro); cursor: pointer; }
+.abas-gestor button[aria-pressed="true"] { background: var(--azul-escuro); border-color: var(--azul-escuro); color: var(--branco); }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filtros button { min-height: 40px; padding: 0 12px; border: 1.5px solid #CBD5E1; border-radius: 999px; background: var(--branco); font-size: 14px; font-weight: 800; cursor: pointer; }
+.filtros button[aria-pressed="true"] { background: var(--azul-claro); border-color: var(--azul); }
+.filtros .periodo { margin-left: auto; font-size: 14px; color: var(--texto-2); }
+
+.indicadores { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px; }
+.indicador { padding: 14px 16px; border-radius: 14px; background: var(--branco); box-shadow: var(--sombra); }
+.indicador .rotulo-ind { font-size: 14px; font-weight: 800; color: var(--texto-2); }
+.indicador .valor { margin-top: 4px; font-size: 30px; font-weight: 800; line-height: 1.1; }
+.indicador .detalhe { margin-top: 4px; font-size: 13px; color: var(--texto-2); }
+
+.barras { display: grid; gap: 10px; }
+.barra-linha { display: grid; grid-template-columns: minmax(110px, 170px) minmax(0, 1fr); gap: 12px; align-items: center; padding: 3px 0; border-radius: 8px; }
+.barra-linha:hover .preenchimento, .barra-linha:focus-visible .preenchimento { filter: brightness(1.15); }
+.barra-linha .nome { font-size: 15px; font-weight: 700; color: var(--texto-2); }
+.barra-trilho { display: block; min-height: 24px; }
+.barra-trilho .area { position: relative; display: block; width: calc(100% - 96px); height: 24px; }
+.preenchimento { position: absolute; left: 0; top: 3px; height: 18px; border-radius: 0 4px 4px 0; background: var(--azul); }
+.barra-trilho .valor-barra { position: absolute; top: 1px; padding-left: 8px; font-size: 15px; font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.barra-trilho .valor-barra small { font-weight: 600; color: var(--texto-2); }
+@media (max-width: 520px) { .barra-linha { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+
+.dica-grafico { position: fixed; z-index: 30; pointer-events: none; max-width: 260px; padding: 8px 10px; border-radius: 10px; background: var(--branco); box-shadow: 0 8px 24px rgba(14, 42, 71, .2); font-size: 14px; color: var(--texto-2); }
+.dica-grafico strong { display: block; font-size: 16px; color: var(--texto); }
+
+.tabela-rolagem { overflow-x: auto; }
+.gestor table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.gestor th, .gestor td { padding: 8px 10px; border-bottom: 1px solid var(--linha); text-align: left; }
+.gestor th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-2); }
+.gestor .num { text-align: right; font-variant-numeric: tabular-nums; }
+.gestor details summary { min-height: 40px; display: flex; align-items: center; font-weight: 800; color: var(--azul); cursor: pointer; }
+
+.achados { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.achados li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; padding: 12px; border-radius: 12px; background: var(--fundo); }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 900; white-space: nowrap; }
+.chip.anuncio { background: #FFEDD5; color: #7C2D12; }
+.chip.atendimento { background: #FEF3C7; color: #713F12; }
+.chip.fechamento { background: #FEE2E2; color: #7F1D1D; }
+.chip.ok { background: #DCFCE7; color: #14532D; }
+.chip.info { background: var(--azul-claro-2); color: var(--azul-escuro); }
+
+.alertas { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.alerta { padding: 14px 16px; border-radius: 14px; background: var(--branco); box-shadow: var(--sombra); border-left: 5px solid var(--azul); }
+.alerta.atencao { border-left-color: #B45309; }
+.alerta.critico { border-left-color: #B91C1C; }
+.alerta strong { display: block; font-size: 26px; font-weight: 800; }
+.alerta span { font-size: 14px; font-weight: 700; color: var(--texto-2); }
+
+.quadro { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+.coluna { scroll-snap-align: start; display: grid; gap: 10px; align-content: start; padding: 10px; border-radius: 16px; background: #EAF0F7; }
+.coluna h3 { display: flex; justify-content: space-between; align-items: center; margin: 0; padding: 4px 6px; font-size: 15px; font-weight: 900; color: var(--azul-escuro); }
+.coluna h3 span { min-width: 28px; padding: 1px 8px; border-radius: 99px; background: var(--branco); text-align: center; font-size: 14px; }
+.ficha { display: grid; gap: 6px; padding: 12px; border-radius: 12px; background: var(--branco); box-shadow: var(--sombra); font-size: 15px; }
+.ficha strong { font-size: 17px; font-weight: 900; color: var(--azul-escuro); }
+.ficha .linha-info { color: var(--texto-2); overflow-wrap: anywhere; }
+.ficha .linha-info b { color: var(--texto); font-weight: 700; }
+.ficha .marcas { display: flex; flex-wrap: wrap; gap: 6px; }
+.ficha .editar { display: grid; gap: 8px; margin-top: 8px; }
+.temp { padding: 2px 8px; border-radius: 99px; background: var(--azul-claro-2); font-size: 13px; font-weight: 800; }
+.temp.quente { background: #FFEDD5; color: #7C2D12; }
+.temp.morno { background: #FEF3C7; color: #713F12; }
+.temp.frio { background: #DBEAFE; color: #1E3A8A; }
+.atrasado { color: #B91C1C; font-weight: 800; }
+
+.lista-imoveis-gestor { display: grid; gap: 12px; }
+.imovel-gestor { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: center; }
+.imovel-gestor img, .imovel-gestor .sem-foto { width: 96px; height: 72px; object-fit: cover; border-radius: 10px; background: var(--azul-claro-2); display: grid; place-items: center; font-size: 30px; }
+.form-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.form-grade > div { display: grid; gap: 4px; min-width: 0; }
+.caixa-texto { padding: 12px; border-radius: 12px; background: var(--fundo); font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.aviso-exemplo { padding: 14px 16px; border-radius: 14px; background: var(--dourado-claro); color: #5B4510; font-weight: 700; box-shadow: inset 4px 0 0 var(--dourado); }
+.passos-lista { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.gestor .etiqueta { display: inline-block; padding: 2px 8px; border-radius: 99px; background: var(--dourado-claro); color: #6B5113; font-size: 12px; font-weight: 900; letter-spacing: .04em; }
+.gestor .imovel-gestor strong { font-size: 17px; color: var(--azul-escuro); }
+.gestor .imovel-gestor .botao { margin-top: 6px; }
+
+@media (min-width: 600px) {
+  body { font-size: 20px; }
+  .topo { border-radius: 0 0 40px 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+</style>
+<main id="app" aria-live="polite">
+  <div class="carregando-inicial" role="status">
+    <div class="pontinhos" aria-hidden="true"><span></span><span></span><span></span></div>
+    <p>Abrindo…</p>
+  </div>
+</main>
+<div id="aviso" class="aviso" role="status" aria-live="assertive" hidden></div>
+<div id="dica-grafico" class="dica-grafico" role="tooltip" hidden></div>
+<input id="seletor-foto" class="escondido" type="file" accept="image/*" multiple tabindex="-1" aria-hidden="true">
+<script type="application/json" id="playbook">"# Cérebro do Copiloto de Vendas Schay\n\nVocê é um mentor de vendas imobiliárias que fala com a Schay em português do Brasil, de um jeito direto e acolhedor. A Schay é corretora na Imobiliária Innovar, em São Leopoldo/RS. Ela veio do varejo de roupas e está começando em imóveis: sabe atender gente, mas ainda tem dificuldade de conduzir a conversa, persuadir e chamar o cliente de novo quando ele some. Ela é iniciante: explique o porquê em 1 linha, sem jargão.\n\nOs clientes chegam por anúncios no Instagram/Facebook e caem direto no WhatsApp dela. Muitos são frios ou só curiosos. A Schay manda um print (ou cola o texto) da conversa, e você devolve a próxima mensagem pronta para ela copiar e enviar. O app não envia nada sozinho: quem envia é ela.\n\n## Objetivo\n\nNão é vender o imóvel por mensagem. É avançar um degrau por vez:\n\nresposta rápida → vínculo → entender a necessidade → qualificar → apresentar o imóvel ligado ao que o cliente disse → marcar visita (ou ligação/áudio) → proposta.\n\nEm cada resposta, descubra em que degrau a conversa está e sugira a mensagem que sobe só o próximo degrau.\n\n## Como ler a conversa\n\n- No print do WhatsApp, os balões da **direita** (verdes) são da Schay. Os balões da **esquerda** (brancos) são do cliente.\n- O nome ou o telefone que aparece no **topo** do print é o do cliente. Se aparecer só o número, use-o como telefone. Nunca invente nome nem telefone: se não estiver visível, devolva `null`.\n- A mensagem mais recente fica embaixo. Responda sempre à última coisa que o cliente disse.\n- Se a última mensagem for da Schay e o cliente não respondeu, o cliente \"sumiu\": sugira uma mensagem de retomada, não repita o que ela já mandou.\n- Mensagens automáticas de anúncio (\"Olá! Tenho interesse e queria mais informações, por favor.\") contam como primeiro contato.\n\n## Princípios\n\n1. **Rapidez e nome.** Responder em até 5 minutos, chamando pelo primeiro nome (se souber). A 1ª mensagem é curta: agradece o contato e faz UMA pergunta aberta sobre o que a pessoa procura.\n2. **Perguntar antes de falar do imóvel.** Descobrir aos poucos: motivo da compra, prazo, faixa de valor, entrada/FGTS, financiamento, quem decide junto. No máximo 1 ou 2 perguntas por mensagem.\n3. **Conectar, não listar.** Ligue o imóvel ao que o cliente contou (\"você falou que trabalha em Novo Hamburgo: daqui são 15 minutos pela BR\"), em vez de despejar características.\n4. **Toda mensagem termina andando pra frente:** uma pergunta ou um convite. Para visita, ofereça 2 opções de horário (\"sábado às 10h ou domingo às 15h?\").\n5. **Tom de WhatsApp:** frases curtas, natural, no máximo 1 emoji, sem textão (ideal até 3 linhas), sem cara de robô ou de propaganda. Nada de \"Prezado\", \"Olá, tudo bem? Espero que sim!\", CAIXA ALTA ou listas.\n6. **Cliente frio ou curioso:** não insistir. Faça uma pergunta leve que separe curioso de interessado (\"é pra morar ou pra investir?\", \"tá procurando pra agora ou mais pra frente?\").\n7. **Objeções:** acolher → perguntar → reposicionar. Respostas curtas (veja abaixo).\n8. **Cliente que some:** retomar em D+1, D+3, D+7 e D+14, cada vez de um jeito diferente: novidade, conteúdo útil, pergunta leve e, por fim, despedida educada. Nunca \"oi, viu minha mensagem?\" nem cobrança.\n9. **Depois da visita:** perguntar a impressão em até 2 horas, tratar a objeção real e propor o próximo passo.\n\n## Objeções mais comuns (modelos curtos para adaptar)\n\n- **\"Só estou olhando.\"** → \"Imagina, fica à vontade! Pra eu te mandar só o que faz sentido: você tá pensando em morar ou investir?\"\n- **\"Está caro.\"** → \"Entendo, é um valor importante. Me conta: qual faixa ficaria confortável pra você? Assim eu vejo o que encaixa melhor.\"\n- **\"Vou falar com meu marido/esposa.\"** → \"Claro, decisão de casa é a dois mesmo 😊 O que você acha que ele vai querer saber? Se quiser, combino uma visita com vocês dois: sábado de manhã ou domingo à tarde?\"\n- **\"Vou ver outras opções.\"** → \"Faz bem em comparar! O que é mais importante pra você na escolha? Se eu tiver algo mais perto disso, te mostro.\"\n- **\"Não tenho entrada.\"** → \"Entendi. Às vezes dá pra usar o FGTS ou financiar uma parte maior, depende de cada caso. Quer que eu veja uma simulação sem compromisso?\"\n- **\"Depois eu te falo.\"** → \"Combinado! Pra eu não te incomodar à toa: posso te chamar na quinta pra saber o que achou?\"\n- **\"Faz desconto?\"** → \"Posso levar sua proposta ao proprietário, sim. Não consigo prometer, mas apresento com todo cuidado. Qual valor você tem em mente?\"\n\n## Retomada (cliente sumiu)\n\nUse o número de tentativas já feitas para escolher o tipo de mensagem:\n\n- **D+1 (1ª retomada):** leve e útil. Traga um detalhe novo do imóvel ou uma pergunta fácil de responder.\n- **D+3 (2ª):** conteúdo útil (ex.: como funciona usar o FGTS, o que olhar numa visita, a rotina do bairro), sem pressão.\n- **D+7 (3ª):** pergunta leve que dê saída fácil (\"ainda faz sentido eu te mandar opções, ou mudou o momento?\").\n- **D+14 (4ª e última):** despedida educada, deixando a porta aberta (\"vou parar de te chamar pra não incomodar; quando quiser, é só me chamar aqui\").\n\nNunca culpe o cliente pelo silêncio e nunca use urgência falsa para \"acordar\" a conversa.\n\n## Honestidade (inegociável)\n\n- Use **só** dados que estejam na lista de imóveis abaixo ou na própria conversa. Faltou informação (valor, metragem, condições, documentação, financiamento, aceita permuta, vaga, condomínio)? **Não invente.** A resposta deve dizer algo como \"vou confirmar e já te retorno\".\n- Sem urgência ou escassez falsa (\"últimas unidades\", \"só hoje\") e sem prometer aprovação de financiamento, desconto ou prazo.\n- Persuasão aqui é clareza, empatia e facilitar o próximo passo. Sem manipulação, sem pressão.\n- Se o cliente pedir para parar ou disser que não quer mais contato, a resposta deve encerrar com educação, sem tentar convencer, `pediu_para_parar` = true e `followup.precisa` = false.\n- Se a conversa não tiver nada a ver com imóveis, responda com educação e sem inventar.\n\n## Como classificar o cliente\n\n- **frio:** curioso, respostas curtas, só pergunta preço, sem prazo nem motivo claro.\n- **morno:** tem interesse real, mas ainda sem prazo, valor ou decisão definidos.\n- **quente:** tem motivo e prazo, fala de valor/entrada/financiamento, pede visita ou faz proposta.\n\n## Etapa (o app organiza o cliente sozinho com base nisso)\n\n- `novo`: só o primeiro contato, a Schay ainda não conversou de verdade com ele.\n- `conversando`: já existe troca de mensagens (o cliente respondeu a Schay).\n- `visita_marcada`: dia e horário de visita combinados na conversa.\n- `proposta`: o cliente fez ou pediu para fazer uma proposta/valor.\n- `vendido`: negócio fechado.\n- `perdido`: o cliente desistiu claramente ou pediu para parar.\n\n## Lembrete se o cliente não responder\n\n- `dias`: em quantos dias chamar de novo (0 = hoje mais tarde, 1 = amanhã, 2 = depois de amanhã...). Normalmente 1. Depois de visita, 0 (perguntar no mesmo dia).\n- `hora`: \"HH:MM\", em horário comercial (entre 09:00 e 19:00). Prefira 10:00, 12:30 ou 18:30. Evite domingo antes das 10h.\n- `quando`: o mesmo, em palavras simples (\"amanhã às 10h\").\n- `mensagem`: a mensagem pronta para mandar se ele não responder, já no estilo da retomada certa.\n- `precisa` = false só quando não faz sentido chamar de novo (pediu para parar, venda fechada, desistiu de vez).\n\n## Áudio\n\nQuando ajudar a criar vínculo (cliente morno/quente, conversa já andando) ou para explicar algo que fica longo por escrito (ex.: financiamento), a 2ª opção de resposta pode ser um **roteiro de áudio** (`tipo` = \"audio\"): fala natural, de até 20 segundos (no máximo 50 palavras), como a Schay falaria, terminando com pergunta ou convite. Não sugira áudio no primeiro contato com cliente frio.\n\n## Formato da resposta (JSON)\n\nQuem lê os campos `leitura`, `proximo_passo`, `followup.quando` e `por_que` é a Schay, no celular. Escreva para ela (\"você\"), em português simples e carinhoso, frases curtas, **sem palavras técnicas ou em inglês**: nada de \"lead\", \"follow-up\", \"funil\", \"temperatura\", \"rapport\", \"gatilho\", \"CTA\", \"qualificar\".\n\n- `cliente.nome` / `cliente.telefone`: como aparecem no print/texto, ou `null`. Telefone só com números e DDD, se visível.\n- `imovel_id`: o `id` do imóvel de que a conversa trata (o informado pela Schay ou o que a conversa deixa claro), ou `null`.\n- `momento`: `primeiro_contato`, `conversando`, `sumiu` ou `pos_visita`.\n- `etapa`: veja acima.\n- `temperatura`: `frio`, `morno` ou `quente`.\n- `leitura`: 1 frase (até 20 palavras) dizendo o que o cliente quer de verdade. Ex.: \"Quer sair do aluguel até o meio do ano e está com medo de não ter entrada.\"\n- `respostas`: exatamente 2 opções, diferentes entre si. A 1ª é sempre `tipo` = \"texto\" e é a melhor opção. A 2ª pode ser outro texto (outro caminho) ou um roteiro de áudio. Escritas na voz da Schay, prontas para colar no WhatsApp, sem aspas, sem assinatura, sem colchetes ou campos para preencher. Use o primeiro nome do cliente só se souber.\n- `proximo_passo`: o objetivo agora, em até 10 palavras (ex.: \"Descobrir se é pra morar ou investir\").\n- `followup`: veja \"Lembrete\".\n- `por_que`: 1 frase (até 20 palavras) ensinando a técnica por trás da resposta, para a Schay aprender.\n- `resumo`: 1 frase curta para o app lembrar quem é esse cliente (o que procura, prazo, condição). Sem dados sensíveis (sem CPF, renda exata, endereço).\n- `hora_primeira_mensagem_hoje`: \"HH:MM\" da primeira mensagem do cliente, **só** se o print mostrar que ela foi enviada hoje; senão `null`.\n- `pediu_para_parar`: true se o cliente pediu para não ser mais contatado.\n\n## Exemplo\n\nConversa: cliente \"Ana\" mandou \"Oi, quanto custa o apartamento do anúncio?\" e nada mais.\n\n- leitura: \"Quer saber o preço; ainda não sabemos se procura pra morar ou investir.\"\n- respostas[0] (preço está na lista): \"Oi, Ana! Obrigada pelo contato 😊 Ele está R$ 289 mil. Pra eu te ajudar melhor: você procura pra morar ou pra investir?\"\n- respostas[0] (preço NÃO está na lista): \"Oi, Ana! Obrigada pelo contato 😊 Vou confirmar o valor atualizado e já te passo. Enquanto isso, me conta: você procura pra morar ou pra investir?\"\n- proximo_passo: \"Descobrir o motivo da compra\"\n- por_que: \"Responder o preço sem enrolar e devolver uma pergunta mantém a conversa viva e mostra o que ela busca.\"\n\nResponda sempre o que o cliente perguntou (se o dado existir) antes de fazer a sua pergunta: esconder o preço afasta o cliente frio."</script>
+<script>
+"use strict";
+(() => {
+// ================================================================
+// Cérebro: monta o pedido para o Claude e confere a resposta.
+// O texto das regras vem do playbook.md (embutido na página pelo scripts/montar.mjs).
+// A IA roda pela conta Claude de quem está usando o app (capability "sample").
+// ================================================================
+const MODELO = "claude-sonnet-5-5";
+const PLAYBOOK = (() => {
+  try {
+    return JSON.parse(document.getElementById("playbook").textContent);
+  } catch {
+    return "";
+  }
+})();
+
+const FORMATO_JSON = `{
+  "cliente": { "nome": "nome como aparece, ou null", "telefone": "só números com DDD, ou null" },
+  "imovel_id": "id do imóvel da lista, ou null",
+  "momento": "primeiro_contato | conversando | sumiu | pos_visita",
+  "etapa": "novo | conversando | visita_marcada | proposta | vendido | perdido",
+  "temperatura": "frio | morno | quente",
+  "leitura": "1 frase: o que o cliente quer de verdade",
+  "respostas": [
+    { "texto": "melhor resposta, pronta para colar no WhatsApp", "tipo": "texto" },
+    { "texto": "outra opção (texto) ou roteiro de áudio de até 20 segundos", "tipo": "texto | audio" }
+  ],
+  "proximo_passo": "objetivo agora, até 10 palavras",
+  "followup": { "precisa": true, "dias": 1, "hora": "10:00", "quando": "amanhã às 10h", "mensagem": "mensagem pronta se ele não responder" },
+  "por_que": "1 frase ensinando a técnica",
+  "resumo": "1 frase para lembrar quem é esse cliente",
+  "hora_primeira_mensagem_hoje": "HH:MM ou null",
+  "pediu_para_parar": false
+}`;
+
+const DATA_HORA = new Intl.DateTimeFormat("pt-BR", {
+  timeZone: "America/Sao_Paulo",
+  weekday: "long",
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
+/** Lista de imóveis para o prompt (sem a foto, que é pesada e não ajuda a IA). */
+function catalogoParaIA(lista) {
+  return lista.map(({ foto, atualizadoEm, ...resto }) => resto);
+}
+
+function descreverCliente(c) {
+  const linhas = ["## O que o app já sabe deste cliente"];
+  if (c.nome) linhas.push(`- Nome: ${c.nome}`);
+  if (c.resumo) linhas.push(`- Resumo: ${c.resumo}`);
+  if (c.etapa) linhas.push(`- Etapa: ${c.etapa}`);
+  if (c.temperatura) linhas.push(`- Como estava: ${c.temperatura}`);
+  if (Number.isFinite(c.diasSemContato)) linhas.push(`- Dias sem conversar: ${c.diasSemContato}`);
+  if (Number.isFinite(c.tentativas)) linhas.push(`- Mensagens de retomada já enviadas sem resposta: ${c.tentativas}`);
+  if (c.visitaEm) linhas.push(`- Visita marcada para: ${c.visitaEm}`);
+  if (c.mensagemPlanejada) linhas.push(`- Mensagem de retomada sugerida antes: "${c.mensagemPlanejada}"`);
+  return linhas.join("\n");
+}
+
+/** O pedido inteiro, em texto: regras + imóveis + situação + conversa + formato da resposta. */
+function montarPedido(entrada, listaImoveis) {
+  const catalogo = catalogoParaIA(listaImoveis);
+  const temExemplo = catalogo.some((i) => i.exemplo);
+  const imovel = entrada.imovelId ? listaImoveis.find((i) => i.id === entrada.imovelId) : null;
+  const partes = [
+    "Você vai ajudar uma corretora de imóveis seguindo as regras abaixo.",
+    "",
+    "<regras>",
+    PLAYBOOK,
+    "</regras>",
+    "",
+    "## Imóveis disponíveis",
+    !catalogo.length
+      ? ""
+      : temExemplo
+        ? 'Imóveis com "exemplo": true são de demonstração (a imobiliária ainda vai trocar pelos reais). Para eles, use os valores que aparecem depois de "ex.:" como se fossem os dados do imóvel, e nunca cite o texto "EXEMPLO - SUBSTITUIR" para o cliente.'
+        : "Use apenas estes dados. O que não estiver aqui, a Schay precisa confirmar.",
+    catalogo.length ? "```json\n" + JSON.stringify(catalogo, null, 1) + "\n```" : "Nenhum imóvel cadastrado ainda: não cite dados de imóvel; sugira confirmar.",
+    "",
+    "## Situação",
+    `- Agora: ${DATA_HORA.format(new Date())} (horário de Brasília)`,
+    `- Imóvel indicado pela Schay: ${imovel ? `${imovel.id} (${imovel.titulo})` : "não informado"}`,
+  ];
+  if (entrada.cliente) partes.push("", descreverCliente(entrada.cliente));
+
+  if (entrada.modo === "retomar") {
+    const posVisita = entrada.cliente?.motivo === "pos_visita";
+    partes.push(
+      "",
+      "## O que fazer",
+      posVisita
+        ? "A Schay quer saber o que o cliente achou da visita. Escreva a mensagem de pós-visita (momento = pos_visita): perguntar a impressão, abrir espaço para a objeção real e propor o próximo passo."
+        : "O cliente parou de responder. Escreva a mensagem de retomada certa para o número de tentativas já feitas (0 = D+1, 1 = D+3, 2 = D+7, 3 ou mais = D+14 despedida). momento = sumiu.",
+      "Não há print desta vez. Use só o que o app sabe do cliente e os dados do imóvel; não invente fatos sobre a conversa.",
+    );
+  } else {
+    if (entrada.texto?.trim()) partes.push("", "## Conversa colada pela Schay (texto)", entrada.texto.trim().slice(0, 20000));
+    if (entrada.imagens?.length) partes.push("", `## Conversa: ${entrada.imagens.length} print(s) do WhatsApp nas imagens anexadas, em ordem.`);
+    partes.push("", "## O que fazer", "Leia a conversa e sugira a próxima mensagem da Schay para este cliente.");
+  }
+  partes.push(
+    "",
+    "## Formato da resposta",
+    "Responda SOMENTE com um objeto JSON neste formato, sem nenhum texto antes ou depois:",
+    FORMATO_JSON,
+  );
+  return partes.join("\n");
+}
+
+const limitar = (s, max) => (typeof s === "string" ? s.trim().slice(0, max) : "");
+const HORA_VALIDA = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+/** Confere e arruma o JSON devolvido, para o app nunca quebrar por um campo estranho. */
+function normalizarResultado(bruto, idsImoveis) {
+  const respostas = (Array.isArray(bruto?.respostas) ? bruto.respostas : [])
+    .map((r) => ({ texto: limitar(r?.texto, 1200), tipo: r?.tipo === "audio" ? "audio" : "texto" }))
+    .filter((r) => r.texto)
+    .slice(0, 2);
+  if (!respostas.length) {
+    const erro = new Error("sem respostas");
+    erro.code = "invalid_json";
+    throw erro;
+  }
+  if (respostas[0].tipo === "audio") {
+    const i = respostas.findIndex((r) => r.tipo === "texto");
+    if (i > 0) respostas.unshift(...respostas.splice(i, 1));
+    else respostas[0].tipo = "texto";
+  }
+  const umDe = (v, ok, padrao) => (ok.includes(v) ? v : padrao);
+  const telefone = typeof bruto?.cliente?.telefone === "string" ? bruto.cliente.telefone.replace(/\D/g, "") : "";
+  const dias = Number.isFinite(bruto?.followup?.dias) ? Math.min(30, Math.max(0, Math.round(bruto.followup.dias))) : 1;
+  return {
+    cliente: {
+      nome: limitar(bruto?.cliente?.nome, 60) || null,
+      telefone: telefone.length >= 10 && telefone.length <= 13 ? telefone : null,
+    },
+    imovel_id: idsImoveis.has(bruto?.imovel_id) ? bruto.imovel_id : null,
+    momento: umDe(bruto?.momento, ["primeiro_contato", "conversando", "sumiu", "pos_visita"], "conversando"),
+    etapa: umDe(bruto?.etapa, ["novo", "conversando", "visita_marcada", "proposta", "vendido", "perdido"], "conversando"),
+    temperatura: umDe(bruto?.temperatura, ["frio", "morno", "quente"], "morno"),
+    leitura: limitar(bruto?.leitura, 300),
+    respostas,
+    proximo_passo: limitar(bruto?.proximo_passo, 160),
+    followup: {
+      precisa: bruto?.followup?.precisa !== false && bruto?.pediu_para_parar !== true,
+      dias,
+      hora: HORA_VALIDA.test(bruto?.followup?.hora) ? bruto.followup.hora : "10:00",
+      quando: limitar(bruto?.followup?.quando, 80),
+      mensagem: limitar(bruto?.followup?.mensagem, 1200),
+    },
+    por_que: limitar(bruto?.por_que, 300),
+    resumo: limitar(bruto?.resumo, 240),
+    hora_primeira_mensagem_hoje: HORA_VALIDA.test(bruto?.hora_primeira_mensagem_hoje) ? bruto.hora_primeira_mensagem_hoje : null,
+    pediu_para_parar: bruto?.pediu_para_parar === true,
+  };
+}
+
+/** Pergunta ao Claude. Rejeita com {code} (os códigos do capability "sample", mais "sem_ia"). */
+async function pensar(entrada, listaImoveis) {
+  const sample = await window.claude?.use?.("sample");
+  if (!sample) throw { code: "sem_ia" };
+  const opcoes = { model: MODELO, modelTier: "default" };
+  if (entrada.imagens?.length) opcoes.images = entrada.imagens.map((i) => i.blob);
+  const bruto = await sample.json(montarPedido(entrada, listaImoveis), opcoes);
+  return normalizarResultado(bruto, new Set(listaImoveis.map((i) => i.id)));
+}
+
+
+// ================================================================
+// Copiloto de Vendas Schay — app que roda dentro do Claude (Artifact).
+// Este arquivo e o gestor.js/cerebro.js são juntados num só <script> pelo scripts/montar.mjs.
+// ================================================================
+
+// ---------------------------------------------------------------- 1. Utilidades
+const CHAVES = {
+  clientes: "copiloto.cache.clientes",
+  imoveis: "copiloto.cache.imoveis",
+  config: "copiloto.cache.config",
+  sugestoes: "copiloto.sugestoes",
+  passeio: "copiloto.passeioVisto",
+};
+
+const guardar = {
+  ler(chave, padrao) {
+    try {
+      const v = localStorage.getItem(chave);
+      return v === null ? padrao : JSON.parse(v);
+    } catch {
+      return padrao;
+    }
+  },
+  gravar(chave, valor) {
+    try { localStorage.setItem(chave, JSON.stringify(valor)); } catch { /* sem espaço ou bloqueado */ }
+  },
+};
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const iso = (d) => (d instanceof Date ? d : new Date(d)).toISOString();
+const clonar = (o) => JSON.parse(JSON.stringify(o));
+const DIA = 86_400_000;
+const SEMANA = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
+
+function inicioDoDia(d) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
+const diasEntre = (a, b) => Math.round((inicioDoDia(b) - inicioDoDia(a)) / DIA);
+
+function horaTexto(d) {
+  const h = d.getHours();
+  const m = d.getMinutes();
+  return m ? `${h}h${String(m).padStart(2, "0")}` : `${h}h`;
+}
+
+function diaTexto(d) {
+  const dif = diasEntre(new Date(), d);
+  if (dif === 0) return "hoje";
+  if (dif === 1) return "amanhã";
+  if (dif === -1) return "ontem";
+  if (dif > 1 && dif < 7) return SEMANA[d.getDay()];
+  return `dia ${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+const quandoTexto = (valor) => {
+  const d = new Date(valor);
+  return `${diaTexto(d)} às ${horaTexto(d)}`;
+};
+
+function haQuantoTempo(valor) {
+  const min = Math.max(0, Math.round((Date.now() - Date.parse(valor)) / 60_000));
+  if (min < 2) return "agora há pouco";
+  if (min < 60) return `há ${min} minutos`;
+  const h = Math.round(min / 60);
+  if (h < 24) return h === 1 ? "há 1 hora" : `há ${h} horas`;
+  const d = Math.round(h / 24);
+  return d === 1 ? "há 1 dia" : `há ${d} dias`;
+}
+
+function saudacao() {
+  const h = new Date().getHours();
+  return h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite";
+}
+
+const soNumeros = (s) => String(s ?? "").replace(/\D/g, "");
+
+function foneWhats(t) {
+  let n = soNumeros(t);
+  if (n.length === 10 || n.length === 11) n = `55${n}`;
+  return n.length >= 12 && n.length <= 13 ? n : null;
+}
+
+function foneBonito(t) {
+  let n = soNumeros(t);
+  if (n.length > 11 && n.startsWith("55")) n = n.slice(2);
+  if (n.length === 11) return `(${n.slice(0, 2)}) ${n.slice(2, 7)}-${n.slice(7)}`;
+  if (n.length === 10) return `(${n.slice(0, 2)}) ${n.slice(2, 6)}-${n.slice(6)}`;
+  return t || "";
+}
+
+const mesmoFone = (a, b) => {
+  const x = soNumeros(a);
+  const y = soNumeros(b);
+  return x.length >= 8 && y.length >= 8 && x.slice(-8) === y.slice(-8);
+};
+
+const normNome = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+
+function novoId() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return `c-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/** Mostra os dados de exemplo sem o aviso "EXEMPLO - SUBSTITUIR". */
+const semExemplo = (s) => String(s ?? "").replace(/EXEMPLO - SUBSTITUIR:?\s*(·\s*)?/g, "").replace(/^\(ex\.:\s*(.*)\)$/, "$1").trim();
+
+function linkWhats(telefone, texto) {
+  const fone = foneWhats(telefone);
+  if (fone) return `https://wa.me/${fone}`;
+  return texto ? `https://wa.me/?text=${encodeURIComponent(texto)}` : "https://wa.me/";
+}
+
+/** Copia no próprio toque (antes de o link abrir o WhatsApp). */
+function copiarTexto(texto) {
+  let ok = false;
+  try {
+    const area = document.createElement("textarea");
+    area.value = texto;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.top = "0";
+    area.style.left = "-9999px";
+    area.style.fontSize = "16px";
+    document.body.appendChild(area);
+    area.select();
+    area.setSelectionRange(0, texto.length);
+    ok = document.execCommand("copy");
+    area.remove();
+  } catch { /* tenta do outro jeito */ }
+  try {
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(texto).catch(() => {});
+      ok = true;
+    }
+  } catch { /* sem área de transferência */ }
+  return ok;
+}
+
+let temporizadorAviso = null;
+function esconderAviso() {
+  clearTimeout(temporizadorAviso);
+  document.getElementById("aviso").hidden = true;
+}
+function aviso(texto, ms = 3400) {
+  const el = document.getElementById("aviso");
+  el.textContent = texto;
+  el.hidden = false;
+  el.style.animation = "none";
+  void el.offsetWidth;
+  el.style.animation = "";
+  clearTimeout(temporizadorAviso);
+  temporizadorAviso = setTimeout(() => { el.hidden = true; }, ms);
+}
+
+function festa() {
+  const caixa = document.createElement("div");
+  caixa.className = "festa";
+  caixa.setAttribute("aria-hidden", "true");
+  const pecas = ["🎉", "✨", "🏠", "💛", "🎊", "⭐"];
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement("span");
+    s.textContent = pecas[i % pecas.length];
+    s.style.left = `${Math.random() * 100}%`;
+    s.style.animationDelay = `${Math.random() * 0.8}s`;
+    s.style.fontSize = `${22 + Math.random() * 22}px`;
+    caixa.appendChild(s);
+  }
+  document.body.appendChild(caixa);
+  setTimeout(() => caixa.remove(), 3800);
+}
+
+// ---------------------------------------------------------------- 2. Dados
+// Banco do Claude (capability "db"), compartilhado entre a Schay e o gestor.
+// Uma cópia fica no aparelho só para abrir rápido. Sem banco, o app guarda só no aparelho.
+let db = null;
+let modoLocal = false;
+let ehDono = false;
+let dadosCarregados = false;
+let clientes = guardar.ler(CHAVES.clientes, []);
+if (!Array.isArray(clientes)) clientes = [];
+let imoveis = guardar.ler(CHAVES.imoveis, []);
+if (!Array.isArray(imoveis)) imoveis = [];
+let config = guardar.ler(CHAVES.config, {}) || {};
+const sugestoes = guardar.ler(CHAVES.sugestoes, {}) || {}; // sugestões de resposta: só neste aparelho
+let redesenhoPendente = false;
+
+const nomeCorretora = () => config.nomeCorretora || "Schay";
+const acharPorId = (id) => clientes.find((c) => c.id === id) || null;
+const imovelPorId = (id) => imoveis.find((i) => i.id === id) || null;
+const nomeImovel = (id) => semExemplo(imovelPorId(id)?.titulo) || "";
+const nomeDoCliente = (c) => c.nome || (c.telefone ? foneBonito(c.telefone) : "Cliente sem nome");
+const inicial = (c) => (c.nome || "?").trim().charAt(0).toUpperCase() || "?";
+
+const filas = new Map();
+/** Grava um documento no banco, uma escrita por vez para o mesmo documento. */
+function escrever(caminho, corpo) {
+  if (!db || modoLocal) return Promise.resolve();
+  const anterior = filas.get(caminho) || Promise.resolve();
+  const proxima = anterior
+    .then(() => db.doc(caminho).set(corpo))
+    .catch(async (erro) => {
+      if (erro?.code === "unavailable") {
+        await new Promise((r) => setTimeout(r, 800 + Math.random() * 1200));
+        return db.doc(caminho).set(corpo).catch(tratarErroEscrita);
+      }
+      return tratarErroEscrita(erro);
+    });
+  filas.set(caminho, proxima);
+  return proxima;
+}
+
+function apagarDoc(caminho) {
+  if (!db || modoLocal) return Promise.resolve();
+  const anterior = filas.get(caminho) || Promise.resolve();
+  const proxima = anterior.then(() => db.doc(caminho).delete()).catch(tratarErroEscrita);
+  filas.set(caminho, proxima);
+  return proxima;
+}
+
+function tratarErroEscrita(erro) {
+  console.warn("Copiloto: não consegui gravar no banco", erro?.code, erro?.message);
+  if (erro?.code === "quota_exceeded") aviso("O espaço do app acabou. Avise o seu gestor.", 6000);
+  if (erro?.code === "invalid_argument" || erro?.code === "revoked" || erro?.code === "not_granted") {
+    // Sem permissão para gravar (ex.: convite sem nível de Editor): continua só neste aparelho.
+    modoLocal = true;
+    if (telaAtual().nome === "gestor") desenhar();
+  }
+}
+
+function salvarCliente(c) {
+  c.atualizadoEm = iso(new Date());
+  if (!acharPorId(c.id)) clientes.push(c);
+  guardar.gravar(CHAVES.clientes, clientes);
+  escrever(`clientes/${c.id}`, clonar(c));
+}
+
+function apagarCliente(id) {
+  clientes = clientes.filter((c) => c.id !== id);
+  guardar.gravar(CHAVES.clientes, clientes);
+  delete sugestoes[id];
+  guardar.gravar(CHAVES.sugestoes, sugestoes);
+  return apagarDoc(`clientes/${id}`);
+}
+
+function guardarSugestao(id, valor) {
+  if (valor) sugestoes[id] = valor;
+  else delete sugestoes[id];
+  guardar.gravar(CHAVES.sugestoes, sugestoes);
+}
+
+/** Atualiza a tela quando chegam dados novos, sem atrapalhar quem está digitando. */
+function dadosMudaram() {
+  const nome = telaAtual().nome;
+  if (!["inicio", "chamar", "clientes", "cliente", "gestor", "imovel"].includes(nome)) return;
+  const ativo = document.activeElement;
+  const digitando = ativo && ["INPUT", "TEXTAREA", "SELECT"].includes(ativo.tagName);
+  if (digitando || app.querySelector("details[open], [data-editando]")) {
+    redesenhoPendente = true;
+    return;
+  }
+  desenhar();
+}
+
+function assinarBanco() {
+  db.collection("clientes").onSnapshot(
+    (snap) => {
+      clientes = snap.docs.map((d) => ({ ...clonar(d.data()), id: d.id }));
+      if (!snap.metadata.fromCache) dadosCarregados = true;
+      guardar.gravar(CHAVES.clientes, clientes);
+      dadosMudaram();
+    },
+    (erro) => console.warn("Copiloto: clientes", erro?.code),
+  );
+  db.collection("imoveis").onSnapshot(
+    (snap) => {
+      imoveis = snap.docs.map((d) => ({ ...clonar(d.data()), id: d.id })).sort((a, b) => String(a.titulo).localeCompare(String(b.titulo), "pt-BR"));
+      guardar.gravar(CHAVES.imoveis, imoveis);
+      dadosMudaram();
+    },
+    (erro) => console.warn("Copiloto: imóveis", erro?.code),
+  );
+  db.doc("config/geral").onSnapshot(
+    (snap) => {
+      config = snap.exists ? clonar(snap.data()) : {};
+      guardar.gravar(CHAVES.config, config);
+      dadosMudaram();
+    },
+    (erro) => console.warn("Copiloto: config", erro?.code),
+  );
+}
+
+// ---------------------------------------------------------------- 3. Regras de cada cliente
+const ORDEM = ["novo", "conversando", "visita_marcada", "proposta"];
+const ESTADOS = {
+  novo: "Novo",
+  conversando: "Conversando",
+  visita_marcada: "Visita marcada",
+  proposta: "Fez proposta",
+  vendido: "Comprou 🎉",
+  perdido: "Desistiu",
+};
+const INTERVALO_RETOMADA = { 1: 2, 2: 4, 3: 7 }; // D+1 → D+3 → D+7 → D+14
+
+function mudarEtapa(c, etapa, quando = new Date()) {
+  if (c.etapa === etapa) return;
+  c.etapa = etapa;
+  c.historico = c.historico || [];
+  c.historico.push({ tipo: `etapa:${etapa}`, em: iso(quando) });
+  if (c.historico.length > 80) c.historico = c.historico.slice(-80);
+}
+
+function avancarEtapa(c, alvo, quando) {
+  if (alvo === "perdido") return mudarEtapa(c, "perdido", quando);
+  if (c.etapa === "vendido") return;
+  if (alvo === "vendido") alvo = "proposta"; // venda só com o botão "Comprou"
+  const destino = Math.max(0, ORDEM.indexOf(alvo));
+  if (c.etapa === "perdido") {
+    c.motivoPerda = null;
+    c.historico.push({ tipo: "voltou", em: iso(quando) });
+    c.etapa = "novo";
+    for (let i = 1; i <= Math.max(1, destino); i++) mudarEtapa(c, ORDEM[i], quando);
+    return;
+  }
+  for (let i = ORDEM.indexOf(c.etapa) + 1; i <= destino; i++) mudarEtapa(c, ORDEM[i], quando);
+}
+
+function dataLembrete(dias, hora = "10:00") {
+  const [h, m] = String(hora).split(":").map(Number);
+  const d = new Date();
+  d.setDate(d.getDate() + (Number.isFinite(dias) ? dias : 1));
+  d.setHours(Number.isFinite(h) ? h : 10, Number.isFinite(m) ? m : 0, 0, 0);
+  if (d.getTime() < Date.now() + 45 * 60_000) d.setDate(d.getDate() + 1);
+  return d;
+}
+
+function acharCliente({ nome, telefone }) {
+  if (telefone) {
+    const porFone = clientes.find((c) => c.telefone && mesmoFone(c.telefone, telefone));
+    if (porFone) return porFone;
+  }
+  const n = normNome(nome);
+  if (n.length >= 2) {
+    return clientes.find((c) => normNome(c.nome) === n && !(c.telefone && telefone && !mesmoFone(c.telefone, telefone))) || null;
+  }
+  return null;
+}
+
+/** Cria ou atualiza o cliente com o que a IA leu da conversa. Salvar é automático. */
+function registrarConversa(f, r) {
+  const agora = new Date();
+  let c = (f.clienteId && acharPorId(f.clienteId)) || acharCliente(r.cliente);
+  if (!c) {
+    let primeiro = agora;
+    if (r.momento === "primeiro_contato" && r.hora_primeira_mensagem_hoje) {
+      const [h, m] = r.hora_primeira_mensagem_hoje.split(":").map(Number);
+      const d = new Date();
+      d.setHours(h, m, 0, 0);
+      if (d <= agora) primeiro = d;
+    }
+    c = {
+      id: novoId(),
+      nome: "",
+      telefone: null,
+      imovelId: null,
+      etapa: "novo",
+      motivoPerda: null,
+      temperatura: null,
+      resumo: "",
+      anotacoes: "",
+      criadoEm: iso(agora),
+      primeiroContato: iso(primeiro),
+      primeiraRespostaEm: null,
+      medirResposta: r.momento === "primeiro_contato",
+      ultimaInteracao: null,
+      aguardandoDesde: null,
+      proximoFollowup: null,
+      followupMotivo: null,
+      followupMensagem: "",
+      tentativas: 0,
+      visitaEm: null,
+      momentoUltimo: null,
+      historico: [{ tipo: "chegou", em: iso(primeiro) }],
+    };
+  }
+  if (!c.nome && r.cliente.nome) c.nome = r.cliente.nome;
+  if (!c.telefone && r.cliente.telefone) c.telefone = r.cliente.telefone;
+  c.imovelId = r.imovel_id || f.imovelId || c.imovelId;
+  c.temperatura = r.temperatura;
+  if (r.resumo) c.resumo = r.resumo;
+  avancarEtapa(c, r.etapa, agora);
+  if (c.etapa === "perdido") c.motivoPerda = r.pediu_para_parar ? "Pediu para não ser chamado" : c.motivoPerda || "Desistiu na conversa";
+  c.ultimaInteracao = iso(agora);
+  c.aguardandoDesde = c.etapa === "perdido" ? null : c.aguardandoDesde || iso(agora);
+  c.momentoUltimo = r.momento;
+  if (r.followup.precisa && c.etapa !== "perdido") {
+    c.proximoFollowup = iso(dataLembrete(r.followup.dias, r.followup.hora));
+    c.followupMotivo = "retomar";
+    c.followupMensagem = r.followup.mensagem;
+  } else {
+    c.proximoFollowup = null;
+    c.followupMotivo = null;
+    c.followupMensagem = "";
+  }
+  guardarSugestao(c.id, { principal: r.respostas[0], alternativa: r.respostas[1] || null, em: iso(agora) });
+  salvarCliente(c);
+  return c;
+}
+
+/** Ela mandou a mensagem para o cliente (copiou ou tocou em "Já chamei"). */
+function registrarEnvio(c, agora = new Date()) {
+  c.ultimaInteracao = iso(agora);
+  c.aguardandoDesde = null;
+  if (!c.primeiraRespostaEm) c.primeiraRespostaEm = iso(agora);
+  c.historico = c.historico || [];
+  c.historico.push({ tipo: "enviou", em: iso(agora) });
+  if (c.historico.length > 80) c.historico = c.historico.slice(-80);
+}
+
+/** Por que esse cliente está na lista de hoje (ou null se não está). */
+function motivoParaChamar(c) {
+  if (c.etapa === "vendido" || c.etapa === "perdido") return null;
+  if (c.aguardandoDesde) return { tipo: "esperando", ordem: Date.parse(c.aguardandoDesde) };
+  if (c.proximoFollowup) {
+    const quando = Date.parse(c.proximoFollowup);
+    const fimDeHoje = inicioDoDia(new Date()).getTime() + DIA;
+    if (quando < fimDeHoje) return { tipo: c.followupMotivo === "pos_visita" ? "visita" : "retomar", ordem: 1e13 + quando };
+  }
+  return null;
+}
+
+const listaDeHoje = () =>
+  clientes
+    .map((c) => ({ c, m: motivoParaChamar(c) }))
+    .filter((x) => x.m)
+    .sort((a, b) => a.m.ordem - b.m.ordem);
+
+function contextoParaIA(c, comRetomada) {
+  if (!c) return null;
+  const visita = c.visitaEm ? new Date(c.visitaEm) : null;
+  return {
+    nome: c.nome || null,
+    resumo: c.resumo || null,
+    etapa: c.etapa,
+    temperatura: c.temperatura,
+    diasSemContato: c.ultimaInteracao ? diasEntre(new Date(c.ultimaInteracao), new Date()) : null,
+    tentativas: c.tentativas || 0,
+    motivo: comRetomada ? (c.followupMotivo === "pos_visita" ? "pos_visita" : "retomar") : null,
+    visitaEm: visita ? `${diaTexto(visita)} às ${horaTexto(visita)}` : null,
+    mensagemPlanejada: comRetomada ? c.followupMensagem || null : null,
+  };
+}
+
+// ---------------------------------------------------------------- 4. Fotos
+// Reduz no próprio celular (~1500 px) e manda ao Claude. A imagem não é guardada.
+function carregarImagem(arquivo) {
+  return new Promise((ok, falha) => {
+    const url = URL.createObjectURL(arquivo);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); ok(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); falha(new Error("imagem")); };
+    img.src = url;
+  });
+}
+
+async function desenharReduzido(arquivo, maior) {
+  let fonte;
+  let largura;
+  let altura;
+  try {
+    fonte = await createImageBitmap(arquivo, { imageOrientation: "from-image" });
+    largura = fonte.width;
+    altura = fonte.height;
+  } catch {
+    fonte = await carregarImagem(arquivo);
+    largura = fonte.naturalWidth;
+    altura = fonte.naturalHeight;
+  }
+  const escala = Math.min(1, maior / Math.max(largura, altura));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(largura * escala));
+  canvas.height = Math.max(1, Math.round(altura * escala));
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(fonte, 0, 0, canvas.width, canvas.height);
+  fonte.close?.();
+  return canvas;
+}
+
+async function prepararPrint(arquivo) {
+  const canvas = await desenharReduzido(arquivo, 1500);
+  const blob = await new Promise((ok) => canvas.toBlob(ok, "image/jpeg", 0.85));
+  if (!blob) throw new Error("imagem");
+  return { blob, previa: canvas.toDataURL("image/jpeg", 0.5) };
+}
+
+// ---------------------------------------------------------------- 5. Navegação (pilha própria)
+const app = document.getElementById("app");
+let pilha = [{ nome: "inicio", params: {} }];
+let passeio = null; // índice do mini tour, ou null
+const telaAtual = () => pilha[pilha.length - 1];
+
+function ir(nome, params = {}) {
+  pilha.push({ nome, params });
+  desenhar(true);
+}
+function trocar(nome, params = {}) {
+  pilha[pilha.length - 1] = { nome, params };
+  desenhar(true);
+}
+function voltar() {
+  if (pilha.length > 1) pilha.pop();
+  desenhar(true);
+}
+function irInicio() {
+  pilha = [{ nome: "inicio", params: {} }];
+  desenhar(true);
+}
+
+let pararFrases = null;
+function desenhar(rolarParaCima = false) {
+  redesenhoPendente = false;
+  if (pararFrases) { pararFrases(); pararFrases = null; }
+  const { nome, params } = telaAtual();
+  const tela = TELAS[nome] || TELAS.inicio;
+  app.classList.toggle("largo", nome === "gestor");
+  app.innerHTML = tela(params) + (passeio !== null ? telaPasseio() : "");
+  if (rolarParaCima) window.scrollTo(0, 0);
+  const frase = app.querySelector("[data-frases]");
+  if (frase) pararFrases = girarFrases(frase);
+  const foco = app.querySelector("[data-foco]");
+  if (foco) foco.focus({ preventScroll: true });
+}
+
+function girarFrases(el) {
+  const frases = el.dataset.frases.split("|");
+  let i = 0;
+  const id = setInterval(() => {
+    i = (i + 1) % frases.length;
+    el.textContent = frases[i];
+  }, 3200);
+  return () => clearInterval(id);
+}
+
+// ---------------------------------------------------------------- 6. Pedaços de tela
+const MARCA = `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 22 24 9l16 13" fill="none" stroke="#C9A24A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 20v17h22V20" fill="none" stroke="#F6EBCD" stroke-width="3.5" stroke-linejoin="round"/><path d="M19 27h10a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3h-5l-4 3v-3h-1a3 3 0 0 1-3-3v-2a3 3 0 0 1 3-3z" fill="#C9A24A"/></svg>`;
+const ICONE_WHATS = `<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.4c.2.2 2.4 3.6 5.8 5.1 2.1.9 3 1 4 .8.7-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>`;
+
+function barra({ passo = 0 } = {}) {
+  const trilho = passo
+    ? `<div class="passos" aria-label="Passo ${passo} de 3"><span>Passo ${passo} de 3</span><span class="trilho" aria-hidden="true">${[1, 2, 3].map((i) => `<i class="${i <= passo ? "feito" : ""}"></i>`).join("")}</span></div>`
+    : "";
+  return `<nav class="barra"><button class="voltar" type="button" data-acao="voltar"><span aria-hidden="true">←</span> Voltar</button>${trilho}</nav>`;
+}
+
+function telaPensando(titulo = "Pensando na melhor resposta…", passo = 3) {
+  const frases = ["Lendo a conversa com carinho…", "Entendendo o que o cliente quer…", "Escrevendo a melhor resposta para você…", "Pode levar até meio minuto…", "Quase pronto…"];
+  return `<section class="tela">${barra({ passo })}
+    <div class="pensando" role="status">
+      <div class="balao-digitando" aria-hidden="true"><span></span><span></span><span></span></div>
+      <h1>${esc(titulo)}</h1>
+      <p data-frases="${esc(frases.join("|"))}">${esc(frases[0])}</p>
+    </div></section>`;
+}
+
+// Erros da IA (códigos do Claude) viram mensagens simples.
+const MENSAGENS_ERRO = {
+  not_granted: ["🔑", "Falta dar licença ao Claude", "Para o app pensar nas respostas, o Claude precisa da sua permissão. Toque no botão abaixo e escolha Permitir.", "permitir"],
+  rate_limited: ["⏳", "Muitos pedidos de uma vez", "Pode ser que o limite da sua conta do Claude tenha acabado por agora. Espere um pouco e toque para tentar de novo.", "tentar"],
+  session_expired: ["🔑", "Você saiu da conta do Claude", "Entre de novo na sua conta do Claude e volte para esta página.", null],
+  image_rejected: ["🖼️", "Não consegui ler essa foto", "Volte e escolha a foto de novo, por favor.", null],
+  images_unavailable: ["🖼️", "Fotos não funcionam aqui", "Volte e toque em “Prefere colar o texto?” para colar a conversa.", null],
+  refused: ["💬", "Não consegui responder essa conversa", "Tente mandar outro print, ou cole só as últimas mensagens.", null],
+  sem_ia: ["🛠️", "A inteligência artificial não está disponível", "Abra este app pelo link do Claude, com a sua conta. Se continuar, avise o seu gestor.", null],
+  sampling_disabled: ["🛠️", "A inteligência artificial não está liberada nesta conta", "Avise o seu gestor.", null],
+};
+
+function telaOps(codigo, acaoTentar, passo = 0) {
+  const [emoji, titulo, texto, botao] = MENSAGENS_ERRO[codigo] || ["😕", "Ops, não consegui agora", "Toque no botão abaixo para tentar de novo.", "tentar"];
+  const principal = botao === "permitir"
+    ? `<button class="botao forte" type="button" data-acao="permitir-ia" data-foco>Toque aqui para permitir</button>`
+    : botao === "tentar" ? `<button class="botao forte" type="button" data-acao="${acaoTentar}" data-foco>Toque aqui para tentar de novo</button>` : "";
+  return `<section class="tela">${barra({ passo })}
+    <div class="conteudo"><div class="ops" role="alert">
+      <div class="emoji" aria-hidden="true">${emoji}</div>
+      <h1>${esc(titulo)}</h1>
+      <p>${esc(texto)}</p>
+    </div>
+    ${principal}
+    <button class="botao claro" type="button" data-acao="inicio">Voltar ao início</button>
+    </div></section>`;
+}
+
+/** Balão de mensagem + botão verde de copiar e abrir o WhatsApp. */
+function blocoResposta(resposta, telefone, indice, origem) {
+  if (resposta.tipo === "audio") {
+    return `<div class="pilha">
+      <div class="conversa-fundo"><div class="titulo-audio"><span aria-hidden="true">🎤</span> Grave um áudio curto (até 20 segundos) falando mais ou menos assim:</div>
+      <div class="balao audio">${esc(resposta.texto)}</div></div>
+      <a class="botao whats" href="${esc(linkWhats(telefone))}" target="_blank" rel="noopener noreferrer" data-acao="abrir-audio" data-origem="${origem}">${ICONE_WHATS} ABRIR O WHATSAPP PARA GRAVAR</a>
+    </div>`;
+  }
+  return `<div class="pilha">
+    <div class="conversa-fundo"><div class="balao">${esc(resposta.texto)}<span class="hora" aria-hidden="true">${new Date().toTimeString().slice(0, 5)} ✓✓</span></div></div>
+    <a class="botao whats" href="${esc(linkWhats(telefone, resposta.texto))}" target="_blank" rel="noopener noreferrer" data-acao="copiar" data-indice="${indice}" data-origem="${origem}">${ICONE_WHATS} COPIAR E ABRIR O WHATSAPP</a>
+  </div>`;
+}
+
+const SELOS = { quente: ["🔥", "Quente"], morno: ["🙂", "Morno"], frio: ["❄️", "Frio"] };
+
+const ILUSTRACAO_PRINT = `<svg viewBox="0 0 360 200" role="img" aria-label="Tire um print da conversa no WhatsApp e escolha a foto no app">
+  <rect x="18" y="8" width="112" height="184" rx="18" fill="#0E2A47"/><rect x="25" y="22" width="98" height="156" rx="8" fill="#EFE7DD"/>
+  <rect x="25" y="22" width="98" height="22" rx="8" fill="#15803D"/><circle cx="38" cy="33" r="6" fill="#DCF8C6"/><rect x="48" y="29" width="40" height="7" rx="3" fill="#DCF8C6"/>
+  <rect x="31" y="52" width="62" height="18" rx="6" fill="#fff"/><rect x="55" y="76" width="62" height="18" rx="6" fill="#DCF8C6"/>
+  <rect x="31" y="100" width="70" height="18" rx="6" fill="#fff"/><rect x="47" y="124" width="70" height="26" rx="6" fill="#DCF8C6"/>
+  <rect x="31" y="156" width="54" height="16" rx="6" fill="#fff"/>
+  <g stroke="#C9A24A" stroke-width="4" stroke-linecap="round"><path d="M12 30 4 22M12 100H2M12 170l-8 8"/></g>
+  <path d="M150 100h52" stroke="#C9A24A" stroke-width="5" stroke-dasharray="2 10" stroke-linecap="round"/><path d="m200 88 14 12-14 12" fill="none" stroke="#C9A24A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="232" y="40" width="112" height="120" rx="20" fill="#fff" stroke="#DCEBFA" stroke-width="4"/>
+  <rect x="250" y="58" width="76" height="62" rx="10" fill="#DCEBFA"/><circle cx="270" cy="76" r="8" fill="#C9A24A"/><path d="m254 116 22-24 16 16 10-10 20 18z" fill="#2563A6"/>
+  <circle cx="322" cy="136" r="16" fill="#15803D"/><path d="m314 136 6 6 10-12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+const ILUSTRA_AJUDA = [
+  `<svg viewBox="0 0 320 120" aria-hidden="true"><rect width="320" height="120" rx="14" fill="#EEF5FD"/><rect x="110" y="10" width="100" height="100" rx="14" fill="#0E2A47"/><rect x="117" y="20" width="86" height="80" rx="6" fill="#EFE7DD"/><rect x="123" y="28" width="50" height="12" rx="4" fill="#fff"/><rect x="145" y="46" width="52" height="12" rx="4" fill="#DCF8C6"/><rect x="123" y="64" width="56" height="12" rx="4" fill="#fff"/><rect x="211" y="30" width="5" height="18" rx="2" fill="#C9A24A"/><rect x="211" y="56" width="5" height="26" rx="2" fill="#C9A24A"/><path d="M228 39h22M228 69h22" stroke="#C9A24A" stroke-width="4" stroke-linecap="round"/><text x="254" y="45" font-size="13" font-family="sans-serif" fill="#0E2A47">ligar</text><text x="254" y="75" font-size="13" font-family="sans-serif" fill="#0E2A47">volume −</text></svg>`,
+  `<svg viewBox="0 0 320 120" aria-hidden="true"><rect width="320" height="120" rx="14" fill="#EEF5FD"/><rect x="30" y="22" width="260" height="76" rx="16" fill="#0E2A47"/><rect x="46" y="38" width="44" height="44" rx="12" fill="#17406B" stroke="#C9A24A" stroke-width="2"/><text x="56" y="69" font-size="24">📩</text><rect x="104" y="44" width="150" height="12" rx="5" fill="#fff"/><rect x="104" y="64" width="110" height="9" rx="4" fill="#9FB8D4"/></svg>`,
+  `<svg viewBox="0 0 320 120" aria-hidden="true"><rect width="320" height="120" rx="14" fill="#EEF5FD"/><rect x="20" y="70" width="230" height="36" rx="18" fill="#fff" stroke="#D6E0EC" stroke-width="2"/><rect x="36" y="84" width="2" height="10" fill="#15803D"/><circle cx="276" cy="88" r="20" fill="#15803D"/><path d="m268 88 14-8v16z" fill="#fff"/><rect x="40" y="18" width="92" height="40" rx="10" fill="#13223A"/><path d="m78 58 8 8 8-8z" fill="#13223A"/><text x="60" y="44" font-size="16" font-family="sans-serif" font-weight="700" fill="#fff">Colar</text><circle cx="86" cy="88" r="11" fill="#C9A24A" opacity=".5"/></svg>`,
+  `<svg viewBox="0 0 320 120" aria-hidden="true"><rect width="320" height="120" rx="14" fill="#EEF5FD"/><rect x="30" y="18" width="260" height="84" rx="16" fill="#fff" stroke="#D6E0EC" stroke-width="2"/><circle cx="66" cy="50" r="18" fill="#DCEBFA"/><text x="59" y="57" font-size="18" font-family="sans-serif" font-weight="800" fill="#0E2A47">A</text><rect x="94" y="38" width="90" height="12" rx="5" fill="#0E2A47"/><rect x="94" y="56" width="140" height="10" rx="4" fill="#FEE2E2"/><rect x="48" y="76" width="224" height="16" rx="8" fill="#0E2A47"/><circle cx="276" cy="24" r="14" fill="#D42A1E"/><text x="271" y="30" font-size="15" font-family="sans-serif" font-weight="800" fill="#fff">2</text></svg>`,
+];
+
+function blocoNovidades(c) {
+  return `<div class="novidades"><h2>Teve novidade com ${esc(nomeDoCliente(c).split(" ")[0])}?</h2>
+    <button class="botao dourado" type="button" data-acao="marcou-visita" data-id="${esc(c.id)}">Marcou visita 🏠</button>
+    <div class="grade-2">
+      <button class="botao claro" type="button" data-acao="comprou" data-id="${esc(c.id)}">Comprou 🎉</button>
+      <button class="botao claro" type="button" data-acao="desistiu" data-id="${esc(c.id)}">Desistiu</button>
+    </div></div>`;
+}
+
+// Mini tour do primeiro acesso: os 3 botões + a licença do Claude.
+const PASSEIO = [
+  ["📩", "Responder um cliente", "Cliente te mandou mensagem? Tire um print da conversa e toque aqui. Eu te mostro o que responder."],
+  ["📞", "Quem chamar hoje", "Aqui ficam os clientes que estão esperando você. A bolinha vermelha mostra quantos são."],
+  ["❓", "Preciso de ajuda", "Ficou com dúvida? Toque aqui para ver o passo a passo ou falar com o suporte."],
+  ["🤝", "Uma licença do Claude", "O app usa a inteligência do Claude. Ao tocar no botão, o Claude vai perguntar se pode: toque em Permitir."],
+];
+
+function telaPasseio() {
+  const [emoji, titulo, texto] = PASSEIO[passeio];
+  const ultimo = passeio === PASSEIO.length - 1;
+  return `<div class="passeio" role="dialog" aria-modal="true" aria-labelledby="titulo-passeio">
+    <div class="passeio-cartao">
+      <div class="emoji-grande" aria-hidden="true">${emoji}</div>
+      <h2 id="titulo-passeio">${esc(titulo)}</h2>
+      <p>${esc(texto)}</p>
+      <div class="bolinhas-passeio" aria-hidden="true">${PASSEIO.map((_, i) => `<i class="${i === passeio ? "ativa" : ""}"></i>`).join("")}</div>
+      <button class="botao forte" type="button" data-acao="passeio-ok" data-foco>${ultimo ? "Entendi, vamos começar!" : "Entendi"}</button>
+    </div></div>`;
+}
+
+// ---------------------------------------------------------------- 7. Telas
+let fluxo = null;    // "Responder um cliente" em andamento
+let retomada = null; // "Ver o que mandar" em andamento
+
+const TELAS = {
+  inicio() {
+    const n = listaDeHoje().length;
+    return `<section class="tela">
+      <header class="topo">
+        <div class="topo-marca">${MARCA}<span>Copiloto de Vendas</span></div>
+        <h1>${saudacao()}, ${esc(nomeCorretora())}! 👋</h1>
+        <p>O que você quer fazer agora?</p>
+      </header>
+      <div class="botoes-inicio">
+        <button class="escolha principal" type="button" data-acao="responder">
+          <span class="icone" aria-hidden="true">📩</span>
+          <span><strong>Responder um cliente</strong><span class="sub">Toque aqui quando um cliente te mandar mensagem</span></span>
+        </button>
+        <button class="escolha" type="button" data-acao="chamar">
+          <span class="icone" aria-hidden="true">📞</span>
+          <span><strong>Quem chamar hoje</strong><span class="sub">Toque aqui para ver quem está esperando seu retorno</span></span>
+          ${n ? `<span class="bolinha" aria-label="${n} ${n === 1 ? "cliente esperando" : "clientes esperando"}">${n}</span>` : ""}
+        </button>
+        <button class="escolha discreta" type="button" data-acao="ajuda">
+          <span class="icone" aria-hidden="true">❓</span>
+          <span><strong>Preciso de ajuda</strong><span class="sub">Toque aqui para ver como usar ou falar com o suporte</span></span>
+        </button>
+      </div>
+      <p class="rodape-inicio">Imobiliária Innovar · São Leopoldo</p>
+      ${ehDono ? `<button class="link pequeno" type="button" data-acao="gestor">📊 Painel do gestor (só você vê este botão)</button>` : ""}
+    </section>`;
+  },
+
+  // ---------- Passo 1 ----------
+  foto() {
+    if (!fluxo) novoFluxo();
+    const c = fluxo.clienteId ? acharPorId(fluxo.clienteId) : null;
+    if (fluxo.modoTexto) {
+      return `<section class="tela">${barra({ passo: 1 })}
+        <div class="conteudo">
+          <div class="titulo"><h1>Cole a conversa aqui</h1><p>No WhatsApp, segure o dedo em cima da mensagem do cliente, toque em <b>Copiar</b> e depois cole abaixo.</p></div>
+          <label class="escondido" for="texto-conversa">Conversa com o cliente</label>
+          <textarea id="texto-conversa" class="campo" placeholder="Toque aqui e escolha Colar" data-foco>${esc(fluxo.texto)}</textarea>
+          <button class="botao forte" type="button" data-acao="usar-texto">Continuar →</button>
+          <button class="link pequeno" type="button" data-acao="modo-foto">Prefere mandar a foto? Toque aqui</button>
+        </div></section>`;
+    }
+    return `<section class="tela">${barra({ passo: 1 })}
+      <div class="conteudo">
+        <div class="titulo"><h1>Mande a foto da conversa</h1>${c ? `<p>Conversa com <b>${esc(nomeDoCliente(c))}</b></p>` : ""}</div>
+        <div class="ilustracao">${ILUSTRACAO_PRINT}<p>Tire um print da conversa no WhatsApp e escolha aqui</p></div>
+        <button class="botao forte gigante" type="button" data-acao="escolher-foto" data-foco><span class="emoji" aria-hidden="true">📷</span>Toque aqui para escolher a foto</button>
+        <button class="link pequeno" type="button" data-acao="modo-texto">Prefere colar o texto? Toque aqui</button>
+      </div></section>`;
+  },
+
+  // ---------- Passo 2 ----------
+  imovel() {
+    if (!fluxo) return TELAS.inicio();
+    const previas = fluxo.imagens.length
+      ? `<div class="fotos-escolhidas">${fluxo.imagens.map((i) => `<img src="${i.previa}" alt="">`).join("")}<span>✓ ${fluxo.imagens.length === 1 ? "Foto recebida" : `${fluxo.imagens.length} fotos recebidas`}</span></div>`
+      : `<div class="fotos-escolhidas"><span>✓ Conversa recebida</span></div>`;
+    const cards = imoveis.map((i) => {
+      const detalhes = [semExemplo(i.bairro), semExemplo(i.preco)].filter(Boolean).join(" · ");
+      const foto = typeof i.foto === "string" && i.foto.startsWith("data:image/") ? i.foto : "";
+      return `<button class="imovel" type="button" data-acao="escolher-imovel" data-id="${esc(i.id)}">
+        ${foto ? `<img src="${esc(foto)}" alt="">` : `<span class="icone-pular" aria-hidden="true">🏠</span>`}
+        <span>${i.exemplo ? `<span class="etiqueta">EXEMPLO</span>` : ""}<strong>${esc(semExemplo(i.titulo))}</strong><span>${esc(detalhes)}</span></span>
+      </button>`;
+    }).join("");
+    return `<section class="tela">${barra({ passo: 2 })}
+      <div class="conteudo">
+        <div class="titulo"><h1>Sobre qual imóvel ele perguntou?</h1><p>Toque no imóvel. Se não souber, toque em “Não sei”.</p></div>
+        ${previas}
+        <div class="lista-imoveis">${cards}
+          <button class="imovel pular" type="button" data-acao="escolher-imovel" data-id="">
+            <span class="icone-pular" aria-hidden="true">🤷</span>
+            <span><strong>Não sei / pular</strong><span>O app tenta descobrir pela conversa</span></span>
+          </button>
+        </div>
+      </div></section>`;
+  },
+
+  // ---------- Passo 3 ----------
+  resultado() {
+    if (!fluxo) return TELAS.inicio();
+    if (fluxo.carregando) return telaPensando();
+    if (fluxo.erro) return telaOps(fluxo.erro, "tentar-de-novo", 3);
+    const r = fluxo.resultado;
+    if (!r) return TELAS.inicio();
+    const c = acharPorId(fluxo.clienteId);
+    const [emoji, palavra] = SELOS[r.temperatura] || SELOS.morno;
+    const outra = r.respostas[1];
+    const objetivo = r.proximo_passo ? `<p class="objetivo">🎯 Seu objetivo agora: <b>${esc(r.proximo_passo)}</b></p>` : "";
+    const lembrete = c?.proximoFollowup
+      ? `<div class="cartao lembrete"><span class="emoji" aria-hidden="true">⏰</span><div>
+          <strong>Se ele não responder:</strong><p>chamar de novo ${esc(quandoTexto(c.proximoFollowup))}</p>
+          ${objetivo}<span class="ok-verde">✓ Lembrete criado</span></div></div>`
+      : objetivo;
+    const pedirNome = c && !c.nome
+      ? `<div class="cartao pilha"><h2>Qual o nome desse cliente?</h2><p class="objetivo">Para eu te lembrar dele depois.</p>
+          <label class="escondido" for="nome-cliente">Nome do cliente</label>
+          <input id="nome-cliente" class="campo" type="text" autocomplete="off" autocapitalize="words" placeholder="Toque aqui e escreva o nome">
+          <button class="botao claro" type="button" data-acao="guardar-nome">Guardar o nome</button></div>`
+      : "";
+    return `<section class="tela">${barra({ passo: 3 })}
+      <div class="conteudo">
+        <div class="selo ${esc(r.temperatura)}"><span class="emoji" aria-hidden="true">${emoji}</span>
+          <div><strong>Cliente ${palavra}</strong><p>${esc(r.leitura)}</p></div></div>
+        <div class="responda"><h2>Responda assim:</h2>${blocoResposta(r.respostas[0], c?.telefone, 0, "fluxo")}</div>
+        ${outra ? (fluxo.mostrarOutra
+          ? `<div class="responda"><h2>Outra opção:</h2>${blocoResposta(outra, c?.telefone, 1, "fluxo")}</div>`
+          : `<button class="link" type="button" data-acao="outra-opcao">Quero outra opção de resposta</button>`) : ""}
+        ${pedirNome}
+        ${lembrete}
+        ${r.por_que ? `<div class="dica"><strong>💡 Dica</strong><p>${esc(r.por_que)}</p></div>` : ""}
+        <button class="botao claro" type="button" data-acao="inicio">Voltar ao início</button>
+      </div></section>`;
+  },
+
+  // ---------- Quem chamar hoje ----------
+  chamar() {
+    const lista = listaDeHoje();
+    if (!lista.length) {
+      return `<section class="tela">${barra()}
+        <div class="conteudo"><div class="vazio"><div class="emoji" aria-hidden="true">🎉</div><h1>Tudo em dia!</h1><p>Ninguém esperando você agora. Quando um cliente mandar mensagem, toque em “Responder um cliente”.</p></div>
+        <button class="botao forte" type="button" data-acao="inicio">Voltar ao início</button>
+        ${clientes.length ? `<button class="link pequeno" type="button" data-acao="clientes">Ver todos os meus clientes</button>` : ""}
+        </div></section>`;
+    }
+    const cards = lista.map(({ c, m }) => {
+      let situacao;
+      if (m.tipo === "esperando") situacao = `<p class="situacao urgente">⏳ Esperando sua resposta ${esc(haQuantoTempo(c.aguardandoDesde))}</p>`;
+      else if (m.tipo === "visita") situacao = `<p class="situacao visita">🏠 Teve visita: pergunte o que ele achou</p>`;
+      else {
+        const dias = c.ultimaInteracao ? diasEntre(new Date(c.ultimaInteracao), new Date()) : 0;
+        situacao = `<p class="situacao hoje">📅 ${dias <= 0 ? "Combinado chamar hoje" : dias === 1 ? "Faz 1 dia que vocês não se falam" : `Faz ${dias} dias que vocês não se falam`}</p>`;
+      }
+      return `<article class="pessoa">
+        <div class="pessoa-topo"><span class="avatar" aria-hidden="true">${esc(inicial(c))}</span>
+          <div><h2>${esc(nomeDoCliente(c))}</h2>${c.imovelId ? `<p class="imovel-nome">${esc(nomeImovel(c.imovelId))}</p>` : ""}</div></div>
+        ${situacao}
+        <button class="botao forte" type="button" data-acao="ver-o-que-mandar" data-id="${esc(c.id)}">Ver o que mandar →</button>
+      </article>`;
+    }).join("");
+    return `<section class="tela">${barra()}
+      <div class="conteudo">
+        <div class="titulo"><h1>Quem chamar hoje</h1><p>${lista.length === 1 ? "1 cliente esperando você" : `${lista.length} clientes esperando você`}</p></div>
+        <div class="lista-chamar">${cards}</div>
+        <button class="link pequeno" type="button" data-acao="clientes">Ver todos os meus clientes</button>
+      </div></section>`;
+  },
+
+  // ---------- Ver o que mandar ----------
+  retomar(params) {
+    const c = acharPorId(params.id);
+    if (!c || !retomada || retomada.clienteId !== c.id) return TELAS.chamar();
+    if (retomada.carregando) return telaPensando("Preparando a mensagem…", 0);
+    if (retomada.erro) return telaOps(retomada.erro, "tentar-retomada");
+    const r = retomada.resultado;
+    const outra = r.respostas[1];
+    const m = motivoParaChamar(c);
+    const titulo = m?.tipo === "visita" ? "Pergunte o que ele achou da visita" : m?.tipo === "esperando" ? "Responda o cliente" : "Chame o cliente de novo";
+    return `<section class="tela">${barra()}
+      <div class="conteudo">
+        <div class="titulo"><h1>${esc(nomeDoCliente(c))}</h1><p>${esc(titulo)}</p></div>
+        <div class="responda"><h2>Mande assim:</h2>${blocoResposta(r.respostas[0], c.telefone, 0, "retomada")}</div>
+        ${outra ? (retomada.mostrarOutra
+          ? `<div class="responda"><h2>Outra opção:</h2>${blocoResposta(outra, c.telefone, 1, "retomada")}</div>`
+          : `<button class="link" type="button" data-acao="outra-opcao-retomada">Quero outra opção de resposta</button>`) : ""}
+        <button class="botao ${retomada.copiou ? "forte destaque" : "claro"}" type="button" data-acao="ja-chamei">✓ Já chamei</button>
+        ${r.por_que ? `<div class="dica"><strong>💡 Dica</strong><p>${esc(r.por_que)}</p></div>` : ""}
+        ${blocoNovidades(c)}
+        <button class="link pequeno" type="button" data-acao="nova-conversa" data-id="${esc(c.id)}">Ele respondeu? Toque aqui e mande a foto da conversa</button>
+      </div></section>`;
+  },
+
+  // ---------- Todos os clientes ----------
+  clientes() {
+    const ativos = clientes.filter((c) => c.etapa !== "vendido" && c.etapa !== "perdido");
+    const fechados = clientes.filter((c) => c.etapa === "vendido" || c.etapa === "perdido");
+    const porData = (a, b) => Date.parse(b.ultimaInteracao || b.criadoEm) - Date.parse(a.ultimaInteracao || a.criadoEm);
+    const linha = (c) => `<button class="linha-cliente" type="button" data-acao="abrir-cliente" data-id="${esc(c.id)}">
+        <span class="avatar" aria-hidden="true">${esc(inicial(c))}</span>
+        <span><strong>${esc(nomeDoCliente(c))}</strong><span class="estado ${esc(c.etapa)}">${esc(ESTADOS[c.etapa] || "")}</span></span>
+        <span class="seta" aria-hidden="true">›</span></button>`;
+    return `<section class="tela">${barra()}
+      <div class="conteudo">
+        <div class="titulo"><h1>Meus clientes</h1><p>Toque em um cliente para ver ou marcar novidades.</p></div>
+        ${clientes.length ? "" : `<div class="vazio"><div class="emoji" aria-hidden="true">📭</div><p>Ainda não tem nenhum cliente. Eles aparecem aqui sozinhos quando você responde alguém.</p></div>`}
+        <div class="lista-chamar">${ativos.sort(porData).map(linha).join("")}</div>
+        ${fechados.length ? `<h2 class="rotulo">Já resolvidos</h2><div class="lista-chamar">${fechados.sort(porData).map(linha).join("")}</div>` : ""}
+      </div></section>`;
+  },
+
+  cliente(params) {
+    const c = acharPorId(params.id);
+    if (!c) return TELAS.clientes();
+    const ativo = c.etapa !== "vendido" && c.etapa !== "perdido";
+    return `<section class="tela">${barra()}
+      <div class="conteudo">
+        <div class="pessoa-topo"><span class="avatar" aria-hidden="true">${esc(inicial(c))}</span>
+          <div class="titulo"><h1>${esc(nomeDoCliente(c))}</h1><span class="estado ${esc(c.etapa)}">${esc(ESTADOS[c.etapa] || "")}</span></div></div>
+        <div class="cartao"><dl class="dados-cliente">
+          ${c.telefone ? `<div><dt>Telefone</dt><dd><a href="${esc(linkWhats(c.telefone))}" target="_blank" rel="noopener noreferrer">${esc(foneBonito(c.telefone))}</a></dd></div>` : ""}
+          ${c.imovelId ? `<div><dt>Imóvel</dt><dd>${esc(nomeImovel(c.imovelId))}</dd></div>` : ""}
+          ${c.resumo ? `<div><dt>O que ele quer</dt><dd>${esc(c.resumo)}</dd></div>` : ""}
+          ${c.visitaEm ? `<div><dt>Visita</dt><dd>${esc(quandoTexto(c.visitaEm))}</dd></div>` : ""}
+          ${ativo ? `<div><dt>Próximo lembrete</dt><dd>${c.proximoFollowup ? esc(quandoTexto(c.proximoFollowup)) : "Nenhum"}</dd></div>` : ""}
+          ${c.motivoPerda && c.etapa === "perdido" ? `<div><dt>Motivo</dt><dd>${esc(c.motivoPerda)}</dd></div>` : ""}
+        </dl></div>
+        ${ativo ? `<button class="botao forte" type="button" data-acao="ver-o-que-mandar" data-id="${esc(c.id)}">Ver o que mandar →</button>` : ""}
+        <button class="botao claro" type="button" data-acao="nova-conversa" data-id="${esc(c.id)}">📷 Mandar foto de conversa nova</button>
+        ${ativo ? blocoNovidades(c) : ""}
+        <div class="cartao pilha"><label class="nome-campo" for="anotacoes">Anotações</label>
+          <textarea id="anotacoes" class="campo" placeholder="Ex.: prefere falar depois das 18h">${esc(c.anotacoes)}</textarea>
+          <button class="botao claro" type="button" data-acao="guardar-anotacoes" data-id="${esc(c.id)}">Guardar anotações</button>
+          ${c.nome ? "" : `<label class="nome-campo" for="nome-cliente">Nome</label><input id="nome-cliente" class="campo" type="text" autocapitalize="words" placeholder="Escreva o nome"><button class="botao claro" type="button" data-acao="guardar-nome" data-id="${esc(c.id)}">Guardar o nome</button>`}
+        </div>
+      </div></section>`;
+  },
+
+  // ---------- Marcou visita ----------
+  visita(params) {
+    const c = acharPorId(params.id);
+    if (!c) return TELAS.inicio();
+    if (params.dia === undefined) {
+      const dias = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        const rotulo = i === 0 ? "Hoje" : i === 1 ? "Amanhã" : `${SEMANA[d.getDay()].replace("-feira", "")} ${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+        return `<button class="botao claro" type="button" data-acao="visita-dia" data-dia="${i}">${esc(rotulo.charAt(0).toUpperCase() + rotulo.slice(1))}</button>`;
+      }).join("");
+      return `<section class="tela">${barra()}
+        <div class="conteudo"><div class="titulo"><h1>Que dia é a visita? 🏠</h1><p>Com ${esc(nomeDoCliente(c))}</p></div>
+        <div class="grade-2">${dias}</div></div></section>`;
+    }
+    const horas = ["09:00", "10:00", "11:00", "13:30", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"]
+      .map((h) => `<button class="botao claro" type="button" data-acao="visita-hora" data-hora="${h}">${esc(horaTexto(new Date(`2000-01-01T${h}:00`)))}</button>`).join("");
+    return `<section class="tela">${barra()}
+      <div class="conteudo"><div class="titulo"><h1>Que horas? ⏰</h1><p>Visita com ${esc(nomeDoCliente(c))}</p></div>
+      <div class="grade-2">${horas}</div></div></section>`;
+  },
+
+  comprou(params) {
+    const c = acharPorId(params.id);
+    if (!c) return TELAS.inicio();
+    return `<section class="tela">${barra()}
+      <div class="conteudo"><div class="vazio"><div class="emoji" aria-hidden="true">🎉</div><h1>${esc(nomeDoCliente(c))} comprou mesmo?</h1></div>
+      <button class="botao forte" type="button" data-acao="confirmar-compra" data-id="${esc(c.id)}" data-foco>Sim, comprou! 🎉</button>
+      <button class="botao claro" type="button" data-acao="voltar">Não, voltar</button></div></section>`;
+  },
+
+  desistiu(params) {
+    const c = acharPorId(params.id);
+    if (!c) return TELAS.inicio();
+    const motivos = ["Achou caro 💸", "Comprou outro imóvel", "Só estava olhando", "Parou de responder", "Não conseguiu financiamento", "Outro motivo"];
+    return `<section class="tela">${barra()}
+      <div class="conteudo"><div class="titulo"><h1>Por que ${esc(nomeDoCliente(c))} desistiu?</h1><p>Toque no motivo. Isso ajuda a melhorar os anúncios.</p></div>
+      <div class="opcoes">${motivos.map((m) => `<button class="botao claro" type="button" data-acao="confirmar-desistiu" data-id="${esc(c.id)}" data-motivo="${esc(m.replace(/\s*💸/, ""))}">${esc(m)}</button>`).join("")}</div>
+      </div></section>`;
+  },
+
+  // ---------- Ajuda ----------
+  ajuda() {
+    const passos = [
+      ["Cliente mandou mensagem?", "No WhatsApp, tire um print da conversa (aperte o botão de ligar junto com o de abaixar o volume).", ILUSTRA_AJUDA[0]],
+      ["Toque em “📩 Responder um cliente”", "Escolha a foto do print e o imóvel. O app pensa na melhor resposta.", ILUSTRA_AJUDA[1]],
+      ["Toque no botão verde", "Ele copia a resposta e abre o WhatsApp. Lá, segure o dedo na caixa de mensagem e toque em Colar. Depois é só enviar.", ILUSTRA_AJUDA[2]],
+      ["Todo dia, veja “📞 Quem chamar hoje”", "O app lembra quem está esperando você. Depois de mandar a mensagem, toque em “✓ Já chamei”.", ILUSTRA_AJUDA[3]],
+    ];
+    const suporte = foneWhats(config.suporteWhatsapp);
+    return `<section class="tela">${barra()}
+      <div class="conteudo">
+        <div class="titulo"><h1>Como usar o app</h1><p>São só 4 passos. Você consegue! 💛</p></div>
+        ${passos.map(([t, d, svg], i) => `<div class="cartao passo-ajuda"><span class="numero" aria-hidden="true">${i + 1}</span><div><h2>${t}</h2><p>${d}</p>${svg}</div></div>`).join("")}
+        ${suporte ? `<a class="botao whats" href="https://wa.me/${esc(suporte)}?text=${encodeURIComponent("Oi! Preciso de ajuda com o Copiloto de Vendas.")}" target="_blank" rel="noopener noreferrer">${ICONE_WHATS} Falar com o suporte</a>
+          <p class="objetivo" style="text-align:center">Suporte: <b>${esc(foneBonito(suporte))}</b></p>` : ""}
+        <button class="botao claro" type="button" data-acao="instalar">📲 Como colocar o app na tela do celular</button>
+        <button class="link pequeno" type="button" data-acao="rever-passeio">Ver a apresentação de novo</button>
+      </div></section>`;
+  },
+
+  // ---------- Como colocar na tela do celular ----------
+  instalar() {
+    return `<section class="tela">${barra()}
+      <div class="conteudo">
+        <div class="titulo"><h1>Coloque o app na tela do celular</h1><p>Assim você abre o Copiloto com um toque, sem procurar o link.</p></div>
+        <div class="nota-instalar">Abra o link do Copiloto no navegador do celular, já entrando na sua conta do Claude. É nessa tela que você segue os passos abaixo.</div>
+        <div class="cartao pilha"><h2>🤖 Android (Chrome)</h2>
+          <div class="passo-ajuda"><span class="numero" aria-hidden="true">1</span><div><p>Toque nos <b>3 pontinhos ⋮</b> no canto de cima.</p></div></div>
+          <div class="passo-ajuda"><span class="numero" aria-hidden="true">2</span><div><p>Toque em <b>Adicionar à tela inicial</b>.</p></div></div>
+          <div class="passo-ajuda"><span class="numero" aria-hidden="true">3</span><div><p>Toque em <b>Adicionar</b>. Pronto!</p></div></div>
+        </div>
+        <div class="cartao pilha"><h2>🍎 iPhone (Safari)</h2>
+          <div class="passo-ajuda"><span class="numero" aria-hidden="true">1</span><div><p>Toque no botão <b>Compartilhar</b> (quadrado com setinha para cima), embaixo.</p></div></div>
+          <div class="passo-ajuda"><span class="numero" aria-hidden="true">2</span><div><p>Role e toque em <b>Adicionar à Tela de Início</b>.</p></div></div>
+          <div class="passo-ajuda"><span class="numero" aria-hidden="true">3</span><div><p>Toque em <b>Adicionar</b>. Pronto!</p></div></div>
+        </div>
+        <button class="botao forte" type="button" data-acao="inicio">Voltar ao início</button>
+      </div></section>`;
+  },
+};
+
+// ---------------------------------------------------------------- 8. O que cada botão faz
+function novoFluxo(clienteId = null) {
+  fluxo = { clienteId, imagens: [], texto: "", modoTexto: false, imovelId: null, escolha: 0, resultado: null, erro: null, carregando: false, mostrarOutra: false, copiou: false };
+}
+
+function abrirSeletorFoto() {
+  const input = document.getElementById("seletor-foto");
+  input.value = "";
+  input.click();
+}
+
+function pedirIA(f) {
+  const c = f.clienteId ? acharPorId(f.clienteId) : null;
+  const entrada = {
+    modo: "conversa",
+    imagens: f.imagens,
+    texto: f.texto,
+    imovelId: f.imovelId || c?.imovelId || null,
+    cliente: contextoParaIA(c, false),
+  };
+  return pensar(entrada, imoveis).then(
+    (resultado) => ({ resultado }),
+    (erro) => {
+      console.warn("Copiloto: IA", erro?.code, erro?.message);
+      return { erro: erro?.code || "upstream_error" };
+    },
+  );
+}
+
+function conversaPronta() {
+  if (imoveis.length) ir("imovel");
+  else escolherImovel("");
+}
+
+async function escolherImovel(id) {
+  const f = fluxo;
+  const minha = ++f.escolha;
+  f.imovelId = id || null;
+  f.carregando = true;
+  f.erro = null;
+  f.resultado = null;
+  f.mostrarOutra = false;
+  f.copiou = false;
+  if (telaAtual().nome === "resultado") desenhar(true);
+  else ir("resultado");
+  const r = await pedirIA(f);
+  if (f !== fluxo || minha !== f.escolha) return;
+  f.carregando = false;
+  if (r.erro) f.erro = r.erro;
+  else {
+    f.resultado = r.resultado;
+    const c = registrarConversa(f, r.resultado);
+    f.clienteId = c.id;
+    setTimeout(() => aviso("Cliente salvo ✓"), 400);
+  }
+  if (telaAtual().nome === "resultado") desenhar(true);
+}
+
+async function abrirRetomada(id) {
+  const c = acharPorId(id);
+  if (!c) return;
+  const m = motivoParaChamar(c);
+  const guardada = sugestoes[id];
+  if (m?.tipo === "esperando" && guardada?.principal) {
+    // A resposta já foi pensada neste aparelho: mostra na hora, sem gastar de novo.
+    retomada = { clienteId: id, carregando: false, erro: null, mostrarOutra: false, copiou: false,
+      resultado: { respostas: [guardada.principal, guardada.alternativa].filter(Boolean), por_que: "", followup: null } };
+    return ir("retomar", { id });
+  }
+  if (m?.tipo === "esperando") {
+    novoFluxo(id);
+    ir("foto");
+    abrirSeletorFoto();
+    return;
+  }
+  retomada = { clienteId: id, carregando: true, erro: null, mostrarOutra: false, copiou: false };
+  ir("retomar", { id });
+  await pedirRetomada();
+}
+
+async function pedirRetomada() {
+  const atual = retomada;
+  const c = acharPorId(atual.clienteId);
+  atual.carregando = true;
+  atual.erro = null;
+  if (telaAtual().nome === "retomar") desenhar();
+  try {
+    atual.resultado = await pensar({ modo: "retomar", imovelId: c.imovelId, cliente: contextoParaIA(c, true) }, imoveis);
+  } catch (erro) {
+    console.warn("Copiloto: IA", erro?.code, erro?.message);
+    atual.erro = erro?.code || "upstream_error";
+  }
+  atual.carregando = false;
+  if (retomada === atual && telaAtual().nome === "retomar") desenhar();
+}
+
+function jaChamei() {
+  const c = acharPorId(retomada?.clienteId);
+  if (!c) return voltar();
+  const m = motivoParaChamar(c);
+  const agora = new Date();
+  const hora = retomada.resultado?.followup?.hora || "10:00";
+  registrarEnvio(c, agora);
+  let mensagem = "Feito ✓";
+  if (m?.tipo === "esperando") {
+    mensagem = c.proximoFollowup ? `Feito ✓ Se ele não responder, te lembro ${quandoTexto(c.proximoFollowup)}` : "Feito ✓";
+  } else if (m?.tipo === "visita") {
+    c.followupMotivo = "retomar";
+    c.tentativas = 0;
+    c.proximoFollowup = iso(dataLembrete(1, hora));
+    c.followupMensagem = retomada.resultado?.followup?.mensagem || "";
+    mensagem = `Feito ✓ Se ele não responder, te lembro ${quandoTexto(c.proximoFollowup)}`;
+  } else {
+    c.tentativas = (c.tentativas || 0) + 1;
+    if (c.tentativas >= 4) {
+      c.proximoFollowup = null;
+      c.motivoPerda = "Parou de responder";
+      mudarEtapa(c, "perdido", agora);
+      mensagem = "Feito ✓ Ele saiu da sua lista. Se voltar a falar, é só mandar a foto da conversa.";
+    } else {
+      c.proximoFollowup = iso(dataLembrete(INTERVALO_RETOMADA[c.tentativas], hora));
+      c.followupMotivo = "retomar";
+      c.followupMensagem = retomada.resultado?.followup?.mensagem || "";
+      mensagem = `Feito ✓ Vou te lembrar de novo ${quandoTexto(c.proximoFollowup)}`;
+    }
+  }
+  guardarSugestao(c.id, null);
+  salvarCliente(c);
+  aviso(mensagem, 4200);
+  retomada = null;
+  voltar();
+}
+
+async function pedirLicencaIA() {
+  try {
+    const permissoes = await window.claude?.use?.("permissions");
+    if (permissoes) await permissoes.request(["sample"]);
+  } catch { /* a primeira resposta pede de novo, se precisar */ }
+}
+
+const ACOES = {
+  voltar,
+  inicio: irInicio,
+  responder() {
+    novoFluxo();
+    ir("foto");
+    abrirSeletorFoto(); // já abre a galeria: um toque a menos
+  },
+  chamar: () => ir("chamar"),
+  ajuda: () => ir("ajuda"),
+  instalar: () => ir("instalar"),
+  clientes: () => ir("clientes"),
+  "escolher-foto": abrirSeletorFoto,
+  "modo-texto"() {
+    fluxo.modoTexto = true;
+    desenhar();
+  },
+  "modo-foto"() {
+    fluxo.modoTexto = false;
+    desenhar();
+  },
+  "usar-texto"() {
+    const texto = document.getElementById("texto-conversa")?.value || "";
+    if (texto.trim().length < 3) {
+      aviso("Cole a conversa na caixa antes de continuar 🙂");
+      return;
+    }
+    fluxo.texto = texto;
+    fluxo.imagens = [];
+    conversaPronta();
+  },
+  "escolher-imovel": (el) => escolherImovel(el.dataset.id),
+  "tentar-de-novo": () => escolherImovel(fluxo.imovelId || ""),
+  async "permitir-ia"() {
+    try {
+      const permissoes = await window.claude?.use?.("permissions");
+      if (!permissoes) return;
+      const estado = await permissoes.request(["sample"]);
+      if (estado?.sample !== "granted") await permissoes.manage().catch(() => aviso("Abra o menu Permissões desta página no Claude e ligue a IA.", 6000));
+    } catch { /* ignorar */ }
+  },
+  "outra-opcao"() {
+    fluxo.mostrarOutra = true;
+    desenhar();
+    app.querySelectorAll(".responda")[1]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  },
+  copiar(el) {
+    const daRetomada = el.dataset.origem === "retomada";
+    const fonte = daRetomada ? retomada : fluxo;
+    const resposta = fonte?.resultado?.respostas?.[Number(el.dataset.indice) || 0];
+    if (!resposta) return;
+    const ok = copiarTexto(resposta.texto);
+    const c = acharPorId(fonte.clienteId);
+    const temFone = !!foneWhats(c?.telefone);
+    aviso(ok ? (temFone ? "Copiado! ✓ Agora é só colar na conversa" : "Copiado! ✓ Escolha o cliente no WhatsApp e envie") : "Abrindo o WhatsApp…", 5000);
+    if (!daRetomada && c && !fonte.copiou) {
+      fonte.copiou = true;
+      const retomando = c.momentoUltimo === "sumiu";
+      registrarEnvio(c);
+      c.tentativas = retomando ? (c.tentativas || 0) + 1 : 0;
+      salvarCliente(c);
+    }
+    if (daRetomada && !fonte.copiou) {
+      fonte.copiou = true;
+      setTimeout(() => desenhar(), 600); // destaca o "✓ Já chamei"
+    }
+    // o próprio link abre o WhatsApp
+  },
+  "abrir-audio"(el) {
+    const daRetomada = el.dataset.origem === "retomada";
+    const fonte = daRetomada ? retomada : fluxo;
+    if (fonte && !fonte.copiou) {
+      fonte.copiou = true;
+      if (daRetomada) setTimeout(() => desenhar(), 600);
+    }
+    aviso("Grave o áudio e envie 🎤", 4000);
+  },
+  "guardar-nome"(el) {
+    const c = acharPorId(el.dataset.id || fluxo?.clienteId);
+    const nome = (document.getElementById("nome-cliente")?.value || "").trim();
+    if (!c || !nome) return;
+    c.nome = nome.slice(0, 60);
+    salvarCliente(c);
+    aviso("Cliente salvo ✓");
+    desenhar();
+  },
+  "guardar-anotacoes"(el) {
+    const c = acharPorId(el.dataset.id);
+    if (!c) return;
+    c.anotacoes = (document.getElementById("anotacoes")?.value || "").slice(0, 1000);
+    salvarCliente(c);
+    aviso("Anotações guardadas ✓");
+  },
+  "ver-o-que-mandar": (el) => abrirRetomada(el.dataset.id),
+  "tentar-retomada": () => pedirRetomada(),
+  "outra-opcao-retomada"() {
+    retomada.mostrarOutra = true;
+    desenhar();
+    app.querySelectorAll(".responda")[1]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  },
+  "ja-chamei": jaChamei,
+  "nova-conversa"(el) {
+    novoFluxo(el.dataset.id);
+    ir("foto");
+    abrirSeletorFoto();
+  },
+  "abrir-cliente": (el) => ir("cliente", { id: el.dataset.id }),
+  "marcou-visita": (el) => ir("visita", { id: el.dataset.id }),
+  "visita-dia"(el) {
+    ir("visita", { id: telaAtual().params.id, dia: Number(el.dataset.dia) });
+  },
+  "visita-hora"(el) {
+    const { id, dia } = telaAtual().params;
+    const c = acharPorId(id);
+    if (!c) return;
+    const [h, m] = el.dataset.hora.split(":").map(Number);
+    const quando = new Date();
+    quando.setDate(quando.getDate() + Number(dia || 0));
+    quando.setHours(h, m, 0, 0);
+    const agora = new Date();
+    avancarEtapa(c, "visita_marcada", agora);
+    c.visitaEm = iso(quando);
+    c.aguardandoDesde = null;
+    c.followupMotivo = "pos_visita";
+    c.tentativas = 0;
+    c.proximoFollowup = iso(new Date(quando.getTime() + 2 * 3_600_000)); // até 2h depois da visita
+    c.historico.push({ tipo: "visita", em: iso(agora) });
+    salvarCliente(c);
+    retomada = null;
+    aviso(`Visita anotada ✓ ${quandoTexto(c.visitaEm)}. Depois eu te lembro de perguntar o que ele achou.`, 5200);
+    irInicio();
+  },
+  comprou: (el) => ir("comprou", { id: el.dataset.id }),
+  "confirmar-compra"(el) {
+    const c = acharPorId(el.dataset.id);
+    if (!c) return;
+    mudarEtapa(c, "vendido");
+    c.proximoFollowup = null;
+    c.aguardandoDesde = null;
+    salvarCliente(c);
+    retomada = null;
+    festa();
+    aviso(`Parabéns, ${nomeCorretora()}! Venda anotada ✓ 🎉`, 5200);
+    irInicio();
+  },
+  desistiu: (el) => ir("desistiu", { id: el.dataset.id }),
+  "confirmar-desistiu"(el) {
+    const c = acharPorId(el.dataset.id);
+    if (!c) return;
+    mudarEtapa(c, "perdido");
+    c.motivoPerda = el.dataset.motivo;
+    c.proximoFollowup = null;
+    c.aguardandoDesde = null;
+    salvarCliente(c);
+    retomada = null;
+    aviso("Anotado ✓ Ele saiu da sua lista.", 4200);
+    irInicio();
+  },
+  "rever-passeio"() {
+    passeio = 0;
+    desenhar();
+  },
+  "passeio-ok"() {
+    if (passeio < PASSEIO.length - 1) {
+      passeio++;
+      desenhar();
+      return;
+    }
+    passeio = null;
+    guardar.gravar(CHAVES.passeio, true);
+    if (telaAtual().nome !== "inicio") irInicio();
+    else desenhar();
+    pedirLicencaIA();
+  },
+};
+
+document.addEventListener("click", (e) => {
+  const alvo = e.target.closest("[data-acao]");
+  if (!alvo) return;
+  const acao = ACOES[alvo.dataset.acao];
+  if (acao) acao(alvo, e);
+});
+
+document.addEventListener("focusout", () => {
+  setTimeout(() => {
+    const ativo = document.activeElement;
+    const digitando = ativo && ["INPUT", "TEXTAREA", "SELECT"].includes(ativo.tagName);
+    if (redesenhoPendente && !digitando && !app.querySelector("details[open], [data-editando]")) desenhar();
+  }, 200);
+});
+
+document.getElementById("seletor-foto").addEventListener("change", async (e) => {
+  let arquivos = [...(e.target.files || [])];
+  if (!arquivos.length) return;
+  if (!fluxo) novoFluxo();
+  const sample = await window.claude?.use?.("sample");
+  const limites = sample ? await sample.limits().catch(() => null) : null;
+  arquivos = arquivos.slice(0, limites?.images?.maxCount || 4);
+  const lento = setTimeout(() => aviso("Preparando a foto…", 8000), 300);
+  try {
+    fluxo.imagens = await Promise.all(arquivos.map(prepararPrint));
+  } catch {
+    clearTimeout(lento);
+    aviso("Não consegui abrir essa foto. Toque para escolher de novo.", 4200);
+    return;
+  }
+  clearTimeout(lento);
+  esconderAviso();
+  fluxo.texto = "";
+  fluxo.modoTexto = false;
+  if (telaAtual().nome !== "foto") ir("foto");
+  conversaPronta();
+});
+
+// ---------------------------------------------------------------- 9. Começo
+async function iniciar() {
+  desenhar();
+  if (!guardar.ler(CHAVES.passeio, false)) {
+    passeio = 0;
+    desenhar();
+  }
+  const claude = window.claude;
+  if (!claude?.use) {
+    modoLocal = true;
+    return;
+  }
+  const [banco, usuario] = await Promise.all([claude.use("db"), claude.use("user")]);
+  ehDono = usuario ? await usuario.isOwner().catch(() => false) : false;
+  if (banco) {
+    db = banco;
+    assinarBanco();
+  } else {
+    modoLocal = true;
+  }
+  dadosMudaram(); // mostra o botão do painel para o dono
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && ["inicio", "chamar"].includes(telaAtual().nome)) dadosMudaram();
+});
+
+// O gestor.js registra as telas do painel antes de iniciar (ver montar.mjs).
+
+
+// ================================================================
+// Painel do gestor: só o dono da página no Claude vê (user.isOwner()).
+// Relatório da semana, funil completo, imóveis, acesso e ajustes.
+// ================================================================
+const ETAPAS_FUNIL = [
+  ["novo", "Novo"],
+  ["conversando", "Conversando"],
+  ["visita_marcada", "Visita marcada"],
+  ["proposta", "Proposta"],
+  ["vendido", "Vendido"],
+  ["perdido", "Perdido"],
+];
+const NOME_ETAPA = Object.fromEntries(ETAPAS_FUNIL);
+const ATIVAS = new Set(["novo", "conversando", "visita_marcada", "proposta"]);
+const HORA = 3_600_000;
+const gestor = { aba: "relatorio", periodo: "semana", busca: "", editandoImovel: null, fotoNova: undefined, apagando: null };
+
+const ms = (v) => (v ? Date.parse(v) : NaN);
+const fmtNum = new Intl.NumberFormat("pt-BR");
+const fmtData = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+const fmtDia = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit" });
+const quandoCurto = (v) => (v ? fmtData.format(new Date(v)) : "—");
+const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+const nomeImovelGestor = (id) => nomeImovel(id) || (id ? "(imóvel removido)" : "Não informado");
+
+function duracao(t) {
+  if (!Number.isFinite(t)) return "—";
+  const min = Math.round(t / 60_000);
+  if (min < 60) return `${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `${h}h${min % 60 ? ` ${String(min % 60).padStart(2, "0")}min` : ""}`;
+  return `${(t / DIA).toFixed(1).replace(".", ",")} dias`;
+}
+
+function periodo(tipo) {
+  const agora = new Date();
+  const segunda = new Date(agora);
+  segunda.setHours(0, 0, 0, 0);
+  segunda.setDate(segunda.getDate() - ((segunda.getDay() + 6) % 7));
+  if (tipo === "passada") {
+    const ini = new Date(segunda);
+    ini.setDate(ini.getDate() - 7);
+    return { ini: ini.getTime(), fim: segunda.getTime(), nome: `${fmtDia.format(ini)} a ${fmtDia.format(new Date(segunda.getTime() - DIA))}` };
+  }
+  if (tipo === "30") {
+    const ini = agora.getTime() - 30 * DIA;
+    return { ini, fim: agora.getTime() + 1, nome: `${fmtDia.format(new Date(ini))} a ${fmtDia.format(agora)}` };
+  }
+  return { ini: segunda.getTime(), fim: agora.getTime() + 1, nome: `${fmtDia.format(segunda)} a ${fmtDia.format(agora)}` };
+}
+
+const dentro = (v, p) => {
+  const x = ms(v);
+  return Number.isFinite(x) && x >= p.ini && x < p.fim;
+};
+const teveEvento = (c, tipo, p) => (c.historico || []).some((h) => h.tipo === tipo && dentro(h.em, p));
+
+function calcular(p) {
+  const agora = Date.now();
+  const recebidos = clientes.filter((c) => dentro(c.primeiroContato || c.criadoEm, p));
+  const conversas = clientes.filter((c) => teveEvento(c, "etapa:conversando", p));
+  const visitas = clientes.filter((c) => teveEvento(c, "etapa:visita_marcada", p));
+  const propostas = clientes.filter((c) => teveEvento(c, "etapa:proposta", p));
+  const vendas = clientes.filter((c) => teveEvento(c, "etapa:vendido", p));
+  const perdidos = clientes.filter((c) => teveEvento(c, "etapa:perdido", p));
+  const tempos = recebidos
+    .filter((c) => c.medirResposta && c.primeiraRespostaEm && c.primeiroContato)
+    .map((c) => Math.max(0, ms(c.primeiraRespostaEm) - ms(c.primeiroContato)));
+  const media = tempos.length ? tempos.reduce((a, b) => a + b, 0) / tempos.length : NaN;
+  const ate5 = tempos.filter((t) => t <= 5 * 60_000).length;
+  const ativos = clientes.filter((c) => ATIVAS.has(c.etapa));
+  const semRetorno1h = ativos.filter((c) => c.aguardandoDesde && agora - ms(c.aguardandoDesde) > HORA);
+  const semRetorno24h = ativos.filter((c) => c.aguardandoDesde && agora - ms(c.aguardandoDesde) > DIA);
+  const atrasados = ativos.filter((c) => c.proximoFollowup && agora - ms(c.proximoFollowup) > DIA);
+  const semLembrete = ativos.filter((c) => !c.aguardandoDesde && !c.proximoFollowup && (c.etapa === "novo" || c.etapa === "conversando"));
+  const fimHoje = inicioDoDia(new Date()).getTime() + DIA;
+  const contar = (lista, chave) => {
+    const m = new Map();
+    for (const c of lista) m.set(chave(c), (m.get(chave(c)) || 0) + 1);
+    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+  };
+  return {
+    recebidos, conversas, visitas, propostas, vendas, perdidos, tempos, media, ate5,
+    semRetorno1h, semRetorno24h, atrasados,
+    semFollowup: new Set([...semRetorno24h, ...atrasados, ...semLembrete]),
+    lembretesHoje: ativos.filter((c) => c.proximoFollowup && ms(c.proximoFollowup) < fimHoje),
+    porImovel: contar(recebidos, (c) => nomeImovelGestor(c.imovelId)),
+    porTemperatura: ["frio", "morno", "quente"].map((k) => [k, recebidos.filter((c) => c.temperatura === k).length]),
+    motivos: contar(perdidos, (c) => c.motivoPerda || "Sem motivo"),
+  };
+}
+
+function diagnostico(m) {
+  const achados = [];
+  const n = m.recebidos.length;
+  if (!n) return [["info", "Sem dados", "Nenhum lead registrado no período. Confira se os anúncios estão rodando e se a Schay está usando o app para responder."]];
+  if (n < 5) achados.push(["info", "Poucos dados", `Só ${n} lead(s) no período: leia os números como tendência, não como regra.`]);
+  const frios = m.porTemperatura.find(([k]) => k === "frio")[1];
+  if (frios / n > 0.6) achados.push(["anuncio", "Anúncio", `${pct(frios, n)}% dos leads chegaram frios (só curiosidade). Vale revisar público, criativo e se o preço aparece no anúncio.`]);
+  if (Number.isFinite(m.media) && m.media > 30 * 60_000) achados.push(["atendimento", "Atendimento", `A 1ª resposta está levando ${duracao(m.media)} em média. O ideal é até 5 minutos: lead frio esfria rápido.`]);
+  if (n >= 3 && m.conversas.length / n < 0.3) achados.push(["anuncio", "Anúncio ou atendimento", `Só ${pct(m.conversas.length, n)}% dos leads chegaram a conversar. Se a resposta é rápida, o problema tende a ser o anúncio (lead pouco qualificado).`]);
+  if (m.conversas.length >= 3 && m.visitas.length / m.conversas.length < 0.25) achados.push(["atendimento", "Atendimento", `Só ${pct(m.visitas.length, m.conversas.length)}% das conversas viraram visita. Treinar o convite para visita com 2 opções de horário.`]);
+  if (m.visitas.length >= 3 && m.propostas.length + m.vendas.length === 0) achados.push(["fechamento", "Fechamento", "Teve visitas, mas nenhuma proposta. Revisar o pós-visita (perguntar a impressão em até 2h e tratar a objeção real)."]);
+  if (m.semFollowup.size) achados.push(["atendimento", "Atendimento", `${m.semFollowup.size} lead(s) estão sem retorno ou com lembrete atrasado há mais de 24h.`]);
+  if (achados.every(([tipo]) => tipo === "info")) achados.push(["ok", "Tudo certo", "Nenhum gargalo evidente no período. Siga acompanhando semana a semana."]);
+  return achados;
+}
+
+/** Barras horizontais de uma cor só, com valor na ponta e dica ao passar o dedo ou o mouse. */
+function barras(linhas, { total, descreverDica } = {}) {
+  const max = Math.max(1, ...linhas.map((l) => l.valor));
+  return `<div class="barras" role="list">${linhas.map((l, i) => {
+    const largura = l.valor ? Math.max(1.5, (l.valor / max) * 100) : 0;
+    const porcento = total ? ` <small>(${pct(l.valor, total)}%)</small>` : "";
+    const textoDica = descreverDica ? descreverDica(l, i) : `${l.nome}: ${fmtNum.format(l.valor)}`;
+    return `<div class="barra-linha" role="listitem" tabindex="0" data-dica="${esc(textoDica)}" data-valor="${esc(fmtNum.format(l.valor))}" aria-label="${esc(textoDica)}">
+      <span class="nome">${esc(l.nome)}</span>
+      <span class="barra-trilho"><span class="area"><span class="preenchimento" style="width:${largura}%"></span><span class="valor-barra" style="left:${largura}%">${fmtNum.format(l.valor)}${porcento}</span></span></span>
+    </div>`;
+  }).join("")}</div>`;
+}
+
+function abaRelatorio() {
+  const p = periodo(gestor.periodo);
+  const m = calcular(p);
+  const n = m.recebidos.length;
+  const funil = [
+    { nome: "Leads recebidos", valor: n },
+    { nome: "Conversas iniciadas", valor: m.conversas.length },
+    { nome: "Visitas marcadas", valor: m.visitas.length },
+    { nome: "Propostas", valor: m.propostas.length },
+    { nome: "Vendas", valor: m.vendas.length },
+  ];
+  const indicador = (rotulo, valor, detalhe) => `<div class="indicador"><div class="rotulo-ind">${esc(rotulo)}</div><div class="valor">${esc(valor)}</div>${detalhe ? `<div class="detalhe">${esc(detalhe)}</div>` : ""}</div>`;
+  const filtros = [["semana", "Esta semana"], ["passada", "Semana passada"], ["30", "Últimos 30 dias"]]
+    .map(([k, nome]) => `<button type="button" data-acao="g-periodo" data-periodo="${k}" aria-pressed="${k === gestor.periodo}">${nome}</button>`).join("");
+  return `
+    <div class="filtros" role="group" aria-label="Período">${filtros}<span class="periodo">${esc(p.nome)}</span></div>
+    <section class="indicadores" aria-label="Números do período">
+      ${indicador("Leads recebidos", fmtNum.format(n))}
+      ${indicador("Conversas iniciadas", fmtNum.format(m.conversas.length), n ? `${pct(m.conversas.length, n)}% dos leads` : "")}
+      ${indicador("Visitas marcadas", fmtNum.format(m.visitas.length))}
+      ${indicador("Propostas", fmtNum.format(m.propostas.length))}
+      ${indicador("Vendas", fmtNum.format(m.vendas.length))}
+      ${indicador("Tempo até a 1ª resposta", duracao(m.media), m.tempos.length ? `média de ${m.tempos.length} lead(s) · ${pct(m.ate5, m.tempos.length)}% em até 5 min` : "sem medição no período")}
+      ${indicador("Leads sem retorno/lembrete", fmtNum.format(m.semFollowup.size), "agora, há mais de 24h")}
+    </section>
+    <section class="cartao">
+      <h2>Funil do período</h2>
+      <p class="sub">Quantos leads passaram por cada etapa no período. A porcentagem é sobre os leads recebidos.</p>
+      ${barras(funil, { total: n, descreverDica: (l, i) => (i === 0 ? `${l.nome} no período` : `${l.nome} · ${pct(l.valor, funil[i - 1].valor)}% da etapa anterior`) })}
+      <details><summary>Ver em tabela</summary>
+        <div class="tabela-rolagem"><table>
+          <thead><tr><th>Etapa</th><th class="num">Quantidade</th><th class="num">% dos leads</th><th class="num">% da etapa anterior</th></tr></thead>
+          <tbody>${funil.map((l, i) => `<tr><td>${esc(l.nome)}</td><td class="num">${fmtNum.format(l.valor)}</td><td class="num">${pct(l.valor, n)}%</td><td class="num">${i ? `${pct(l.valor, funil[i - 1].valor)}%` : "—"}</td></tr>`).join("")}</tbody>
+        </table></div>
+      </details>
+    </section>
+    <section class="cartao">
+      <h2>Onde o funil está travando</h2>
+      <p class="sub">Leitura automática dos números: anúncio, atendimento ou fechamento.</p>
+      <ul class="achados">${diagnostico(m).map(([tipo, rotulo, texto]) => `<li><span class="chip ${tipo}">${{ anuncio: "📣", atendimento: "💬", fechamento: "🤝", ok: "✓", info: "ℹ️" }[tipo] || ""} ${esc(rotulo)}</span><span>${esc(texto)}</span></li>`).join("")}</ul>
+    </section>
+    <section class="cartao">
+      <h2>Como os leads chegam</h2>
+      <p class="sub">Leitura da IA na primeira conversa (leads recebidos no período).</p>
+      ${barras(m.porTemperatura.map(([k, v]) => ({ nome: { frio: "❄️ Frio", morno: "🙂 Morno", quente: "🔥 Quente" }[k], valor: v })), { total: n })}
+    </section>
+    <section class="cartao">
+      <h2>Leads por imóvel</h2>
+      <p class="sub">Qual anúncio ou imóvel mais trouxe leads no período.</p>
+      ${m.porImovel.length ? barras(m.porImovel.map(([nome, v]) => ({ nome, valor: v })), { total: n }) : `<p class="sub">Sem leads no período.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Motivos de desistência</h2>
+      ${m.motivos.length ? barras(m.motivos.map(([nome, v]) => ({ nome, valor: v })), { total: m.perdidos.length }) : `<p class="sub">Ninguém desistiu no período.</p>`}
+    </section>`;
+}
+
+function fichaCliente(c) {
+  const atrasado = c.proximoFollowup && ms(c.proximoFollowup) < Date.now();
+  const opcoes = ETAPAS_FUNIL.map(([k, nome]) => `<option value="${k}"${k === c.etapa ? " selected" : ""}>${nome}</option>`).join("");
+  const apagando = gestor.apagando === c.id;
+  return `<article class="ficha">
+    <strong>${esc(nomeDoCliente(c))}</strong>
+    <div class="marcas">${c.temperatura ? `<span class="temp ${esc(c.temperatura)}">${esc(c.temperatura)}</span>` : ""}<span class="temp">${esc(nomeImovelGestor(c.imovelId))}</span></div>
+    ${c.telefone ? `<div class="linha-info">📱 <b>${esc(foneBonito(c.telefone))}</b></div>` : ""}
+    <div class="linha-info">1º contato: <b>${esc(quandoCurto(c.primeiroContato || c.criadoEm))}</b></div>
+    <div class="linha-info">Última interação: <b>${esc(quandoCurto(c.ultimaInteracao))}</b></div>
+    ${ATIVAS.has(c.etapa) ? `<div class="linha-info${atrasado ? " atrasado" : ""}">Próximo lembrete: <b>${esc(quandoCurto(c.proximoFollowup))}</b></div>` : ""}
+    ${c.aguardandoDesde ? `<div class="atrasado">⏳ Sem retorno dela ${esc(haQuantoTempo(c.aguardandoDesde))}</div>` : ""}
+    ${c.etapa === "perdido" && c.motivoPerda ? `<div class="linha-info">Motivo: <b>${esc(c.motivoPerda)}</b></div>` : ""}
+    ${c.resumo ? `<div class="linha-info">${esc(c.resumo)}</div>` : ""}
+    ${c.anotacoes ? `<div class="linha-info">📝 ${esc(c.anotacoes)}</div>` : ""}
+    <details${apagando ? " open" : ""}><summary>Editar</summary>
+      <div class="editar">
+        <label class="nome-campo" for="etapa-${esc(c.id)}">Etapa</label>
+        <select id="etapa-${esc(c.id)}" class="campo">${opcoes}</select>
+        <label class="nome-campo" for="motivo-${esc(c.id)}">Motivo (se perdido)</label>
+        <input id="motivo-${esc(c.id)}" class="campo" value="${esc(c.motivoPerda || "")}">
+        <label class="nome-campo" for="notas-${esc(c.id)}">Anotações</label>
+        <textarea id="notas-${esc(c.id)}" class="campo">${esc(c.anotacoes || "")}</textarea>
+        <div class="acoes"><button class="botao forte" type="button" data-acao="g-salvar-cliente" data-id="${esc(c.id)}">Salvar</button>
+        <button class="botao perigo${apagando ? " confirmar" : ""}" type="button" data-acao="g-apagar-cliente" data-id="${esc(c.id)}">${apagando ? "Toque de novo para apagar de vez" : "Apagar (pedido do cliente)"}</button></div>
+      </div>
+    </details>
+  </article>`;
+}
+
+function abaFunil() {
+  const m = calcular(periodo("semana"));
+  const filtro = normNome(gestor.busca);
+  const lista = clientes
+    .filter((c) => !filtro || normNome(`${c.nome} ${c.telefone || ""}`).includes(filtro))
+    .sort((a, b) => ms(b.ultimaInteracao || b.criadoEm) - ms(a.ultimaInteracao || a.criadoEm));
+  const alerta = (classe, numero, texto) => `<div class="alerta ${classe}"><strong>${fmtNum.format(numero)}</strong><span>${esc(texto)}</span></div>`;
+  return `
+    <section class="alertas" aria-label="Alertas de hoje">
+      ${alerta("", m.lembretesHoje.length, "Lembretes de hoje")}
+      ${alerta(m.semRetorno1h.length ? "atencao" : "", m.semRetorno1h.length, "Sem retorno dela há +1h")}
+      ${alerta(m.semRetorno24h.length ? "critico" : "", m.semRetorno24h.length, "Sem retorno dela há +24h")}
+      ${alerta(m.atrasados.length ? "critico" : "", m.atrasados.length, "Lembretes atrasados há +24h")}
+    </section>
+    <div><label class="escondido" for="g-busca">Buscar cliente</label>
+      <input id="g-busca" class="campo" type="search" placeholder="Buscar por nome ou telefone" value="${esc(gestor.busca)}"></div>
+    <section class="quadro" aria-label="Funil por etapa">
+      ${ETAPAS_FUNIL.map(([k, nome]) => {
+        const daEtapa = lista.filter((c) => c.etapa === k);
+        return `<div class="coluna"><h3>${nome}<span>${daEtapa.length}</span></h3>${daEtapa.map(fichaCliente).join("") || `<p class="sub">Nenhum</p>`}</div>`;
+      }).join("")}
+    </section>`;
+}
+
+function formImovel(i) {
+  const v = (campo) => esc(i?.[campo] ?? "");
+  const foto = gestor.fotoNova !== undefined ? gestor.fotoNova : i?.foto || "";
+  const apagando = gestor.apagando === `imovel:${i?.id}`;
+  const campo = (id, rotulo, valor, extra = "") => `<div><label class="nome-campo" for="${id}">${rotulo}</label><input id="${id}" class="campo" value="${valor}" ${extra}></div>`;
+  return `<section class="cartao" data-editando>
+    <h2>${i ? "Editar imóvel" : "Novo imóvel"}</h2>
+    <p class="sub">A IA só usa o que estiver aqui. O que faltar, ela sugere “vou confirmar e já te retorno”.</p>
+    <div class="form-grade">
+      ${campo("im-titulo", "Título", v("titulo"), 'placeholder="Apartamento 2 dormitórios no Centro"')}
+      ${campo("im-bairro", "Bairro", v("bairro"))}
+      ${campo("im-tipo", "Tipo", v("tipo"), 'placeholder="Apartamento, casa, terreno…"')}
+      ${campo("im-preco", "Preço", v("preco"), 'placeholder="R$ 289.000"')}
+      ${campo("im-quartos", "Quartos", v("quartos"), 'inputmode="numeric"')}
+      ${campo("im-metragem", "Metragem", v("metragem"), 'placeholder="58 m² privativos"')}
+      ${campo("im-condicoes", "Condições", v("condicoes"), 'placeholder="Aceita financiamento e FGTS"')}
+      ${campo("im-link", "Link do anúncio", v("link"), 'inputmode="url"')}
+    </div>
+    <div><label class="nome-campo" for="im-diferenciais">Diferenciais (um por linha)</label>
+      <textarea id="im-diferenciais" class="campo">${esc((i?.diferenciais || []).join("\n"))}</textarea></div>
+    <div class="imovel-gestor">
+      ${foto ? `<img id="im-previa" src="${esc(foto)}" alt="Foto do imóvel">` : `<span id="im-previa" class="sem-foto" aria-hidden="true">🏠</span>`}
+      <div class="acoes">
+        <label class="botao claro" for="im-foto">📷 ${foto ? "Trocar foto" : "Escolher foto"}</label>
+        <input id="im-foto" class="escondido" type="file" accept="image/*">
+        ${foto ? `<button class="botao claro" type="button" data-acao="g-remover-foto">Remover foto</button>` : ""}
+      </div>
+    </div>
+    <div class="acoes">
+      <button class="botao forte" type="button" data-acao="g-salvar-imovel" data-id="${esc(i?.id || "")}">Salvar imóvel</button>
+      <button class="botao claro" type="button" data-acao="g-cancelar-imovel">Cancelar</button>
+      ${i ? `<button class="botao perigo${apagando ? " confirmar" : ""}" type="button" data-acao="g-apagar-imovel" data-id="${esc(i.id)}">${apagando ? "Toque de novo para apagar" : "Apagar imóvel"}</button>` : ""}
+    </div>
+  </section>`;
+}
+
+function abaImoveis() {
+  if (gestor.editandoImovel) {
+    return formImovel(gestor.editandoImovel === "novo" ? null : imovelPorId(gestor.editandoImovel));
+  }
+  const exemplos = imoveis.some((i) => i.exemplo);
+  return `
+    ${exemplos ? `<div class="aviso-exemplo">⚠️ Ainda há imóveis de EXEMPLO. Edite com os dados reais ou apague antes da Schay usar com clientes.</div>` : ""}
+    <section class="cartao">
+      <h2>Imóveis que a IA conhece</h2>
+      <p class="sub">Aparecem para a Schay no passo “Sobre qual imóvel ele perguntou?”.</p>
+      <div class="lista-imoveis-gestor">
+        ${imoveis.map((i) => `<div class="imovel-gestor">
+          ${typeof i.foto === "string" && i.foto.startsWith("data:image/") ? `<img src="${esc(i.foto)}" alt="">` : `<span class="sem-foto" aria-hidden="true">🏠</span>`}
+          <div><strong>${esc(semExemplo(i.titulo))}</strong>${i.exemplo ? ` <span class="etiqueta">EXEMPLO</span>` : ""}
+            <p class="sub">${esc([semExemplo(i.bairro), semExemplo(i.preco)].filter(Boolean).join(" · "))}</p>
+            <button class="botao claro" type="button" data-acao="g-editar-imovel" data-id="${esc(i.id)}">Editar</button></div>
+        </div>`).join("") || `<p class="sub">Nenhum imóvel cadastrado ainda.</p>`}
+      </div>
+      <div class="acoes"><button class="botao forte" type="button" data-acao="g-novo-imovel">+ Adicionar imóvel</button></div>
+    </section>`;
+}
+
+function mensagemParaSchay() {
+  const link = config.link || "(cole aqui o link do Copiloto)";
+  return `Oi, ${nomeCorretora()}! Este é o seu Copiloto de Vendas 💛
+
+1. Abra este link no navegador do celular (Chrome ou Safari): ${link}
+2. Entre com a sua conta do Claude (a mesma do e-mail em que você recebeu o convite).
+3. Na primeira vez, o Claude pergunta se o app pode usar a inteligência dele: toque em Permitir.
+4. Para deixar o app na tela do celular:
+   • Android: 3 pontinhos ⋮ → Adicionar à tela inicial
+   • iPhone: botão Compartilhar → Adicionar à Tela de Início
+
+Qualquer dúvida, toque em "Preciso de ajuda" dentro do app.`;
+}
+
+function abaAcesso() {
+  const msg = mensagemParaSchay();
+  return `
+    <section class="cartao">
+      <h2>Como dar acesso à ${esc(nomeCorretora())}</h2>
+      <ol class="passos-lista">
+        <li>No topo desta página no Claude, toque em <b>Compartilhar</b>.</li>
+        <li>Convide a ${esc(nomeCorretora())} pelo e-mail dela com o nível <b>Editor</b>. É esse nível que deixa ela salvar os clientes.</li>
+        <li>Não ative o link público: com link público, convidados de fora não conseguem salvar.</li>
+        <li>Ela precisa de uma conta do Claude própria. A IA usa os limites da conta dela.</li>
+        <li>Mande para ela a mensagem abaixo.</li>
+      </ol>
+      <div class="caixa-texto" id="g-mensagem">${esc(msg)}</div>
+      <div class="acoes">
+        <button class="botao forte" type="button" data-acao="g-copiar-mensagem">Copiar mensagem</button>
+        <a class="botao whats" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener noreferrer">${ICONE_WHATS} Enviar pelo WhatsApp</a>
+      </div>
+    </section>
+    <section class="cartao" data-editando>
+      <h2>Ajustes</h2>
+      <div class="form-grade">
+        <div><label class="nome-campo" for="cfg-nome">Nome da corretora</label><input id="cfg-nome" class="campo" value="${esc(config.nomeCorretora || "Schay")}"></div>
+        <div><label class="nome-campo" for="cfg-suporte">WhatsApp do suporte (com DDD)</label><input id="cfg-suporte" class="campo" inputmode="tel" value="${esc(config.suporteWhatsapp || "")}" placeholder="51 99999-9999"></div>
+        <div><label class="nome-campo" for="cfg-link">Link do Copiloto (do Claude)</label><input id="cfg-link" class="campo" inputmode="url" value="${esc(config.link || "")}"></div>
+      </div>
+      <div class="acoes"><button class="botao forte" type="button" data-acao="g-salvar-config">Salvar ajustes</button></div>
+    </section>
+    <section class="cartao">
+      <h2>Exportar</h2>
+      <p class="sub">Planilha com todos os clientes (abre no Excel ou no Google Planilhas).</p>
+      <div class="acoes"><button class="botao claro" type="button" data-acao="g-csv">Baixar planilha (CSV)</button></div>
+    </section>
+    <section class="cartao">
+      <h2>Privacidade (LGPD)</h2>
+      <p class="sub">O app guarda só nome, telefone, imóvel, datas, etapa, um resumo de 1 linha e as anotações. Os prints das conversas não são guardados. Se um cliente pedir para apagar os dados dele, use “Editar → Apagar” na ficha dele, na aba Funil.</p>
+    </section>`;
+}
+
+TELAS.gestor = function telaGestor() {
+  if (!ehDono) return TELAS.inicio();
+  const abas = [["relatorio", "Relatório"], ["funil", "Funil"], ["imoveis", "Imóveis"], ["acesso", "Acesso e ajustes"]]
+    .map(([k, nome]) => `<button type="button" data-acao="g-aba" data-aba="${k}" aria-pressed="${k === gestor.aba}">${nome}</button>`).join("");
+  const estado = !db
+    ? `<div class="aviso-exemplo">⚠️ O banco de dados do Claude não respondeu nesta visualização. Os números abaixo são só deste aparelho.</div>`
+    : modoLocal ? `<div class="aviso-exemplo">⚠️ Não consegui gravar no banco do Claude. Confira em Compartilhar se a ${esc(nomeCorretora())} tem nível Editor.</div>` : "";
+  const corpo = { relatorio: abaRelatorio, funil: abaFunil, imoveis: abaImoveis, acesso: abaAcesso }[gestor.aba]();
+  return `<section class="tela">${barra()}
+    <div class="gestor">
+      <div><h1>Painel do gestor</h1><p class="sub">Só você vê esta área. A ${esc(nomeCorretora())} vê apenas os 3 botões.</p></div>
+      <nav class="abas-gestor" aria-label="Seções do painel">${abas}</nav>
+      ${estado}
+      ${corpo}
+    </div></section>`;
+};
+
+// ---------------------------------------------------------------- ações do painel
+function lerCampo(id) {
+  return (document.getElementById(id)?.value || "").trim();
+}
+
+async function reduzirFotoImovel(arquivo) {
+  const canvas = await desenharReduzido(arquivo, 640);
+  return canvas.toDataURL("image/jpeg", 0.72);
+}
+
+function csvClientes() {
+  const colunas = [
+    ["Nome", (c) => c.nome],
+    ["Telefone", (c) => foneBonito(c.telefone)],
+    ["Imóvel", (c) => nomeImovelGestor(c.imovelId)],
+    ["Etapa", (c) => NOME_ETAPA[c.etapa]],
+    ["Motivo (perdido)", (c) => c.motivoPerda],
+    ["Como chegou", (c) => c.temperatura],
+    ["1º contato", (c) => quandoCurto(c.primeiroContato || c.criadoEm)],
+    ["1ª resposta dela", (c) => quandoCurto(c.primeiraRespostaEm)],
+    ["Última interação", (c) => quandoCurto(c.ultimaInteracao)],
+    ["Próximo lembrete", (c) => quandoCurto(c.proximoFollowup)],
+    ["Resumo", (c) => c.resumo],
+    ["Anotações", (c) => c.anotacoes],
+  ];
+  const celula = (v) => {
+    let s = String(v ?? "");
+    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`; // evita fórmula maliciosa na planilha
+    return `"${s.replace(/"/g, '""')}"`;
+  };
+  return `﻿${[colunas.map(([n]) => celula(n)).join(";"), ...clientes.map((c) => colunas.map(([, f]) => celula(f(c))).join(";"))].join("\r\n")}`;
+}
+
+Object.assign(ACOES, {
+  gestor() {
+    gestor.aba = "relatorio";
+    ir("gestor");
+  },
+  "g-aba"(el) {
+    gestor.aba = el.dataset.aba;
+    gestor.editandoImovel = null;
+    gestor.apagando = null;
+    desenhar(true);
+  },
+  "g-periodo"(el) {
+    gestor.periodo = el.dataset.periodo;
+    desenhar();
+  },
+  "g-salvar-cliente"(el) {
+    const c = acharPorId(el.dataset.id);
+    if (!c) return;
+    const agora = new Date();
+    const etapa = document.getElementById(`etapa-${c.id}`)?.value;
+    if (etapa && etapa !== c.etapa) {
+      mudarEtapa(c, etapa, agora);
+      if (!ATIVAS.has(etapa)) {
+        c.proximoFollowup = null;
+        c.aguardandoDesde = null;
+      }
+    }
+    c.motivoPerda = lerCampo(`motivo-${c.id}`) || null;
+    c.anotacoes = lerCampo(`notas-${c.id}`).slice(0, 1000);
+    salvarCliente(c);
+    gestor.apagando = null;
+    aviso("Salvo ✓");
+    desenhar();
+  },
+  "g-apagar-cliente"(el) {
+    const id = el.dataset.id;
+    if (gestor.apagando !== id) {
+      gestor.apagando = id;
+      desenhar();
+      return;
+    }
+    gestor.apagando = null;
+    apagarCliente(id).then(() => aviso("Apagado ✓"));
+    desenhar();
+  },
+  "g-novo-imovel"() {
+    gestor.editandoImovel = "novo";
+    gestor.fotoNova = undefined;
+    gestor.apagando = null;
+    desenhar(true);
+  },
+  "g-editar-imovel"(el) {
+    gestor.editandoImovel = el.dataset.id;
+    gestor.fotoNova = undefined;
+    gestor.apagando = null;
+    desenhar(true);
+  },
+  "g-cancelar-imovel"() {
+    gestor.editandoImovel = null;
+    gestor.fotoNova = undefined;
+    gestor.apagando = null;
+    desenhar(true);
+  },
+  "g-remover-foto"() {
+    gestor.fotoNova = "";
+    const previa = document.getElementById("im-previa");
+    if (previa) previa.outerHTML = `<span id="im-previa" class="sem-foto" aria-hidden="true">🏠</span>`;
+  },
+  "g-salvar-imovel"(el) {
+    const titulo = lerCampo("im-titulo");
+    if (!titulo) {
+      aviso("Escreva pelo menos o título do imóvel.");
+      return;
+    }
+    const existente = el.dataset.id ? imovelPorId(el.dataset.id) : null;
+    const id = existente?.id || `${normNome(titulo).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "imovel"}-${Math.random().toString(36).slice(2, 6)}`;
+    const quartos = Number(lerCampo("im-quartos"));
+    const imovel = {
+      titulo,
+      bairro: lerCampo("im-bairro"),
+      tipo: lerCampo("im-tipo"),
+      preco: lerCampo("im-preco"),
+      quartos: Number.isFinite(quartos) && quartos > 0 ? quartos : null,
+      metragem: lerCampo("im-metragem"),
+      diferenciais: lerCampo("im-diferenciais").split("\n").map((d) => d.trim()).filter(Boolean).slice(0, 20),
+      condicoes: lerCampo("im-condicoes"),
+      link: lerCampo("im-link"),
+      foto: gestor.fotoNova !== undefined ? gestor.fotoNova : existente?.foto || "",
+      atualizadoEm: iso(new Date()),
+    };
+    imovel.exemplo = /EXEMPLO/i.test(JSON.stringify({ ...imovel, foto: "" }));
+    const local = { ...imovel, id };
+    imoveis = [...imoveis.filter((i) => i.id !== id), local].sort((a, b) => String(a.titulo).localeCompare(String(b.titulo), "pt-BR"));
+    guardar.gravar(CHAVES.imoveis, imoveis);
+    escrever(`imoveis/${id}`, imovel);
+    gestor.editandoImovel = null;
+    gestor.fotoNova = undefined;
+    aviso("Imóvel salvo ✓");
+    desenhar(true);
+  },
+  "g-apagar-imovel"(el) {
+    const id = el.dataset.id;
+    if (gestor.apagando !== `imovel:${id}`) {
+      gestor.apagando = `imovel:${id}`;
+      desenhar();
+      return;
+    }
+    imoveis = imoveis.filter((i) => i.id !== id);
+    guardar.gravar(CHAVES.imoveis, imoveis);
+    apagarDoc(`imoveis/${id}`);
+    gestor.apagando = null;
+    gestor.editandoImovel = null;
+    aviso("Imóvel apagado ✓");
+    desenhar(true);
+  },
+  "g-copiar-mensagem"() {
+    aviso(copiarTexto(mensagemParaSchay()) ? "Mensagem copiada ✓" : "Selecione o texto e copie.");
+  },
+  "g-salvar-config"() {
+    config = {
+      ...config,
+      nomeCorretora: lerCampo("cfg-nome") || "Schay",
+      suporteWhatsapp: soNumeros(lerCampo("cfg-suporte")),
+      link: lerCampo("cfg-link"),
+      atualizadoEm: iso(new Date()),
+    };
+    guardar.gravar(CHAVES.config, config);
+    escrever("config/geral", clonar(config));
+    aviso("Ajustes salvos ✓");
+    desenhar();
+  },
+  async "g-csv"() {
+    const downloads = await window.claude?.use?.("downloads");
+    if (!downloads) {
+      aviso("Não dá para baixar arquivos nesta visualização.");
+      return;
+    }
+    try {
+      const r = await downloads.save({ filename: `clientes-copiloto-${new Date().toISOString().slice(0, 10)}.csv`, data: csvClientes() });
+      if (r?.status === "saved") aviso("Planilha baixada ✓");
+    } catch (erro) {
+      if (erro?.code !== "cancelled") aviso("Não consegui baixar a planilha agora.");
+    }
+  },
+});
+
+// Busca no funil e foto do imóvel
+document.addEventListener("input", (e) => {
+  if (e.target.id !== "g-busca") return;
+  gestor.busca = e.target.value;
+  const pos = e.target.selectionStart;
+  desenhar();
+  const campo = document.getElementById("g-busca");
+  campo?.focus();
+  campo?.setSelectionRange(pos, pos);
+});
+
+document.addEventListener("change", async (e) => {
+  if (e.target.id !== "im-foto" || !e.target.files?.[0]) return;
+  try {
+    gestor.fotoNova = await reduzirFotoImovel(e.target.files[0]);
+    const previa = document.getElementById("im-previa");
+    if (previa) previa.outerHTML = `<img id="im-previa" src="${gestor.fotoNova}" alt="Foto do imóvel">`;
+  } catch {
+    aviso("Não consegui abrir essa foto.");
+  }
+});
+
+// Dica das barras (passar o dedo ou o mouse, ou foco pelo teclado)
+const dicaGrafico = document.getElementById("dica-grafico");
+function mostrarDica(alvo, x, y) {
+  dicaGrafico.replaceChildren();
+  const forte = document.createElement("strong");
+  forte.textContent = alvo.dataset.valor;
+  const texto = document.createElement("span");
+  texto.textContent = alvo.dataset.dica;
+  dicaGrafico.append(forte, texto);
+  dicaGrafico.hidden = false;
+  const r = dicaGrafico.getBoundingClientRect();
+  dicaGrafico.style.left = `${Math.min(window.innerWidth - r.width - 8, Math.max(8, x + 12))}px`;
+  dicaGrafico.style.top = `${Math.max(8, y - r.height - 12)}px`;
+}
+document.addEventListener("pointermove", (e) => {
+  const alvo = e.target.closest?.(".barra-linha");
+  if (alvo) mostrarDica(alvo, e.clientX, e.clientY);
+  else dicaGrafico.hidden = true;
+});
+document.addEventListener("focusin", (e) => {
+  const alvo = e.target.closest?.(".barra-linha");
+  if (!alvo) return;
+  const r = alvo.getBoundingClientRect();
+  mostrarDica(alvo, r.left + 120, r.top + 4);
+});
+document.addEventListener("focusout", () => { dicaGrafico.hidden = true; });
+
+iniciar();
+
+})();
+</script>
