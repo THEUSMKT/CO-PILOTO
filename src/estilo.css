@@ -920,6 +920,7 @@ textarea.campo { min-height: 220px; resize: vertical; line-height: 1.4; }
 .ops .emoji { font-size: 68px; line-height: 1; }
 .ops h1 { font-size: 28px; font-weight: 900; color: var(--azul-escuro); }
 .ops p { font-size: 20px; color: var(--texto-2); }
+.codigo-suporte { margin-top: 4px; text-align: center; font-size: 14px; color: var(--texto-2); opacity: .8; }
 
 /* ---------- Aviso (toast) ---------- */
 .aviso {

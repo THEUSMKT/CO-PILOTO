@@ -573,7 +573,10 @@ const MENSAGENS_ERRO = {
   image_rejected: ["🖼️", "Não consegui ler essa foto", "Volte e escolha a foto de novo, por favor.", null],
   images_unavailable: ["🖼️", "Fotos não funcionam aqui", "Volte e toque em “Prefere colar o texto?” para colar a conversa.", null],
   refused: ["💬", "Não consegui responder essa conversa", "Tente mandar outro print, ou cole só as últimas mensagens.", null],
-  sem_ia: ["🛠️", "A inteligência artificial não está disponível", "Abra este app pelo link do Claude, com a sua conta. Se continuar, avise o seu gestor.", null],
+  sem_ia: ["📱", "A inteligência não abriu aqui", "Tente abrir o Copiloto pelo navegador do celular (Chrome ou Safari), com a sua conta do Claude. Se continuar, avise o seu gestor.", "tentar"],
+  capability_disabled: ["📱", "A inteligência não funciona neste aplicativo", "Tente abrir o Copiloto pelo navegador do celular (Chrome ou Safari), com a sua conta do Claude. Se continuar, avise o seu gestor.", "tentar"],
+  capability_removed: ["📱", "O aplicativo do Claude está desatualizado", "Atualize o Claude na loja do celular, ou abra o Copiloto pelo navegador (Chrome ou Safari).", "tentar"],
+  transform_error: ["🖼️", "Não consegui enviar a foto daqui", "Volte e toque em “Prefere colar o texto?” para colar a conversa, ou tente pelo navegador do celular.", "tentar"],
   sampling_disabled: ["🛠️", "A inteligência artificial não está liberada nesta conta", "Avise o seu gestor.", null],
 };
 
@@ -582,6 +585,8 @@ function telaOps(codigo, acaoTentar, passo = 0) {
   const principal = botao === "permitir"
     ? `<button class="botao forte" type="button" data-acao="permitir-ia" data-foco>Toque aqui para permitir</button>`
     : botao === "tentar" ? `<button class="botao forte" type="button" data-acao="${acaoTentar}" data-foco>Toque aqui para tentar de novo</button>` : "";
+  const colarTexto = acaoTentar === "tentar-de-novo" && fluxo?.imagens?.length
+    ? `<button class="link pequeno" type="button" data-acao="colar-depois-do-erro">Prefere colar o texto da conversa? Toque aqui</button>` : "";
   return `<section class="tela">${barra({ passo })}
     <div class="conteudo"><div class="ops" role="alert">
       <div class="emoji" aria-hidden="true">${emoji}</div>
@@ -589,7 +594,9 @@ function telaOps(codigo, acaoTentar, passo = 0) {
       <p>${esc(texto)}</p>
     </div>
     ${principal}
+    ${colarTexto}
     <button class="botao claro" type="button" data-acao="inicio">Voltar ao início</button>
+    <p class="codigo-suporte">Código para o suporte: ${esc(codigo || "desconhecido")}</p>
     </div></section>`;
 }
 
@@ -987,8 +994,8 @@ function pedirIA(f) {
   return pensar(entrada, imoveis).then(
     (resultado) => ({ resultado }),
     (erro) => {
-      console.warn("Copiloto: IA", erro?.code, erro?.message);
-      return { erro: erro?.code || "upstream_error" };
+      console.warn("Copiloto: IA", erro?.code, erro?.message, erro);
+      return { erro: erro?.code || (erro instanceof Error ? `js:${erro.name}` : "upstream_error") };
     },
   );
 }
@@ -1053,8 +1060,8 @@ async function pedirRetomada() {
   try {
     atual.resultado = await pensar({ modo: "retomar", imovelId: c.imovelId, cliente: contextoParaIA(c, true) }, imoveis);
   } catch (erro) {
-    console.warn("Copiloto: IA", erro?.code, erro?.message);
-    atual.erro = erro?.code || "upstream_error";
+    console.warn("Copiloto: IA", erro?.code, erro?.message, erro);
+    atual.erro = erro?.code || (erro instanceof Error ? `js:${erro.name}` : "upstream_error");
   }
   atual.carregando = false;
   if (retomada === atual && telaAtual().nome === "retomar") desenhar();
@@ -1136,6 +1143,15 @@ const ACOES = {
     conversaPronta();
   },
   "escolher-imovel": (el) => escolherImovel(el.dataset.id),
+  "colar-depois-do-erro"() {
+    // Volta ao passo 1 já no modo de colar o texto.
+    fluxo.modoTexto = true;
+    fluxo.imagens = [];
+    fluxo.erro = null;
+    pilha = pilha.filter((t) => !["imovel", "resultado"].includes(t.nome));
+    if (telaAtual().nome !== "foto") pilha.push({ nome: "foto", params: {} });
+    desenhar(true);
+  },
   "tentar-de-novo": () => escolherImovel(fluxo.imovelId || ""),
   async "permitir-ia"() {
     try {

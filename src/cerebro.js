@@ -157,12 +157,41 @@ function normalizarResultado(bruto, idsImoveis) {
   };
 }
 
+/** Lê o JSON de uma resposta em texto: puro, dentro de ```json```, ou do primeiro { ao último }. */
+function lerJson(texto) {
+  const t = String(texto ?? "").trim();
+  const candidatos = [t];
+  const cerca = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (cerca) candidatos.push(cerca[1]);
+  const i = t.indexOf("{");
+  const j = t.lastIndexOf("}");
+  if (i >= 0 && j > i) candidatos.push(t.slice(i, j + 1));
+  for (const c of candidatos) {
+    try { return JSON.parse(c); } catch { /* tenta o próximo */ }
+  }
+  throw { code: "invalid_json", message: "a resposta não trouxe JSON" };
+}
+
 /** Pergunta ao Claude. Rejeita com {code} (os códigos do capability "sample", mais "sem_ia"). */
 async function pensar(entrada, listaImoveis) {
   const sample = await window.claude?.use?.("sample");
   if (!sample) throw { code: "sem_ia" };
   const opcoes = { model: MODELO, modelTier: "default" };
   if (entrada.imagens?.length) opcoes.images = entrada.imagens.map((i) => i.blob);
-  const bruto = await sample.json(montarPedido(entrada, listaImoveis), opcoes);
+  const pedido = montarPedido(entrada, listaImoveis);
+  // Plano B para aplicativos do Claude mais antigos, que não têm sample.json:
+  // pede a resposta em texto comum e lê o JSON aqui mesmo.
+  const emTexto = async () => lerJson((await sample(pedido, opcoes)).text);
+  let bruto;
+  if (typeof sample.json !== "function") {
+    bruto = await emTexto();
+  } else {
+    try {
+      bruto = await sample.json(pedido, opcoes);
+    } catch (erro) {
+      if (erro?.code !== "capability_removed") throw erro;
+      bruto = await emTexto();
+    }
+  }
   return normalizarResultado(bruto, new Set(listaImoveis.map((i) => i.id)));
 }

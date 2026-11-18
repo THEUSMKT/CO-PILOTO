@@ -83,10 +83,18 @@
     };
   }
 
-  const sample = async (input) => ({ text: "ok", truncated: false, modelTierApplied: "default" });
+  // sample() em texto: devolve o JSON dentro de um bloco ```json (como um app antigo faria)
+  const sample = async (input, opcoes = {}) => {
+    window.__ultimoPedido = { input, opcoes: { ...opcoes, images: opcoes.images ? `${[].concat(opcoes.images).length} imagem(ns)` : undefined }, via: "texto" };
+    if (window.__falharIA) throw { code: window.__falharIA, message: "falha simulada" };
+    await new Promise((r) => setTimeout(r, 800));
+    return { text: "Aqui está:\n```json\n" + JSON.stringify(respostaFalsa(String(input))) + "\n```", truncated: false, modelTierApplied: "default" };
+  };
   sample.limits = async () => ({ maxPromptBytes: 262144, images: { maxCount: 4, maxInputBytes: 20_000_000, mediaTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"] } });
-  sample.json = async (input, opcoes = {}) => {
-    window.__ultimoPedido = { input, opcoes: { ...opcoes, images: opcoes.images ? `${[].concat(opcoes.images).length} imagem(ns)` : undefined } };
+  // ?semjson=1 imita um app do Claude sem sample.json; ?jsonremovido=1 imita sample.json recusando com capability_removed
+  if (params.get("semjson") !== "1") sample.json = async (input, opcoes = {}) => {
+    if (params.get("jsonremovido") === "1") throw { code: "capability_removed", message: "json não existe neste app" };
+    window.__ultimoPedido = { input, opcoes: { ...opcoes, images: opcoes.images ? `${[].concat(opcoes.images).length} imagem(ns)` : undefined }, via: "json" };
     if (window.__falharIA) throw { code: window.__falharIA, message: "falha simulada" };
     await new Promise((r) => setTimeout(r, 1500));
     return respostaFalsa(String(input));
