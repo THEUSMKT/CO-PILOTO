@@ -400,7 +400,8 @@ function registrarConversa(f, r) {
   c.momentoUltimo = r.momento;
   if (r.avaliacao) c.avaliacao = { ...r.avaliacao, em: iso(agora) }; // só aparece no painel do gestor
   if (r.followup.precisa && c.etapa !== "perdido") {
-    c.proximoFollowup = iso(dataLembrete(r.followup.dias, r.followup.hora));
+    // Chamar de novo só a partir do dia seguinte: no mesmo dia ainda é conversa, não acompanhamento.
+    c.proximoFollowup = iso(dataLembrete(Math.max(1, r.followup.dias), r.followup.hora));
     c.followupMotivo = "retomar";
     c.followupMensagem = r.followup.mensagem;
   } else {
@@ -423,10 +424,11 @@ function registrarEnvio(c, agora = new Date()) {
   if (c.historico.length > 80) c.historico = c.historico.slice(-80);
 }
 
-/** Por que esse cliente está na lista de hoje (ou null se não está). */
+/** Por que esse cliente está na lista de hoje (ou null se não está).
+ *  "Quem chamar hoje" é só acompanhamento: quem esfriou e chegou no dia de ser chamado de novo
+ *  (e o pós-visita). Cliente que acabou de receber resposta não entra aqui. */
 function motivoParaChamar(c) {
   if (c.etapa === "vendido" || c.etapa === "perdido") return null;
-  if (c.aguardandoDesde) return { tipo: "esperando", ordem: Date.parse(c.aguardandoDesde) };
   if (c.proximoFollowup) {
     const quando = Date.parse(c.proximoFollowup);
     const fimDeHoje = inicioDoDia(new Date()).getTime() + DIA;
@@ -654,7 +656,7 @@ function blocoNovidades(c) {
 // Mini tour do primeiro acesso: os 3 botões + a licença do Claude.
 const PASSEIO = [
   ["📩", "Responder um cliente", "Cliente te mandou mensagem? Tire um print da conversa e toque aqui. Eu te mostro o que responder."],
-  ["📞", "Quem chamar hoje", "Aqui ficam os clientes que estão esperando você. A bolinha vermelha mostra quantos são."],
+  ["📞", "Quem chamar hoje", "Aqui aparecem os clientes que pararam de responder, no dia certo de chamar de novo. A bolinha vermelha mostra quantos são."],
   ["❓", "Preciso de ajuda", "Ficou com dúvida? Toque aqui para ver o passo a passo ou falar com o suporte."],
   ["🤝", "Uma licença do Claude", "O app usa a inteligência do Claude. Ao tocar no botão, o Claude vai perguntar se pode: toque em Permitir."],
 ];
@@ -692,8 +694,8 @@ const TELAS = {
         </button>
         <button class="escolha" type="button" data-acao="chamar">
           <span class="icone" aria-hidden="true">📞</span>
-          <span><strong>Quem chamar hoje</strong><span class="sub">Toque aqui para ver quem está esperando seu retorno</span></span>
-          ${n ? `<span class="bolinha" aria-label="${n} ${n === 1 ? "cliente esperando" : "clientes esperando"}">${n}</span>` : ""}
+          <span><strong>Quem chamar hoje</strong><span class="sub">Toque aqui para ver quem precisa ser chamado de novo</span></span>
+          ${n ? `<span class="bolinha" aria-label="${n} ${n === 1 ? "cliente para chamar" : "clientes para chamar"}">${n}</span>` : ""}
         </button>
         <button class="escolha discreta" type="button" data-acao="ajuda">
           <span class="icone" aria-hidden="true">❓</span>
@@ -797,7 +799,7 @@ const TELAS = {
     const lista = listaDeHoje();
     if (!lista.length) {
       return `<section class="tela">${barra()}
-        <div class="conteudo"><div class="vazio"><div class="emoji" aria-hidden="true">🎉</div><h1>Tudo em dia!</h1><p>Ninguém esperando você agora. Quando um cliente mandar mensagem, toque em “Responder um cliente”.</p></div>
+        <div class="conteudo"><div class="vazio"><div class="emoji" aria-hidden="true">🎉</div><h1>Tudo em dia!</h1><p>Ninguém para chamar de novo hoje. Quando um cliente mandar mensagem, toque em “Responder um cliente”.</p></div>
         <button class="botao forte" type="button" data-acao="inicio">Voltar ao início</button>
         ${clientes.length ? `<button class="link pequeno" type="button" data-acao="clientes">Ver todos os meus clientes</button>` : ""}
         </div></section>`;
@@ -819,7 +821,7 @@ const TELAS = {
     }).join("");
     return `<section class="tela">${barra()}
       <div class="conteudo">
-        <div class="titulo"><h1>Quem chamar hoje</h1><p>${lista.length === 1 ? "1 cliente esperando você" : `${lista.length} clientes esperando você`}</p></div>
+        <div class="titulo"><h1>Quem chamar hoje</h1><p>${lista.length === 1 ? "1 cliente para chamar de novo" : `${lista.length} clientes para chamar de novo`}</p></div>
         <div class="lista-chamar">${cards}</div>
         <button class="link pequeno" type="button" data-acao="clientes">Ver todos os meus clientes</button>
       </div></section>`;
@@ -941,7 +943,7 @@ const TELAS = {
       ["Cliente mandou mensagem?", "No WhatsApp, tire um print da conversa (aperte o botão de ligar junto com o de abaixar o volume).", ILUSTRA_AJUDA[0]],
       ["Toque em “📩 Responder um cliente”", "Escolha a foto do print e o imóvel. O app pensa na melhor resposta.", ILUSTRA_AJUDA[1]],
       ["Toque no botão verde", "Ele copia a resposta e abre o WhatsApp. Lá, segure o dedo na caixa de mensagem e toque em Colar. Depois é só enviar.", ILUSTRA_AJUDA[2]],
-      ["Todo dia, veja “📞 Quem chamar hoje”", "O app lembra quem está esperando você. Depois de mandar a mensagem, toque em “✓ Já chamei”.", ILUSTRA_AJUDA[3]],
+      ["Todo dia, veja “📞 Quem chamar hoje”", "O app lembra quem parou de responder e precisa ser chamado de novo. Depois de mandar a mensagem, toque em “✓ Já chamei”. Se o cliente respondeu, mande o print novo pelo “Responder um cliente”.", ILUSTRA_AJUDA[3]],
     ];
     const suporte = foneWhats(config.suporteWhatsapp);
     return `<section class="tela">${barra()}
