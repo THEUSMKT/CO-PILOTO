@@ -27,9 +27,29 @@ const FORMATO_JSON = `{
   "followup": { "precisa": true, "dias": 1, "hora": "10:00", "quando": "amanhã às 10h", "mensagem": "mensagem pronta se ele não responder" },
   "por_que": "1 frase ensinando a técnica",
   "resumo": "1 frase para lembrar quem é esse cliente",
-  "hora_primeira_mensagem_hoje": "HH:MM ou null",
-  "pediu_para_parar": false
-}`;
+  "primeira_mensagem": { "data": "AAAA-MM-DD ou null", "hora": "HH:MM ou null" },
+  "pediu_para_parar": false,
+  "avaliacao": {
+    "nota_atendimento": 7,
+    "minutos_ate_primeira_resposta": 15,
+    "onde_travou": "nao_travou | primeira_resposta | entender_necessidade | apresentacao_imovel | convite_visita | objecao | retomada | pos_visita",
+    "causa_principal": "atendimento | perfil_do_lead | preco_ou_condicoes | imovel | ainda_em_andamento",
+    "falhas": ["códigos da lista de falhas"],
+    "acertos": ["códigos da lista de acertos"],
+    "motivo_esfriou": "preco | entrada_financiamento | localizacao | caracteristicas | so_curiosidade | demora_ou_falha_atendimento | sem_motivo_claro | nao_esfriou",
+    "comentario": "1 ou 2 frases para o gestor"
+  }
+}
+(No modo de retomada sem print, "avaliacao" é null.)`;
+
+// Códigos aceitos na avaliação do atendimento (o painel do gestor traduz cada um).
+const AVALIACAO = {
+  onde_travou: ["nao_travou", "primeira_resposta", "entender_necessidade", "apresentacao_imovel", "convite_visita", "objecao", "retomada", "pos_visita"],
+  causa_principal: ["atendimento", "perfil_do_lead", "preco_ou_condicoes", "imovel", "ainda_em_andamento"],
+  falhas: ["demorou_para_responder", "nao_fez_perguntas", "nao_respondeu_o_que_perguntou", "listou_sem_conectar", "nao_convidou_visita", "convite_sem_horarios", "nao_tratou_objecao", "mensagem_longa_ou_robotica", "terminou_sem_proximo_passo", "nao_retomou", "informacao_errada_ou_promessa"],
+  acertos: ["respondeu_rapido", "fez_boas_perguntas", "conectou_imovel_ao_cliente", "convidou_visita_com_horarios", "tratou_objecao_bem", "tom_acolhedor", "retomou_contato"],
+  motivo_esfriou: ["preco", "entrada_financiamento", "localizacao", "caracteristicas", "so_curiosidade", "demora_ou_falha_atendimento", "sem_motivo_claro", "nao_esfriou"],
+};
 
 const DATA_HORA = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "America/Sao_Paulo",
@@ -152,8 +172,32 @@ function normalizarResultado(bruto, idsImoveis) {
     },
     por_que: limitar(bruto?.por_que, 300),
     resumo: limitar(bruto?.resumo, 240),
-    hora_primeira_mensagem_hoje: HORA_VALIDA.test(bruto?.hora_primeira_mensagem_hoje) ? bruto.hora_primeira_mensagem_hoje : null,
+    primeira_mensagem: {
+      data: /^\d{4}-\d{2}-\d{2}$/.test(bruto?.primeira_mensagem?.data) ? bruto.primeira_mensagem.data : null,
+      hora: HORA_VALIDA.test(bruto?.primeira_mensagem?.hora) ? bruto.primeira_mensagem.hora : null,
+    },
     pediu_para_parar: bruto?.pediu_para_parar === true,
+    avaliacao: normalizarAvaliacao(bruto?.avaliacao),
+  };
+}
+
+/** Avaliação do atendimento: só códigos conhecidos, para o painel nunca mostrar lixo. */
+function normalizarAvaliacao(a) {
+  if (!a || typeof a !== "object") return null;
+  const umDe = (v, ok) => (ok.includes(v) ? v : null);
+  const lista = (v, ok) => [...new Set((Array.isArray(v) ? v : []).filter((x) => ok.includes(x)))];
+  const nota = Number.isFinite(a.nota_atendimento) ? Math.min(10, Math.max(0, Math.round(a.nota_atendimento))) : null;
+  const minutos = Number.isFinite(a.minutos_ate_primeira_resposta) && a.minutos_ate_primeira_resposta >= 0
+    ? Math.round(a.minutos_ate_primeira_resposta) : null;
+  return {
+    nota_atendimento: nota,
+    minutos_ate_primeira_resposta: minutos,
+    onde_travou: umDe(a.onde_travou, AVALIACAO.onde_travou),
+    causa_principal: umDe(a.causa_principal, AVALIACAO.causa_principal) || "ainda_em_andamento",
+    falhas: lista(a.falhas, AVALIACAO.falhas),
+    acertos: lista(a.acertos, AVALIACAO.acertos),
+    motivo_esfriou: umDe(a.motivo_esfriou, AVALIACAO.motivo_esfriou),
+    comentario: limitar(a.comentario, 300),
   };
 }
 

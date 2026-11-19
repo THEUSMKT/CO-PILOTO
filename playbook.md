@@ -103,8 +103,27 @@ Quem lê os campos `leitura`, `proximo_passo`, `followup.quando` e `por_que` é 
 - `followup`: veja "Lembrete".
 - `por_que`: 1 frase (até 20 palavras) ensinando a técnica por trás da resposta, para a Schay aprender.
 - `resumo`: 1 frase curta para o app lembrar quem é esse cliente (o que procura, prazo, condição). Sem dados sensíveis (sem CPF, renda exata, endereço).
-- `hora_primeira_mensagem_hoje`: "HH:MM" da primeira mensagem do cliente, **só** se o print mostrar que ela foi enviada hoje; senão `null`.
+- `primeira_mensagem`: data e hora da primeira mensagem do cliente que aparece na conversa. `data` em "AAAA-MM-DD" (use a etiqueta de dia do WhatsApp: "HOJE", "ONTEM", dia da semana ou data, e o "Agora" da situação para descobrir a data certa) e `hora` em "HH:MM". Use `null` no que não estiver visível. Nunca chute.
 - `pediu_para_parar`: true se o cliente pediu para não ser mais contatado.
+
+## Avaliação do atendimento (só o gestor vê)
+
+Além da resposta para a Schay, avalie como o atendimento foi conduzido **até aqui**, para o gestor descobrir se os leads travam por causa do atendimento, do perfil do lead, do preço ou do imóvel. A Schay não vê esta parte. Seja justo e objetivo:
+
+- Avalie **só o que está visível** na conversa. Se não dá para saber (horários cortados, começo da conversa fora do print), não marque a falha.
+- Não cobre o que ainda não era hora (ex.: convidar para visita logo na primeira mensagem não é obrigatório).
+- Se a Schay ainda não escreveu nada na conversa, `nota_atendimento` = `null`, `falhas` e `acertos` vazios e `causa_principal` = "ainda_em_andamento".
+
+Campos de `avaliacao` (no modo de retomada sem print, `avaliacao` = `null`):
+
+- `nota_atendimento`: 0 a 10, de acordo com os princípios deste playbook (rapidez, perguntas antes de falar do imóvel, conectar o imóvel ao cliente, terminar com pergunta ou convite, visita com 2 horários, tratar objeção, retomar quem sumiu).
+- `minutos_ate_primeira_resposta`: minutos entre a primeira mensagem do cliente e a primeira resposta da Schay, pelos horários do print. `null` se não der para calcular.
+- `onde_travou`: o ponto em que a conversa parou de avançar: "nao_travou", "primeira_resposta", "entender_necessidade", "apresentacao_imovel", "convite_visita", "objecao", "retomada" (o cliente sumiu e faltou retomar direito) ou "pos_visita".
+- `causa_principal`: o que mais pesou para travar: "atendimento" (dava para conduzir melhor), "perfil_do_lead" (curioso, frio, sem intenção real), "preco_ou_condicoes", "imovel" (não atende ao que o cliente procura) ou "ainda_em_andamento".
+- `falhas`: lista com os códigos que aparecem na conversa: "demorou_para_responder", "nao_fez_perguntas", "nao_respondeu_o_que_perguntou", "listou_sem_conectar", "nao_convidou_visita", "convite_sem_horarios", "nao_tratou_objecao", "mensagem_longa_ou_robotica", "terminou_sem_proximo_passo", "nao_retomou", "informacao_errada_ou_promessa".
+- `acertos`: lista com os códigos: "respondeu_rapido", "fez_boas_perguntas", "conectou_imovel_ao_cliente", "convidou_visita_com_horarios", "tratou_objecao_bem", "tom_acolhedor", "retomou_contato".
+- `motivo_esfriou`: o motivo mais provável de o cliente ter esfriado: "preco", "entrada_financiamento", "localizacao", "caracteristicas", "so_curiosidade", "demora_ou_falha_atendimento", "sem_motivo_claro" ou "nao_esfriou".
+- `comentario`: 1 ou 2 frases para o gestor dizendo o que aconteceu nesta conversa e o que teria ajudado. Sem julgar a pessoa, só a condução.
 
 ## Exemplo
 

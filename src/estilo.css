@@ -1059,6 +1059,11 @@ textarea.campo { min-height: 220px; resize: vertical; line-height: 1.4; }
 .caixa-texto { padding: 12px; border-radius: 12px; background: var(--fundo); font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .aviso-exemplo { padding: 14px 16px; border-radius: 14px; background: var(--dourado-claro); color: #5B4510; font-weight: 700; box-shadow: inset 4px 0 0 var(--dourado); }
 .passos-lista { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.conclusao { display: grid; gap: 8px; padding: 18px 20px; border-radius: 16px; background: var(--azul-escuro); color: var(--branco); box-shadow: var(--sombra), inset 4px 0 0 var(--dourado); }
+.conclusao h2 { color: var(--dourado-claro); }
+.conclusao p { font-size: 17px; line-height: 1.5; color: #E6EEF8; }
+.conclusao p:first-of-type { font-size: 19px; font-weight: 800; color: var(--branco); }
+.gestor td { vertical-align: top; }
 .gestor .etiqueta { display: inline-block; padding: 2px 8px; border-radius: 99px; background: var(--dourado-claro); color: #6B5113; font-size: 12px; font-weight: 900; letter-spacing: .04em; }
 .gestor .imovel-gestor strong { font-size: 17px; color: var(--azul-escuro); }
 .gestor .imovel-gestor .botao { margin-top: 6px; }

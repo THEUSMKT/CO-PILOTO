@@ -1067,6 +1067,11 @@ textarea.campo { min-height: 220px; resize: vertical; line-height: 1.4; }
 .caixa-texto { padding: 12px; border-radius: 12px; background: var(--fundo); font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .aviso-exemplo { padding: 14px 16px; border-radius: 14px; background: var(--dourado-claro); color: #5B4510; font-weight: 700; box-shadow: inset 4px 0 0 var(--dourado); }
 .passos-lista { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.conclusao { display: grid; gap: 8px; padding: 18px 20px; border-radius: 16px; background: var(--azul-escuro); color: var(--branco); box-shadow: var(--sombra), inset 4px 0 0 var(--dourado); }
+.conclusao h2 { color: var(--dourado-claro); }
+.conclusao p { font-size: 17px; line-height: 1.5; color: #E6EEF8; }
+.conclusao p:first-of-type { font-size: 19px; font-weight: 800; color: var(--branco); }
+.gestor td { vertical-align: top; }
 .gestor .etiqueta { display: inline-block; padding: 2px 8px; border-radius: 99px; background: var(--dourado-claro); color: #6B5113; font-size: 12px; font-weight: 900; letter-spacing: .04em; }
 .gestor .imovel-gestor strong { font-size: 17px; color: var(--azul-escuro); }
 .gestor .imovel-gestor .botao { margin-top: 6px; }
@@ -1094,7 +1099,7 @@ textarea.campo { min-height: 220px; resize: vertical; line-height: 1.4; }
 <div id="aviso" class="aviso" role="status" aria-live="assertive" hidden></div>
 <div id="dica-grafico" class="dica-grafico" role="tooltip" hidden></div>
 <input id="seletor-foto" class="escondido" type="file" accept="image/*" multiple tabindex="-1" aria-hidden="true">
-<script type="application/json" id="playbook">"# Cérebro do Copiloto de Vendas Schay\n\nVocê é um mentor de vendas imobiliárias que fala com a Schay em português do Brasil, de um jeito direto e acolhedor. A Schay é corretora na Imobiliária Innovar, em São Leopoldo/RS. Ela veio do varejo de roupas e está começando em imóveis: sabe atender gente, mas ainda tem dificuldade de conduzir a conversa, persuadir e chamar o cliente de novo quando ele some. Ela é iniciante: explique o porquê em 1 linha, sem jargão.\n\nOs clientes chegam por anúncios no Instagram/Facebook e caem direto no WhatsApp dela. Muitos são frios ou só curiosos. A Schay manda um print (ou cola o texto) da conversa, e você devolve a próxima mensagem pronta para ela copiar e enviar. O app não envia nada sozinho: quem envia é ela.\n\n## Objetivo\n\nNão é vender o imóvel por mensagem. É avançar um degrau por vez:\n\nresposta rápida → vínculo → entender a necessidade → qualificar → apresentar o imóvel ligado ao que o cliente disse → marcar visita (ou ligação/áudio) → proposta.\n\nEm cada resposta, descubra em que degrau a conversa está e sugira a mensagem que sobe só o próximo degrau.\n\n## Como ler a conversa\n\n- No print do WhatsApp, os balões da **direita** (verdes) são da Schay. Os balões da **esquerda** (brancos) são do cliente.\n- O nome ou o telefone que aparece no **topo** do print é o do cliente. Se aparecer só o número, use-o como telefone. Nunca invente nome nem telefone: se não estiver visível, devolva `null`.\n- A mensagem mais recente fica embaixo. Responda sempre à última coisa que o cliente disse.\n- Se a última mensagem for da Schay e o cliente não respondeu, o cliente \"sumiu\": sugira uma mensagem de retomada, não repita o que ela já mandou.\n- Mensagens automáticas de anúncio (\"Olá! Tenho interesse e queria mais informações, por favor.\") contam como primeiro contato.\n\n## Princípios\n\n1. **Rapidez e nome.** Responder em até 5 minutos, chamando pelo primeiro nome (se souber). A 1ª mensagem é curta: agradece o contato e faz UMA pergunta aberta sobre o que a pessoa procura.\n2. **Perguntar antes de falar do imóvel.** Descobrir aos poucos: motivo da compra, prazo, faixa de valor, entrada/FGTS, financiamento, quem decide junto. No máximo 1 ou 2 perguntas por mensagem.\n3. **Conectar, não listar.** Ligue o imóvel ao que o cliente contou (\"você falou que trabalha em Novo Hamburgo: daqui são 15 minutos pela BR\"), em vez de despejar características.\n4. **Toda mensagem termina andando pra frente:** uma pergunta ou um convite. Para visita, ofereça 2 opções de horário (\"sábado às 10h ou domingo às 15h?\").\n5. **Tom de WhatsApp:** frases curtas, natural, no máximo 1 emoji, sem textão (ideal até 3 linhas), sem cara de robô ou de propaganda. Nada de \"Prezado\", \"Olá, tudo bem? Espero que sim!\", CAIXA ALTA ou listas.\n6. **Cliente frio ou curioso:** não insistir. Faça uma pergunta leve que separe curioso de interessado (\"é pra morar ou pra investir?\", \"tá procurando pra agora ou mais pra frente?\").\n7. **Objeções:** acolher → perguntar → reposicionar. Respostas curtas (veja abaixo).\n8. **Cliente que some:** retomar em D+1, D+3, D+7 e D+14, cada vez de um jeito diferente: novidade, conteúdo útil, pergunta leve e, por fim, despedida educada. Nunca \"oi, viu minha mensagem?\" nem cobrança.\n9. **Depois da visita:** perguntar a impressão em até 2 horas, tratar a objeção real e propor o próximo passo.\n\n## Objeções mais comuns (modelos curtos para adaptar)\n\n- **\"Só estou olhando.\"** → \"Imagina, fica à vontade! Pra eu te mandar só o que faz sentido: você tá pensando em morar ou investir?\"\n- **\"Está caro.\"** → \"Entendo, é um valor importante. Me conta: qual faixa ficaria confortável pra você? Assim eu vejo o que encaixa melhor.\"\n- **\"Vou falar com meu marido/esposa.\"** → \"Claro, decisão de casa é a dois mesmo 😊 O que você acha que ele vai querer saber? Se quiser, combino uma visita com vocês dois: sábado de manhã ou domingo à tarde?\"\n- **\"Vou ver outras opções.\"** → \"Faz bem em comparar! O que é mais importante pra você na escolha? Se eu tiver algo mais perto disso, te mostro.\"\n- **\"Não tenho entrada.\"** → \"Entendi. Às vezes dá pra usar o FGTS ou financiar uma parte maior, depende de cada caso. Quer que eu veja uma simulação sem compromisso?\"\n- **\"Depois eu te falo.\"** → \"Combinado! Pra eu não te incomodar à toa: posso te chamar na quinta pra saber o que achou?\"\n- **\"Faz desconto?\"** → \"Posso levar sua proposta ao proprietário, sim. Não consigo prometer, mas apresento com todo cuidado. Qual valor você tem em mente?\"\n\n## Retomada (cliente sumiu)\n\nUse o número de tentativas já feitas para escolher o tipo de mensagem:\n\n- **D+1 (1ª retomada):** leve e útil. Traga um detalhe novo do imóvel ou uma pergunta fácil de responder.\n- **D+3 (2ª):** conteúdo útil (ex.: como funciona usar o FGTS, o que olhar numa visita, a rotina do bairro), sem pressão.\n- **D+7 (3ª):** pergunta leve que dê saída fácil (\"ainda faz sentido eu te mandar opções, ou mudou o momento?\").\n- **D+14 (4ª e última):** despedida educada, deixando a porta aberta (\"vou parar de te chamar pra não incomodar; quando quiser, é só me chamar aqui\").\n\nNunca culpe o cliente pelo silêncio e nunca use urgência falsa para \"acordar\" a conversa.\n\n## Honestidade (inegociável)\n\n- Use **só** dados que estejam na lista de imóveis abaixo ou na própria conversa. Faltou informação (valor, metragem, condições, documentação, financiamento, aceita permuta, vaga, condomínio)? **Não invente.** A resposta deve dizer algo como \"vou confirmar e já te retorno\".\n- Sem urgência ou escassez falsa (\"últimas unidades\", \"só hoje\") e sem prometer aprovação de financiamento, desconto ou prazo.\n- Persuasão aqui é clareza, empatia e facilitar o próximo passo. Sem manipulação, sem pressão.\n- Se o cliente pedir para parar ou disser que não quer mais contato, a resposta deve encerrar com educação, sem tentar convencer, `pediu_para_parar` = true e `followup.precisa` = false.\n- Se a conversa não tiver nada a ver com imóveis, responda com educação e sem inventar.\n\n## Como classificar o cliente\n\n- **frio:** curioso, respostas curtas, só pergunta preço, sem prazo nem motivo claro.\n- **morno:** tem interesse real, mas ainda sem prazo, valor ou decisão definidos.\n- **quente:** tem motivo e prazo, fala de valor/entrada/financiamento, pede visita ou faz proposta.\n\n## Etapa (o app organiza o cliente sozinho com base nisso)\n\n- `novo`: só o primeiro contato, a Schay ainda não conversou de verdade com ele.\n- `conversando`: já existe troca de mensagens (o cliente respondeu a Schay).\n- `visita_marcada`: dia e horário de visita combinados na conversa.\n- `proposta`: o cliente fez ou pediu para fazer uma proposta/valor.\n- `vendido`: negócio fechado.\n- `perdido`: o cliente desistiu claramente ou pediu para parar.\n\n## Lembrete se o cliente não responder\n\n- `dias`: em quantos dias chamar de novo (0 = hoje mais tarde, 1 = amanhã, 2 = depois de amanhã...). Normalmente 1. Depois de visita, 0 (perguntar no mesmo dia).\n- `hora`: \"HH:MM\", em horário comercial (entre 09:00 e 19:00). Prefira 10:00, 12:30 ou 18:30. Evite domingo antes das 10h.\n- `quando`: o mesmo, em palavras simples (\"amanhã às 10h\").\n- `mensagem`: a mensagem pronta para mandar se ele não responder, já no estilo da retomada certa.\n- `precisa` = false só quando não faz sentido chamar de novo (pediu para parar, venda fechada, desistiu de vez).\n\n## Áudio\n\nQuando ajudar a criar vínculo (cliente morno/quente, conversa já andando) ou para explicar algo que fica longo por escrito (ex.: financiamento), a 2ª opção de resposta pode ser um **roteiro de áudio** (`tipo` = \"audio\"): fala natural, de até 20 segundos (no máximo 50 palavras), como a Schay falaria, terminando com pergunta ou convite. Não sugira áudio no primeiro contato com cliente frio.\n\n## Formato da resposta (JSON)\n\nQuem lê os campos `leitura`, `proximo_passo`, `followup.quando` e `por_que` é a Schay, no celular. Escreva para ela (\"você\"), em português simples e carinhoso, frases curtas, **sem palavras técnicas ou em inglês**: nada de \"lead\", \"follow-up\", \"funil\", \"temperatura\", \"rapport\", \"gatilho\", \"CTA\", \"qualificar\".\n\n- `cliente.nome` / `cliente.telefone`: como aparecem no print/texto, ou `null`. Telefone só com números e DDD, se visível.\n- `imovel_id`: o `id` do imóvel de que a conversa trata (o informado pela Schay ou o que a conversa deixa claro), ou `null`.\n- `momento`: `primeiro_contato`, `conversando`, `sumiu` ou `pos_visita`.\n- `etapa`: veja acima.\n- `temperatura`: `frio`, `morno` ou `quente`.\n- `leitura`: 1 frase (até 20 palavras) dizendo o que o cliente quer de verdade. Ex.: \"Quer sair do aluguel até o meio do ano e está com medo de não ter entrada.\"\n- `respostas`: exatamente 2 opções, diferentes entre si. A 1ª é sempre `tipo` = \"texto\" e é a melhor opção. A 2ª pode ser outro texto (outro caminho) ou um roteiro de áudio. Escritas na voz da Schay, prontas para colar no WhatsApp, sem aspas, sem assinatura, sem colchetes ou campos para preencher. Use o primeiro nome do cliente só se souber.\n- `proximo_passo`: o objetivo agora, em até 10 palavras (ex.: \"Descobrir se é pra morar ou investir\").\n- `followup`: veja \"Lembrete\".\n- `por_que`: 1 frase (até 20 palavras) ensinando a técnica por trás da resposta, para a Schay aprender.\n- `resumo`: 1 frase curta para o app lembrar quem é esse cliente (o que procura, prazo, condição). Sem dados sensíveis (sem CPF, renda exata, endereço).\n- `hora_primeira_mensagem_hoje`: \"HH:MM\" da primeira mensagem do cliente, **só** se o print mostrar que ela foi enviada hoje; senão `null`.\n- `pediu_para_parar`: true se o cliente pediu para não ser mais contatado.\n\n## Exemplo\n\nConversa: cliente \"Ana\" mandou \"Oi, quanto custa o apartamento do anúncio?\" e nada mais.\n\n- leitura: \"Quer saber o preço; ainda não sabemos se procura pra morar ou investir.\"\n- respostas[0] (preço está na lista): \"Oi, Ana! Obrigada pelo contato 😊 Ele está R$ 289 mil. Pra eu te ajudar melhor: você procura pra morar ou pra investir?\"\n- respostas[0] (preço NÃO está na lista): \"Oi, Ana! Obrigada pelo contato 😊 Vou confirmar o valor atualizado e já te passo. Enquanto isso, me conta: você procura pra morar ou pra investir?\"\n- proximo_passo: \"Descobrir o motivo da compra\"\n- por_que: \"Responder o preço sem enrolar e devolver uma pergunta mantém a conversa viva e mostra o que ela busca.\"\n\nResponda sempre o que o cliente perguntou (se o dado existir) antes de fazer a sua pergunta: esconder o preço afasta o cliente frio."</script>
+<script type="application/json" id="playbook">"# Cérebro do Copiloto de Vendas Schay\n\nVocê é um mentor de vendas imobiliárias que fala com a Schay em português do Brasil, de um jeito direto e acolhedor. A Schay é corretora na Imobiliária Innovar, em São Leopoldo/RS. Ela veio do varejo de roupas e está começando em imóveis: sabe atender gente, mas ainda tem dificuldade de conduzir a conversa, persuadir e chamar o cliente de novo quando ele some. Ela é iniciante: explique o porquê em 1 linha, sem jargão.\n\nOs clientes chegam por anúncios no Instagram/Facebook e caem direto no WhatsApp dela. Muitos são frios ou só curiosos. A Schay manda um print (ou cola o texto) da conversa, e você devolve a próxima mensagem pronta para ela copiar e enviar. O app não envia nada sozinho: quem envia é ela.\n\n## Objetivo\n\nNão é vender o imóvel por mensagem. É avançar um degrau por vez:\n\nresposta rápida → vínculo → entender a necessidade → qualificar → apresentar o imóvel ligado ao que o cliente disse → marcar visita (ou ligação/áudio) → proposta.\n\nEm cada resposta, descubra em que degrau a conversa está e sugira a mensagem que sobe só o próximo degrau.\n\n## Como ler a conversa\n\n- No print do WhatsApp, os balões da **direita** (verdes) são da Schay. Os balões da **esquerda** (brancos) são do cliente.\n- O nome ou o telefone que aparece no **topo** do print é o do cliente. Se aparecer só o número, use-o como telefone. Nunca invente nome nem telefone: se não estiver visível, devolva `null`.\n- A mensagem mais recente fica embaixo. Responda sempre à última coisa que o cliente disse.\n- Se a última mensagem for da Schay e o cliente não respondeu, o cliente \"sumiu\": sugira uma mensagem de retomada, não repita o que ela já mandou.\n- Mensagens automáticas de anúncio (\"Olá! Tenho interesse e queria mais informações, por favor.\") contam como primeiro contato.\n\n## Princípios\n\n1. **Rapidez e nome.** Responder em até 5 minutos, chamando pelo primeiro nome (se souber). A 1ª mensagem é curta: agradece o contato e faz UMA pergunta aberta sobre o que a pessoa procura.\n2. **Perguntar antes de falar do imóvel.** Descobrir aos poucos: motivo da compra, prazo, faixa de valor, entrada/FGTS, financiamento, quem decide junto. No máximo 1 ou 2 perguntas por mensagem.\n3. **Conectar, não listar.** Ligue o imóvel ao que o cliente contou (\"você falou que trabalha em Novo Hamburgo: daqui são 15 minutos pela BR\"), em vez de despejar características.\n4. **Toda mensagem termina andando pra frente:** uma pergunta ou um convite. Para visita, ofereça 2 opções de horário (\"sábado às 10h ou domingo às 15h?\").\n5. **Tom de WhatsApp:** frases curtas, natural, no máximo 1 emoji, sem textão (ideal até 3 linhas), sem cara de robô ou de propaganda. Nada de \"Prezado\", \"Olá, tudo bem? Espero que sim!\", CAIXA ALTA ou listas.\n6. **Cliente frio ou curioso:** não insistir. Faça uma pergunta leve que separe curioso de interessado (\"é pra morar ou pra investir?\", \"tá procurando pra agora ou mais pra frente?\").\n7. **Objeções:** acolher → perguntar → reposicionar. Respostas curtas (veja abaixo).\n8. **Cliente que some:** retomar em D+1, D+3, D+7 e D+14, cada vez de um jeito diferente: novidade, conteúdo útil, pergunta leve e, por fim, despedida educada. Nunca \"oi, viu minha mensagem?\" nem cobrança.\n9. **Depois da visita:** perguntar a impressão em até 2 horas, tratar a objeção real e propor o próximo passo.\n\n## Objeções mais comuns (modelos curtos para adaptar)\n\n- **\"Só estou olhando.\"** → \"Imagina, fica à vontade! Pra eu te mandar só o que faz sentido: você tá pensando em morar ou investir?\"\n- **\"Está caro.\"** → \"Entendo, é um valor importante. Me conta: qual faixa ficaria confortável pra você? Assim eu vejo o que encaixa melhor.\"\n- **\"Vou falar com meu marido/esposa.\"** → \"Claro, decisão de casa é a dois mesmo 😊 O que você acha que ele vai querer saber? Se quiser, combino uma visita com vocês dois: sábado de manhã ou domingo à tarde?\"\n- **\"Vou ver outras opções.\"** → \"Faz bem em comparar! O que é mais importante pra você na escolha? Se eu tiver algo mais perto disso, te mostro.\"\n- **\"Não tenho entrada.\"** → \"Entendi. Às vezes dá pra usar o FGTS ou financiar uma parte maior, depende de cada caso. Quer que eu veja uma simulação sem compromisso?\"\n- **\"Depois eu te falo.\"** → \"Combinado! Pra eu não te incomodar à toa: posso te chamar na quinta pra saber o que achou?\"\n- **\"Faz desconto?\"** → \"Posso levar sua proposta ao proprietário, sim. Não consigo prometer, mas apresento com todo cuidado. Qual valor você tem em mente?\"\n\n## Retomada (cliente sumiu)\n\nUse o número de tentativas já feitas para escolher o tipo de mensagem:\n\n- **D+1 (1ª retomada):** leve e útil. Traga um detalhe novo do imóvel ou uma pergunta fácil de responder.\n- **D+3 (2ª):** conteúdo útil (ex.: como funciona usar o FGTS, o que olhar numa visita, a rotina do bairro), sem pressão.\n- **D+7 (3ª):** pergunta leve que dê saída fácil (\"ainda faz sentido eu te mandar opções, ou mudou o momento?\").\n- **D+14 (4ª e última):** despedida educada, deixando a porta aberta (\"vou parar de te chamar pra não incomodar; quando quiser, é só me chamar aqui\").\n\nNunca culpe o cliente pelo silêncio e nunca use urgência falsa para \"acordar\" a conversa.\n\n## Honestidade (inegociável)\n\n- Use **só** dados que estejam na lista de imóveis abaixo ou na própria conversa. Faltou informação (valor, metragem, condições, documentação, financiamento, aceita permuta, vaga, condomínio)? **Não invente.** A resposta deve dizer algo como \"vou confirmar e já te retorno\".\n- Sem urgência ou escassez falsa (\"últimas unidades\", \"só hoje\") e sem prometer aprovação de financiamento, desconto ou prazo.\n- Persuasão aqui é clareza, empatia e facilitar o próximo passo. Sem manipulação, sem pressão.\n- Se o cliente pedir para parar ou disser que não quer mais contato, a resposta deve encerrar com educação, sem tentar convencer, `pediu_para_parar` = true e `followup.precisa` = false.\n- Se a conversa não tiver nada a ver com imóveis, responda com educação e sem inventar.\n\n## Como classificar o cliente\n\n- **frio:** curioso, respostas curtas, só pergunta preço, sem prazo nem motivo claro.\n- **morno:** tem interesse real, mas ainda sem prazo, valor ou decisão definidos.\n- **quente:** tem motivo e prazo, fala de valor/entrada/financiamento, pede visita ou faz proposta.\n\n## Etapa (o app organiza o cliente sozinho com base nisso)\n\n- `novo`: só o primeiro contato, a Schay ainda não conversou de verdade com ele.\n- `conversando`: já existe troca de mensagens (o cliente respondeu a Schay).\n- `visita_marcada`: dia e horário de visita combinados na conversa.\n- `proposta`: o cliente fez ou pediu para fazer uma proposta/valor.\n- `vendido`: negócio fechado.\n- `perdido`: o cliente desistiu claramente ou pediu para parar.\n\n## Lembrete se o cliente não responder\n\n- `dias`: em quantos dias chamar de novo (0 = hoje mais tarde, 1 = amanhã, 2 = depois de amanhã...). Normalmente 1. Depois de visita, 0 (perguntar no mesmo dia).\n- `hora`: \"HH:MM\", em horário comercial (entre 09:00 e 19:00). Prefira 10:00, 12:30 ou 18:30. Evite domingo antes das 10h.\n- `quando`: o mesmo, em palavras simples (\"amanhã às 10h\").\n- `mensagem`: a mensagem pronta para mandar se ele não responder, já no estilo da retomada certa.\n- `precisa` = false só quando não faz sentido chamar de novo (pediu para parar, venda fechada, desistiu de vez).\n\n## Áudio\n\nQuando ajudar a criar vínculo (cliente morno/quente, conversa já andando) ou para explicar algo que fica longo por escrito (ex.: financiamento), a 2ª opção de resposta pode ser um **roteiro de áudio** (`tipo` = \"audio\"): fala natural, de até 20 segundos (no máximo 50 palavras), como a Schay falaria, terminando com pergunta ou convite. Não sugira áudio no primeiro contato com cliente frio.\n\n## Formato da resposta (JSON)\n\nQuem lê os campos `leitura`, `proximo_passo`, `followup.quando` e `por_que` é a Schay, no celular. Escreva para ela (\"você\"), em português simples e carinhoso, frases curtas, **sem palavras técnicas ou em inglês**: nada de \"lead\", \"follow-up\", \"funil\", \"temperatura\", \"rapport\", \"gatilho\", \"CTA\", \"qualificar\".\n\n- `cliente.nome` / `cliente.telefone`: como aparecem no print/texto, ou `null`. Telefone só com números e DDD, se visível.\n- `imovel_id`: o `id` do imóvel de que a conversa trata (o informado pela Schay ou o que a conversa deixa claro), ou `null`.\n- `momento`: `primeiro_contato`, `conversando`, `sumiu` ou `pos_visita`.\n- `etapa`: veja acima.\n- `temperatura`: `frio`, `morno` ou `quente`.\n- `leitura`: 1 frase (até 20 palavras) dizendo o que o cliente quer de verdade. Ex.: \"Quer sair do aluguel até o meio do ano e está com medo de não ter entrada.\"\n- `respostas`: exatamente 2 opções, diferentes entre si. A 1ª é sempre `tipo` = \"texto\" e é a melhor opção. A 2ª pode ser outro texto (outro caminho) ou um roteiro de áudio. Escritas na voz da Schay, prontas para colar no WhatsApp, sem aspas, sem assinatura, sem colchetes ou campos para preencher. Use o primeiro nome do cliente só se souber.\n- `proximo_passo`: o objetivo agora, em até 10 palavras (ex.: \"Descobrir se é pra morar ou investir\").\n- `followup`: veja \"Lembrete\".\n- `por_que`: 1 frase (até 20 palavras) ensinando a técnica por trás da resposta, para a Schay aprender.\n- `resumo`: 1 frase curta para o app lembrar quem é esse cliente (o que procura, prazo, condição). Sem dados sensíveis (sem CPF, renda exata, endereço).\n- `primeira_mensagem`: data e hora da primeira mensagem do cliente que aparece na conversa. `data` em \"AAAA-MM-DD\" (use a etiqueta de dia do WhatsApp: \"HOJE\", \"ONTEM\", dia da semana ou data, e o \"Agora\" da situação para descobrir a data certa) e `hora` em \"HH:MM\". Use `null` no que não estiver visível. Nunca chute.\n- `pediu_para_parar`: true se o cliente pediu para não ser mais contatado.\n\n## Avaliação do atendimento (só o gestor vê)\n\nAlém da resposta para a Schay, avalie como o atendimento foi conduzido **até aqui**, para o gestor descobrir se os leads travam por causa do atendimento, do perfil do lead, do preço ou do imóvel. A Schay não vê esta parte. Seja justo e objetivo:\n\n- Avalie **só o que está visível** na conversa. Se não dá para saber (horários cortados, começo da conversa fora do print), não marque a falha.\n- Não cobre o que ainda não era hora (ex.: convidar para visita logo na primeira mensagem não é obrigatório).\n- Se a Schay ainda não escreveu nada na conversa, `nota_atendimento` = `null`, `falhas` e `acertos` vazios e `causa_principal` = \"ainda_em_andamento\".\n\nCampos de `avaliacao` (no modo de retomada sem print, `avaliacao` = `null`):\n\n- `nota_atendimento`: 0 a 10, de acordo com os princípios deste playbook (rapidez, perguntas antes de falar do imóvel, conectar o imóvel ao cliente, terminar com pergunta ou convite, visita com 2 horários, tratar objeção, retomar quem sumiu).\n- `minutos_ate_primeira_resposta`: minutos entre a primeira mensagem do cliente e a primeira resposta da Schay, pelos horários do print. `null` se não der para calcular.\n- `onde_travou`: o ponto em que a conversa parou de avançar: \"nao_travou\", \"primeira_resposta\", \"entender_necessidade\", \"apresentacao_imovel\", \"convite_visita\", \"objecao\", \"retomada\" (o cliente sumiu e faltou retomar direito) ou \"pos_visita\".\n- `causa_principal`: o que mais pesou para travar: \"atendimento\" (dava para conduzir melhor), \"perfil_do_lead\" (curioso, frio, sem intenção real), \"preco_ou_condicoes\", \"imovel\" (não atende ao que o cliente procura) ou \"ainda_em_andamento\".\n- `falhas`: lista com os códigos que aparecem na conversa: \"demorou_para_responder\", \"nao_fez_perguntas\", \"nao_respondeu_o_que_perguntou\", \"listou_sem_conectar\", \"nao_convidou_visita\", \"convite_sem_horarios\", \"nao_tratou_objecao\", \"mensagem_longa_ou_robotica\", \"terminou_sem_proximo_passo\", \"nao_retomou\", \"informacao_errada_ou_promessa\".\n- `acertos`: lista com os códigos: \"respondeu_rapido\", \"fez_boas_perguntas\", \"conectou_imovel_ao_cliente\", \"convidou_visita_com_horarios\", \"tratou_objecao_bem\", \"tom_acolhedor\", \"retomou_contato\".\n- `motivo_esfriou`: o motivo mais provável de o cliente ter esfriado: \"preco\", \"entrada_financiamento\", \"localizacao\", \"caracteristicas\", \"so_curiosidade\", \"demora_ou_falha_atendimento\", \"sem_motivo_claro\" ou \"nao_esfriou\".\n- `comentario`: 1 ou 2 frases para o gestor dizendo o que aconteceu nesta conversa e o que teria ajudado. Sem julgar a pessoa, só a condução.\n\n## Exemplo\n\nConversa: cliente \"Ana\" mandou \"Oi, quanto custa o apartamento do anúncio?\" e nada mais.\n\n- leitura: \"Quer saber o preço; ainda não sabemos se procura pra morar ou investir.\"\n- respostas[0] (preço está na lista): \"Oi, Ana! Obrigada pelo contato 😊 Ele está R$ 289 mil. Pra eu te ajudar melhor: você procura pra morar ou pra investir?\"\n- respostas[0] (preço NÃO está na lista): \"Oi, Ana! Obrigada pelo contato 😊 Vou confirmar o valor atualizado e já te passo. Enquanto isso, me conta: você procura pra morar ou pra investir?\"\n- proximo_passo: \"Descobrir o motivo da compra\"\n- por_que: \"Responder o preço sem enrolar e devolver uma pergunta mantém a conversa viva e mostra o que ela busca.\"\n\nResponda sempre o que o cliente perguntou (se o dado existir) antes de fazer a sua pergunta: esconder o preço afasta o cliente frio."</script>
 <script>
 "use strict";
 (() => {
@@ -1127,9 +1132,29 @@ const FORMATO_JSON = `{
   "followup": { "precisa": true, "dias": 1, "hora": "10:00", "quando": "amanhã às 10h", "mensagem": "mensagem pronta se ele não responder" },
   "por_que": "1 frase ensinando a técnica",
   "resumo": "1 frase para lembrar quem é esse cliente",
-  "hora_primeira_mensagem_hoje": "HH:MM ou null",
-  "pediu_para_parar": false
-}`;
+  "primeira_mensagem": { "data": "AAAA-MM-DD ou null", "hora": "HH:MM ou null" },
+  "pediu_para_parar": false,
+  "avaliacao": {
+    "nota_atendimento": 7,
+    "minutos_ate_primeira_resposta": 15,
+    "onde_travou": "nao_travou | primeira_resposta | entender_necessidade | apresentacao_imovel | convite_visita | objecao | retomada | pos_visita",
+    "causa_principal": "atendimento | perfil_do_lead | preco_ou_condicoes | imovel | ainda_em_andamento",
+    "falhas": ["códigos da lista de falhas"],
+    "acertos": ["códigos da lista de acertos"],
+    "motivo_esfriou": "preco | entrada_financiamento | localizacao | caracteristicas | so_curiosidade | demora_ou_falha_atendimento | sem_motivo_claro | nao_esfriou",
+    "comentario": "1 ou 2 frases para o gestor"
+  }
+}
+(No modo de retomada sem print, "avaliacao" é null.)`;
+
+// Códigos aceitos na avaliação do atendimento (o painel do gestor traduz cada um).
+const AVALIACAO = {
+  onde_travou: ["nao_travou", "primeira_resposta", "entender_necessidade", "apresentacao_imovel", "convite_visita", "objecao", "retomada", "pos_visita"],
+  causa_principal: ["atendimento", "perfil_do_lead", "preco_ou_condicoes", "imovel", "ainda_em_andamento"],
+  falhas: ["demorou_para_responder", "nao_fez_perguntas", "nao_respondeu_o_que_perguntou", "listou_sem_conectar", "nao_convidou_visita", "convite_sem_horarios", "nao_tratou_objecao", "mensagem_longa_ou_robotica", "terminou_sem_proximo_passo", "nao_retomou", "informacao_errada_ou_promessa"],
+  acertos: ["respondeu_rapido", "fez_boas_perguntas", "conectou_imovel_ao_cliente", "convidou_visita_com_horarios", "tratou_objecao_bem", "tom_acolhedor", "retomou_contato"],
+  motivo_esfriou: ["preco", "entrada_financiamento", "localizacao", "caracteristicas", "so_curiosidade", "demora_ou_falha_atendimento", "sem_motivo_claro", "nao_esfriou"],
+};
 
 const DATA_HORA = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "America/Sao_Paulo",
@@ -1252,8 +1277,32 @@ function normalizarResultado(bruto, idsImoveis) {
     },
     por_que: limitar(bruto?.por_que, 300),
     resumo: limitar(bruto?.resumo, 240),
-    hora_primeira_mensagem_hoje: HORA_VALIDA.test(bruto?.hora_primeira_mensagem_hoje) ? bruto.hora_primeira_mensagem_hoje : null,
+    primeira_mensagem: {
+      data: /^\d{4}-\d{2}-\d{2}$/.test(bruto?.primeira_mensagem?.data) ? bruto.primeira_mensagem.data : null,
+      hora: HORA_VALIDA.test(bruto?.primeira_mensagem?.hora) ? bruto.primeira_mensagem.hora : null,
+    },
     pediu_para_parar: bruto?.pediu_para_parar === true,
+    avaliacao: normalizarAvaliacao(bruto?.avaliacao),
+  };
+}
+
+/** Avaliação do atendimento: só códigos conhecidos, para o painel nunca mostrar lixo. */
+function normalizarAvaliacao(a) {
+  if (!a || typeof a !== "object") return null;
+  const umDe = (v, ok) => (ok.includes(v) ? v : null);
+  const lista = (v, ok) => [...new Set((Array.isArray(v) ? v : []).filter((x) => ok.includes(x)))];
+  const nota = Number.isFinite(a.nota_atendimento) ? Math.min(10, Math.max(0, Math.round(a.nota_atendimento))) : null;
+  const minutos = Number.isFinite(a.minutos_ate_primeira_resposta) && a.minutos_ate_primeira_resposta >= 0
+    ? Math.round(a.minutos_ate_primeira_resposta) : null;
+  return {
+    nota_atendimento: nota,
+    minutos_ate_primeira_resposta: minutos,
+    onde_travou: umDe(a.onde_travou, AVALIACAO.onde_travou),
+    causa_principal: umDe(a.causa_principal, AVALIACAO.causa_principal) || "ainda_em_andamento",
+    falhas: lista(a.falhas, AVALIACAO.falhas),
+    acertos: lista(a.acertos, AVALIACAO.acertos),
+    motivo_esfriou: umDe(a.motivo_esfriou, AVALIACAO.motivo_esfriou),
+    comentario: limitar(a.comentario, 300),
   };
 }
 
@@ -1651,12 +1700,16 @@ function registrarConversa(f, r) {
   const agora = new Date();
   let c = (f.clienteId && acharPorId(f.clienteId)) || acharCliente(r.cliente);
   if (!c) {
+    // Data e hora da 1ª mensagem do cliente, lidas no print (vale para leads antigos também).
     let primeiro = agora;
-    if (r.momento === "primeiro_contato" && r.hora_primeira_mensagem_hoje) {
-      const [h, m] = r.hora_primeira_mensagem_hoje.split(":").map(Number);
-      const d = new Date();
-      d.setHours(h, m, 0, 0);
-      if (d <= agora) primeiro = d;
+    const pm = r.primeira_mensagem || {};
+    if (pm.data || pm.hora) {
+      const d = pm.data ? new Date(`${pm.data}T12:00:00`) : new Date();
+      if (pm.hora) {
+        const [h, m] = pm.hora.split(":").map(Number);
+        d.setHours(h, m, 0, 0);
+      }
+      if (!Number.isNaN(d.getTime()) && d <= agora && agora - d < 400 * DIA) primeiro = d;
     }
     c = {
       id: novoId(),
@@ -1693,6 +1746,7 @@ function registrarConversa(f, r) {
   c.ultimaInteracao = iso(agora);
   c.aguardandoDesde = c.etapa === "perdido" ? null : c.aguardandoDesde || iso(agora);
   c.momentoUltimo = r.momento;
+  if (r.avaliacao) c.avaliacao = { ...r.avaliacao, em: iso(agora) }; // só aparece no painel do gestor
   if (r.followup.precisa && c.etapa !== "perdido") {
     c.proximoFollowup = iso(dataLembrete(r.followup.dias, r.followup.hora));
     c.followupMotivo = "retomar";
@@ -2679,8 +2733,76 @@ const NOME_ETAPA = Object.fromEntries(ETAPAS_FUNIL);
 const ATIVAS = new Set(["novo", "conversando", "visita_marcada", "proposta"]);
 const HORA = 3_600_000;
 const LINK_ENTRADA = "https://theusmkt.github.io/CO-PILOTO/";
+
+// Como cada código da avaliação do atendimento aparece para o gestor.
+const ROTULOS = {
+  causa: {
+    atendimento: "Atendimento",
+    perfil_do_lead: "Perfil do lead (curioso ou frio)",
+    preco_ou_condicoes: "Preço ou condições",
+    imovel: "O imóvel não serviu",
+    ainda_em_andamento: "Ainda em andamento",
+  },
+  onde: {
+    nao_travou: "Não travou (segue andando)",
+    primeira_resposta: "Na primeira resposta",
+    entender_necessidade: "Ao entender o que o cliente quer",
+    apresentacao_imovel: "Na apresentação do imóvel",
+    convite_visita: "No convite para visita",
+    objecao: "Numa objeção (preço, entrada, cônjuge…)",
+    retomada: "Quando o cliente sumiu",
+    pos_visita: "Depois da visita",
+  },
+  falhas: {
+    demorou_para_responder: "Demorou para responder",
+    nao_fez_perguntas: "Não fez perguntas para entender o cliente",
+    nao_respondeu_o_que_perguntou: "Não respondeu o que o cliente perguntou",
+    listou_sem_conectar: "Listou o imóvel sem ligar ao que o cliente quer",
+    nao_convidou_visita: "Não convidou para visita",
+    convite_sem_horarios: "Convidou sem sugerir dia e horário",
+    nao_tratou_objecao: "Não tratou a objeção",
+    mensagem_longa_ou_robotica: "Mensagens longas ou com cara de robô",
+    terminou_sem_proximo_passo: "Terminou sem pergunta ou convite",
+    nao_retomou: "Não chamou de novo quando o cliente sumiu",
+    informacao_errada_ou_promessa: "Informação errada ou promessa demais",
+  },
+  acertos: {
+    respondeu_rapido: "Respondeu rápido",
+    fez_boas_perguntas: "Fez boas perguntas",
+    conectou_imovel_ao_cliente: "Ligou o imóvel ao que o cliente quer",
+    convidou_visita_com_horarios: "Convidou para visita com horários",
+    tratou_objecao_bem: "Tratou bem a objeção",
+    tom_acolhedor: "Tom acolhedor",
+    retomou_contato: "Retomou o contato",
+  },
+  motivo: {
+    preco: "Preço acima do que queria",
+    entrada_financiamento: "Entrada ou financiamento",
+    localizacao: "Localização",
+    caracteristicas: "Características do imóvel",
+    so_curiosidade: "Só curiosidade",
+    demora_ou_falha_atendimento: "Demora ou falha no atendimento",
+    sem_motivo_claro: "Sumiu sem motivo claro",
+    nao_esfriou: "Não esfriou (ainda conversando)",
+  },
+};
+const ORDEM_ONDE = Object.keys(ROTULOS.onde);
+// A mesma falha, escrita como o que treinar.
+const TREINO = {
+  demorou_para_responder: "responder mais rápido (o ideal é até 5 minutos)",
+  nao_fez_perguntas: "fazer perguntas para entender o cliente antes de falar do imóvel",
+  nao_respondeu_o_que_perguntou: "responder primeiro o que o cliente perguntou",
+  listou_sem_conectar: "ligar o imóvel ao que o cliente contou",
+  nao_convidou_visita: "convidar para visita",
+  convite_sem_horarios: "convidar para visita já sugerindo 2 horários",
+  nao_tratou_objecao: "tratar objeções (acolher, perguntar e reposicionar)",
+  mensagem_longa_ou_robotica: "escrever mensagens curtas e naturais",
+  terminou_sem_proximo_passo: "terminar toda mensagem com uma pergunta ou um convite",
+  nao_retomou: "chamar de novo quem sumiu (depois de 1, 3, 7 e 14 dias)",
+  informacao_errada_ou_promessa: "confirmar antes de passar informação ou prometer algo",
+};
 const linkEntrada = () => config.linkEntrada || LINK_ENTRADA;
-const gestor = { aba: "relatorio", periodo: "semana", busca: "", editandoImovel: null, fotoNova: undefined, apagando: null };
+const gestor = { aba: "relatorio", periodo: "semana", periodoDiag: "tudo", busca: "", editandoImovel: null, fotoNova: undefined, apagando: null };
 
 const ms = (v) => (v ? Date.parse(v) : NaN);
 const fmtNum = new Intl.NumberFormat("pt-BR");
@@ -2730,9 +2852,15 @@ function calcular(p) {
   const propostas = clientes.filter((c) => teveEvento(c, "etapa:proposta", p));
   const vendas = clientes.filter((c) => teveEvento(c, "etapa:vendido", p));
   const perdidos = clientes.filter((c) => teveEvento(c, "etapa:perdido", p));
+  // Tempo até a 1ª resposta: o lido nos horários do print (mais fiel); senão, o medido pelo app.
   const tempos = recebidos
-    .filter((c) => c.medirResposta && c.primeiraRespostaEm && c.primeiroContato)
-    .map((c) => Math.max(0, ms(c.primeiraRespostaEm) - ms(c.primeiroContato)));
+    .map((c) => {
+      const lido = c.avaliacao?.minutos_ate_primeira_resposta;
+      if (Number.isFinite(lido)) return lido * 60_000;
+      if (c.medirResposta && c.primeiraRespostaEm && c.primeiroContato) return Math.max(0, ms(c.primeiraRespostaEm) - ms(c.primeiroContato));
+      return null;
+    })
+    .filter((t) => t !== null);
   const media = tempos.length ? tempos.reduce((a, b) => a + b, 0) / tempos.length : NaN;
   const ate5 = tempos.filter((t) => t <= 5 * 60_000).length;
   const ativos = clientes.filter((c) => ATIVAS.has(c.etapa));
@@ -2769,6 +2897,11 @@ function diagnostico(m) {
   if (m.conversas.length >= 3 && m.visitas.length / m.conversas.length < 0.25) achados.push(["atendimento", "Atendimento", `Só ${pct(m.visitas.length, m.conversas.length)}% das conversas viraram visita. Treinar o convite para visita com 2 opções de horário.`]);
   if (m.visitas.length >= 3 && m.propostas.length + m.vendas.length === 0) achados.push(["fechamento", "Fechamento", "Teve visitas, mas nenhuma proposta. Revisar o pós-visita (perguntar a impressão em até 2h e tratar a objeção real)."]);
   if (m.semFollowup.size) achados.push(["atendimento", "Atendimento", `${m.semFollowup.size} lead(s) estão sem retorno ou com lembrete atrasado há mais de 24h.`]);
+  const fechadas = m.recebidos.map((c) => c.avaliacao).filter((a) => a && a.causa_principal !== "ainda_em_andamento");
+  if (fechadas.length >= 3) {
+    const porAtendimento = fechadas.filter((a) => a.causa_principal === "atendimento").length;
+    achados.push(["atendimento", "Leitura das conversas", `A IA avaliou ${fechadas.length} conversa(s) do período: ${pct(porAtendimento, fechadas.length)}% travaram por atendimento. Veja os detalhes na aba Diagnóstico.`]);
+  }
   if (achados.every(([tipo]) => tipo === "info")) achados.push(["ok", "Tudo certo", "Nenhum gargalo evidente no período. Siga acompanhando semana a semana."]);
   return achados;
 }
@@ -2844,6 +2977,108 @@ function abaRelatorio() {
     </section>`;
 }
 
+/** Aba Diagnóstico: o que a IA viu nas conversas e a conclusão (atendimento ou leads?). */
+function abaDiagnostico() {
+  const limite = { tudo: 0, "30": 30, "7": 7 }[gestor.periodoDiag] || 0;
+  const desde = limite ? Date.now() - limite * DIA : 0;
+  const lista = clientes.filter((c) => c.avaliacao && ms(c.primeiroContato || c.criadoEm) >= desde);
+  const filtros = [["tudo", "Todos os leads"], ["30", "Últimos 30 dias"], ["7", "Últimos 7 dias"]]
+    .map(([k, nome]) => `<button type="button" data-acao="g-periodo-diag" data-periodo="${k}" aria-pressed="${k === gestor.periodoDiag}">${nome}</button>`).join("");
+  const topo = `<div class="filtros" role="group" aria-label="Período">${filtros}</div>`;
+  const comNota = lista.filter((c) => c.avaliacao.nota_atendimento != null);
+  if (!comNota.length) {
+    return `${topo}<section class="cartao"><h2>Ainda não há conversas avaliadas</h2>
+      <p class="sub">Cada vez que a ${esc(nomeCorretora())} manda o print de uma conversa pelo “Responder um cliente”, a IA avalia o atendimento e o resultado aparece aqui.</p></section>`;
+  }
+  const av = comNota.map((c) => c.avaliacao);
+  const contar = (valores, rotulos) => {
+    const mapa = new Map();
+    for (const v of valores) if (v) mapa.set(v, (mapa.get(v) || 0) + 1);
+    return [...mapa.entries()].sort((a, b) => b[1] - a[1]).map(([k, n]) => ({ chave: k, nome: rotulos[k] || k, valor: n }));
+  };
+  const fechadas = av.filter((a) => a.causa_principal !== "ainda_em_andamento");
+  const causas = contar(fechadas.map((a) => a.causa_principal), ROTULOS.causa);
+  const falhas = contar(av.flatMap((a) => a.falhas || []), ROTULOS.falhas);
+  const acertos = contar(av.flatMap((a) => a.acertos || []), ROTULOS.acertos);
+  const motivos = contar(av.map((a) => a.motivo_esfriou), ROTULOS.motivo);
+  const onde = contar(av.map((a) => a.onde_travou).filter((o) => o !== "nao_travou"), ROTULOS.onde).sort((a, b) => ORDEM_ONDE.indexOf(a.chave) - ORDEM_ONDE.indexOf(b.chave));
+  const andando = av.filter((a) => a.onde_travou === "nao_travou").length;
+  const notaMedia = av.reduce((s, a) => s + a.nota_atendimento, 0) / av.length;
+  const minutos = av.map((a) => a.minutos_ate_primeira_resposta).filter(Number.isFinite);
+  const tempoMedio = minutos.length ? (minutos.reduce((s, x) => s + x, 0) / minutos.length) * 60_000 : NaN;
+  const acimaDe1h = minutos.filter((x) => x > 60).length;
+  const porAtendimento = fechadas.filter((a) => a.causa_principal === "atendimento").length;
+
+  // Conclusão escrita a partir dos números.
+  const frases = [];
+  if (!fechadas.length) {
+    frases.push("Ainda não dá para concluir: as conversas avaliadas ainda estão em andamento.");
+  } else {
+    const [primeira, segunda] = causas;
+    const p1 = pct(primeira.valor, fechadas.length);
+    const textoCausa = {
+      atendimento: `O principal problema está no atendimento: em ${primeira.valor} de ${fechadas.length} conversas (${p1}%), o lead travou por algo que dava para conduzir melhor.`,
+      perfil_do_lead: `O principal problema está no perfil dos leads, ou seja, no anúncio: em ${primeira.valor} de ${fechadas.length} conversas (${p1}%), o cliente era curioso ou sem intenção real.`,
+      preco_ou_condicoes: `O principal problema está no preço ou nas condições: pesou em ${primeira.valor} de ${fechadas.length} conversas (${p1}%).`,
+      imovel: `O principal problema está no imóvel: em ${primeira.valor} de ${fechadas.length} conversas (${p1}%), ele não atendia ao que o cliente procurava.`,
+    }[primeira.chave];
+    frases.push(textoCausa);
+    if (segunda && pct(primeira.valor, fechadas.length) - pct(segunda.valor, fechadas.length) <= 15) {
+      frases.push(`Logo atrás vem ${segunda.nome.toLowerCase()} (${segunda.valor} conversas), então os dois pesam.`);
+    }
+  }
+  if (falhas.length) frases.push(`A falha de atendimento mais comum foi “${falhas[0].nome.toLowerCase()}” (${falhas[0].valor} de ${av.length} conversas).`);
+  if (minutos.length) frases.push(`Pelos horários dos prints, ela leva em média ${duracao(tempoMedio)} para dar a primeira resposta${acimaDe1h ? `; em ${acimaDe1h} de ${minutos.length} conversas passou de 1 hora` : ""}.`);
+  frases.push(`Nota média do atendimento: ${notaMedia.toFixed(1).replace(".", ",")} de 10.`);
+  if (falhas.length) frases.push(`O que treinar primeiro: ${falhas.slice(0, 2).map((f) => TREINO[f.chave] || f.nome.toLowerCase()).join("; e ")}.`);
+  if (av.length < 5) frases.push("Ainda são poucas conversas: leia como tendência, não como regra.");
+
+  const indicador = (rotulo, valor, detalhe) => `<div class="indicador"><div class="rotulo-ind">${esc(rotulo)}</div><div class="valor">${esc(valor)}</div>${detalhe ? `<div class="detalhe">${esc(detalhe)}</div>` : ""}</div>`;
+  const conversas = [...comNota].sort((a, b) => a.avaliacao.nota_atendimento - b.avaliacao.nota_atendimento);
+  return `${topo}
+    <section class="conclusao" aria-label="Conclusão">
+      <h2>Conclusão</h2>
+      ${frases.map((f) => `<p>${esc(f)}</p>`).join("")}
+    </section>
+    <section class="indicadores" aria-label="Números do diagnóstico">
+      ${indicador("Conversas avaliadas", fmtNum.format(av.length), fechadas.length < av.length ? `${av.length - fechadas.length} ainda em andamento` : "")}
+      ${indicador("Nota do atendimento", `${notaMedia.toFixed(1).replace(".", ",")}/10`, "média das conversas")}
+      ${indicador("Travaram por atendimento", fechadas.length ? `${pct(porAtendimento, fechadas.length)}%` : "—", fechadas.length ? `${porAtendimento} de ${fechadas.length} conversas` : "")}
+      ${indicador("1ª resposta (prints)", duracao(tempoMedio), minutos.length ? `média de ${minutos.length} conversa(s)` : "horários não visíveis")}
+    </section>
+    <section class="cartao">
+      <h2>Por que os leads travam</h2>
+      <p class="sub">A causa que mais pesou em cada conversa que parou (sem contar as que seguem andando).</p>
+      ${causas.length ? barras(causas, { total: fechadas.length }) : `<p class="sub">Nenhuma conversa parou ainda.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Falhas de atendimento mais comuns</h2>
+      <p class="sub">Em quantas conversas cada falha apareceu.</p>
+      ${falhas.length ? barras(falhas, { total: av.length }) : `<p class="sub">Nenhuma falha marcada.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Onde as conversas param</h2>
+      <p class="sub">${andando ? `Sem contar ${andando} conversa(s) que seguem andando.` : "Em que ponto cada conversa parou de avançar."}</p>
+      ${onde.length ? barras(onde, { total: av.length }) : `<p class="sub">Nenhuma conversa parou ainda.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Por que os leads esfriam</h2>
+      ${motivos.length ? barras(motivos, { total: av.length }) : `<p class="sub">Sem dados.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>O que ela já faz bem</h2>
+      ${acertos.length ? barras(acertos, { total: av.length }) : `<p class="sub">Nenhum acerto marcado ainda.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Conversa por conversa</h2>
+      <p class="sub">Da nota mais baixa para a mais alta.</p>
+      <div class="tabela-rolagem"><table>
+        <thead><tr><th>Cliente</th><th class="num">Nota</th><th>Travou</th><th>Causa</th><th>O que a IA viu</th></tr></thead>
+        <tbody>${conversas.map((c) => `<tr><td>${esc(nomeDoCliente(c))}</td><td class="num">${c.avaliacao.nota_atendimento}</td><td>${esc(ROTULOS.onde[c.avaliacao.onde_travou] || "—")}</td><td>${esc(ROTULOS.causa[c.avaliacao.causa_principal] || "—")}</td><td>${esc(c.avaliacao.comentario || "")}</td></tr>`).join("")}</tbody>
+      </table></div>
+    </section>`;
+}
+
 function fichaCliente(c) {
   const atrasado = c.proximoFollowup && ms(c.proximoFollowup) < Date.now();
   const opcoes = ETAPAS_FUNIL.map(([k, nome]) => `<option value="${k}"${k === c.etapa ? " selected" : ""}>${nome}</option>`).join("");
@@ -2858,6 +3093,8 @@ function fichaCliente(c) {
     ${c.aguardandoDesde ? `<div class="atrasado">⏳ Sem retorno dela ${esc(haQuantoTempo(c.aguardandoDesde))}</div>` : ""}
     ${c.etapa === "perdido" && c.motivoPerda ? `<div class="linha-info">Motivo: <b>${esc(c.motivoPerda)}</b></div>` : ""}
     ${c.resumo ? `<div class="linha-info">${esc(c.resumo)}</div>` : ""}
+    ${c.avaliacao?.nota_atendimento != null ? `<div class="linha-info">🧭 Atendimento <b>${c.avaliacao.nota_atendimento}/10</b>${c.avaliacao.onde_travou ? ` · travou: <b>${esc(ROTULOS.onde[c.avaliacao.onde_travou] || "")}</b>` : ""}${c.avaliacao.causa_principal ? ` · causa: <b>${esc(ROTULOS.causa[c.avaliacao.causa_principal] || "")}</b>` : ""}</div>` : ""}
+    ${c.avaliacao?.comentario ? `<div class="linha-info">💬 ${esc(c.avaliacao.comentario)}</div>` : ""}
     ${c.anotacoes ? `<div class="linha-info">📝 ${esc(c.anotacoes)}</div>` : ""}
     <details${apagando ? " open" : ""}><summary>Editar</summary>
       <div class="editar">
@@ -3005,12 +3242,12 @@ function abaAcesso() {
 
 TELAS.gestor = function telaGestor() {
   if (!ehDono) return TELAS.inicio();
-  const abas = [["relatorio", "Relatório"], ["funil", "Funil"], ["imoveis", "Imóveis"], ["acesso", "Acesso e ajustes"]]
+  const abas = [["relatorio", "Relatório"], ["diagnostico", "Diagnóstico"], ["funil", "Funil"], ["imoveis", "Imóveis"], ["acesso", "Acesso e ajustes"]]
     .map(([k, nome]) => `<button type="button" data-acao="g-aba" data-aba="${k}" aria-pressed="${k === gestor.aba}">${nome}</button>`).join("");
   const estado = !db
     ? `<div class="aviso-exemplo">⚠️ O banco de dados do Claude não respondeu nesta visualização. Os números abaixo são só deste aparelho.</div>`
     : modoLocal ? `<div class="aviso-exemplo">⚠️ Não consegui gravar no banco do Claude. Confira em Compartilhar se a ${esc(nomeCorretora())} tem nível Editor.</div>` : "";
-  const corpo = { relatorio: abaRelatorio, funil: abaFunil, imoveis: abaImoveis, acesso: abaAcesso }[gestor.aba]();
+  const corpo = { relatorio: abaRelatorio, diagnostico: abaDiagnostico, funil: abaFunil, imoveis: abaImoveis, acesso: abaAcesso }[gestor.aba]();
   return `<section class="tela">${barra()}
     <div class="gestor">
       <div><h1>Painel do gestor</h1><p class="sub">Só você vê esta área. A ${esc(nomeCorretora())} vê apenas os 3 botões.</p></div>
@@ -3043,6 +3280,12 @@ function csvClientes() {
     ["Última interação", (c) => quandoCurto(c.ultimaInteracao)],
     ["Próximo lembrete", (c) => quandoCurto(c.proximoFollowup)],
     ["Resumo", (c) => c.resumo],
+    ["Nota do atendimento", (c) => c.avaliacao?.nota_atendimento ?? ""],
+    ["Onde travou", (c) => ROTULOS.onde[c.avaliacao?.onde_travou] || ""],
+    ["Causa principal", (c) => ROTULOS.causa[c.avaliacao?.causa_principal] || ""],
+    ["Falhas do atendimento", (c) => (c.avaliacao?.falhas || []).map((f) => ROTULOS.falhas[f] || f).join(", ")],
+    ["Por que esfriou", (c) => ROTULOS.motivo[c.avaliacao?.motivo_esfriou] || ""],
+    ["Comentário da IA", (c) => c.avaliacao?.comentario || ""],
     ["Anotações", (c) => c.anotacoes],
   ];
   const celula = (v) => {
@@ -3066,6 +3309,10 @@ Object.assign(ACOES, {
   },
   "g-periodo"(el) {
     gestor.periodo = el.dataset.periodo;
+    desenhar();
+  },
+  "g-periodo-diag"(el) {
+    gestor.periodoDiag = el.dataset.periodo;
     desenhar();
   },
   "g-salvar-cliente"(el) {

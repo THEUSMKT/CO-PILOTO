@@ -78,8 +78,18 @@
       followup: { precisa: true, dias: 1, hora: "10:00", quando: "amanhã às 10h", mensagem: "Oi, Mariana! Conseguiu ver minha mensagem sobre o apê? Se quiser, te mando mais fotos 😊" },
       por_que: "Responder o preço e já devolver uma pergunta mantém a conversa viva.",
       resumo: "Perguntou o preço do apartamento do anúncio.",
-      hora_primeira_mensagem_hoje: null,
+      primeira_mensagem: retomar ? { data: null, hora: null } : { data: "2026-10-20", hora: "14:02" },
       pediu_para_parar: false,
+      avaliacao: retomar ? null : {
+        nota_atendimento: 5,
+        minutos_ate_primeira_resposta: 95,
+        onde_travou: "entender_necessidade",
+        causa_principal: "atendimento",
+        falhas: ["demorou_para_responder", "nao_fez_perguntas", "codigo_que_nao_existe"],
+        acertos: ["tom_acolhedor"],
+        motivo_esfriou: "demora_ou_falha_atendimento",
+        comentario: "Respondeu o preço depois de 1h35 e não perguntou o que o cliente procurava.",
+      },
     };
   }
 

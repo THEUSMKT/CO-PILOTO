@@ -352,12 +352,16 @@ function registrarConversa(f, r) {
   const agora = new Date();
   let c = (f.clienteId && acharPorId(f.clienteId)) || acharCliente(r.cliente);
   if (!c) {
+    // Data e hora da 1ª mensagem do cliente, lidas no print (vale para leads antigos também).
     let primeiro = agora;
-    if (r.momento === "primeiro_contato" && r.hora_primeira_mensagem_hoje) {
-      const [h, m] = r.hora_primeira_mensagem_hoje.split(":").map(Number);
-      const d = new Date();
-      d.setHours(h, m, 0, 0);
-      if (d <= agora) primeiro = d;
+    const pm = r.primeira_mensagem || {};
+    if (pm.data || pm.hora) {
+      const d = pm.data ? new Date(`${pm.data}T12:00:00`) : new Date();
+      if (pm.hora) {
+        const [h, m] = pm.hora.split(":").map(Number);
+        d.setHours(h, m, 0, 0);
+      }
+      if (!Number.isNaN(d.getTime()) && d <= agora && agora - d < 400 * DIA) primeiro = d;
     }
     c = {
       id: novoId(),
@@ -394,6 +398,7 @@ function registrarConversa(f, r) {
   c.ultimaInteracao = iso(agora);
   c.aguardandoDesde = c.etapa === "perdido" ? null : c.aguardandoDesde || iso(agora);
   c.momentoUltimo = r.momento;
+  if (r.avaliacao) c.avaliacao = { ...r.avaliacao, em: iso(agora) }; // só aparece no painel do gestor
   if (r.followup.precisa && c.etapa !== "perdido") {
     c.proximoFollowup = iso(dataLembrete(r.followup.dias, r.followup.hora));
     c.followupMotivo = "retomar";

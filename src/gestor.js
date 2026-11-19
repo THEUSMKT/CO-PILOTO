@@ -14,8 +14,76 @@ const NOME_ETAPA = Object.fromEntries(ETAPAS_FUNIL);
 const ATIVAS = new Set(["novo", "conversando", "visita_marcada", "proposta"]);
 const HORA = 3_600_000;
 const LINK_ENTRADA = "https://theusmkt.github.io/CO-PILOTO/";
+
+// Como cada código da avaliação do atendimento aparece para o gestor.
+const ROTULOS = {
+  causa: {
+    atendimento: "Atendimento",
+    perfil_do_lead: "Perfil do lead (curioso ou frio)",
+    preco_ou_condicoes: "Preço ou condições",
+    imovel: "O imóvel não serviu",
+    ainda_em_andamento: "Ainda em andamento",
+  },
+  onde: {
+    nao_travou: "Não travou (segue andando)",
+    primeira_resposta: "Na primeira resposta",
+    entender_necessidade: "Ao entender o que o cliente quer",
+    apresentacao_imovel: "Na apresentação do imóvel",
+    convite_visita: "No convite para visita",
+    objecao: "Numa objeção (preço, entrada, cônjuge…)",
+    retomada: "Quando o cliente sumiu",
+    pos_visita: "Depois da visita",
+  },
+  falhas: {
+    demorou_para_responder: "Demorou para responder",
+    nao_fez_perguntas: "Não fez perguntas para entender o cliente",
+    nao_respondeu_o_que_perguntou: "Não respondeu o que o cliente perguntou",
+    listou_sem_conectar: "Listou o imóvel sem ligar ao que o cliente quer",
+    nao_convidou_visita: "Não convidou para visita",
+    convite_sem_horarios: "Convidou sem sugerir dia e horário",
+    nao_tratou_objecao: "Não tratou a objeção",
+    mensagem_longa_ou_robotica: "Mensagens longas ou com cara de robô",
+    terminou_sem_proximo_passo: "Terminou sem pergunta ou convite",
+    nao_retomou: "Não chamou de novo quando o cliente sumiu",
+    informacao_errada_ou_promessa: "Informação errada ou promessa demais",
+  },
+  acertos: {
+    respondeu_rapido: "Respondeu rápido",
+    fez_boas_perguntas: "Fez boas perguntas",
+    conectou_imovel_ao_cliente: "Ligou o imóvel ao que o cliente quer",
+    convidou_visita_com_horarios: "Convidou para visita com horários",
+    tratou_objecao_bem: "Tratou bem a objeção",
+    tom_acolhedor: "Tom acolhedor",
+    retomou_contato: "Retomou o contato",
+  },
+  motivo: {
+    preco: "Preço acima do que queria",
+    entrada_financiamento: "Entrada ou financiamento",
+    localizacao: "Localização",
+    caracteristicas: "Características do imóvel",
+    so_curiosidade: "Só curiosidade",
+    demora_ou_falha_atendimento: "Demora ou falha no atendimento",
+    sem_motivo_claro: "Sumiu sem motivo claro",
+    nao_esfriou: "Não esfriou (ainda conversando)",
+  },
+};
+const ORDEM_ONDE = Object.keys(ROTULOS.onde);
+// A mesma falha, escrita como o que treinar.
+const TREINO = {
+  demorou_para_responder: "responder mais rápido (o ideal é até 5 minutos)",
+  nao_fez_perguntas: "fazer perguntas para entender o cliente antes de falar do imóvel",
+  nao_respondeu_o_que_perguntou: "responder primeiro o que o cliente perguntou",
+  listou_sem_conectar: "ligar o imóvel ao que o cliente contou",
+  nao_convidou_visita: "convidar para visita",
+  convite_sem_horarios: "convidar para visita já sugerindo 2 horários",
+  nao_tratou_objecao: "tratar objeções (acolher, perguntar e reposicionar)",
+  mensagem_longa_ou_robotica: "escrever mensagens curtas e naturais",
+  terminou_sem_proximo_passo: "terminar toda mensagem com uma pergunta ou um convite",
+  nao_retomou: "chamar de novo quem sumiu (depois de 1, 3, 7 e 14 dias)",
+  informacao_errada_ou_promessa: "confirmar antes de passar informação ou prometer algo",
+};
 const linkEntrada = () => config.linkEntrada || LINK_ENTRADA;
-const gestor = { aba: "relatorio", periodo: "semana", busca: "", editandoImovel: null, fotoNova: undefined, apagando: null };
+const gestor = { aba: "relatorio", periodo: "semana", periodoDiag: "tudo", busca: "", editandoImovel: null, fotoNova: undefined, apagando: null };
 
 const ms = (v) => (v ? Date.parse(v) : NaN);
 const fmtNum = new Intl.NumberFormat("pt-BR");
@@ -65,9 +133,15 @@ function calcular(p) {
   const propostas = clientes.filter((c) => teveEvento(c, "etapa:proposta", p));
   const vendas = clientes.filter((c) => teveEvento(c, "etapa:vendido", p));
   const perdidos = clientes.filter((c) => teveEvento(c, "etapa:perdido", p));
+  // Tempo até a 1ª resposta: o lido nos horários do print (mais fiel); senão, o medido pelo app.
   const tempos = recebidos
-    .filter((c) => c.medirResposta && c.primeiraRespostaEm && c.primeiroContato)
-    .map((c) => Math.max(0, ms(c.primeiraRespostaEm) - ms(c.primeiroContato)));
+    .map((c) => {
+      const lido = c.avaliacao?.minutos_ate_primeira_resposta;
+      if (Number.isFinite(lido)) return lido * 60_000;
+      if (c.medirResposta && c.primeiraRespostaEm && c.primeiroContato) return Math.max(0, ms(c.primeiraRespostaEm) - ms(c.primeiroContato));
+      return null;
+    })
+    .filter((t) => t !== null);
   const media = tempos.length ? tempos.reduce((a, b) => a + b, 0) / tempos.length : NaN;
   const ate5 = tempos.filter((t) => t <= 5 * 60_000).length;
   const ativos = clientes.filter((c) => ATIVAS.has(c.etapa));
@@ -104,6 +178,11 @@ function diagnostico(m) {
   if (m.conversas.length >= 3 && m.visitas.length / m.conversas.length < 0.25) achados.push(["atendimento", "Atendimento", `Só ${pct(m.visitas.length, m.conversas.length)}% das conversas viraram visita. Treinar o convite para visita com 2 opções de horário.`]);
   if (m.visitas.length >= 3 && m.propostas.length + m.vendas.length === 0) achados.push(["fechamento", "Fechamento", "Teve visitas, mas nenhuma proposta. Revisar o pós-visita (perguntar a impressão em até 2h e tratar a objeção real)."]);
   if (m.semFollowup.size) achados.push(["atendimento", "Atendimento", `${m.semFollowup.size} lead(s) estão sem retorno ou com lembrete atrasado há mais de 24h.`]);
+  const fechadas = m.recebidos.map((c) => c.avaliacao).filter((a) => a && a.causa_principal !== "ainda_em_andamento");
+  if (fechadas.length >= 3) {
+    const porAtendimento = fechadas.filter((a) => a.causa_principal === "atendimento").length;
+    achados.push(["atendimento", "Leitura das conversas", `A IA avaliou ${fechadas.length} conversa(s) do período: ${pct(porAtendimento, fechadas.length)}% travaram por atendimento. Veja os detalhes na aba Diagnóstico.`]);
+  }
   if (achados.every(([tipo]) => tipo === "info")) achados.push(["ok", "Tudo certo", "Nenhum gargalo evidente no período. Siga acompanhando semana a semana."]);
   return achados;
 }
@@ -179,6 +258,108 @@ function abaRelatorio() {
     </section>`;
 }
 
+/** Aba Diagnóstico: o que a IA viu nas conversas e a conclusão (atendimento ou leads?). */
+function abaDiagnostico() {
+  const limite = { tudo: 0, "30": 30, "7": 7 }[gestor.periodoDiag] || 0;
+  const desde = limite ? Date.now() - limite * DIA : 0;
+  const lista = clientes.filter((c) => c.avaliacao && ms(c.primeiroContato || c.criadoEm) >= desde);
+  const filtros = [["tudo", "Todos os leads"], ["30", "Últimos 30 dias"], ["7", "Últimos 7 dias"]]
+    .map(([k, nome]) => `<button type="button" data-acao="g-periodo-diag" data-periodo="${k}" aria-pressed="${k === gestor.periodoDiag}">${nome}</button>`).join("");
+  const topo = `<div class="filtros" role="group" aria-label="Período">${filtros}</div>`;
+  const comNota = lista.filter((c) => c.avaliacao.nota_atendimento != null);
+  if (!comNota.length) {
+    return `${topo}<section class="cartao"><h2>Ainda não há conversas avaliadas</h2>
+      <p class="sub">Cada vez que a ${esc(nomeCorretora())} manda o print de uma conversa pelo “Responder um cliente”, a IA avalia o atendimento e o resultado aparece aqui.</p></section>`;
+  }
+  const av = comNota.map((c) => c.avaliacao);
+  const contar = (valores, rotulos) => {
+    const mapa = new Map();
+    for (const v of valores) if (v) mapa.set(v, (mapa.get(v) || 0) + 1);
+    return [...mapa.entries()].sort((a, b) => b[1] - a[1]).map(([k, n]) => ({ chave: k, nome: rotulos[k] || k, valor: n }));
+  };
+  const fechadas = av.filter((a) => a.causa_principal !== "ainda_em_andamento");
+  const causas = contar(fechadas.map((a) => a.causa_principal), ROTULOS.causa);
+  const falhas = contar(av.flatMap((a) => a.falhas || []), ROTULOS.falhas);
+  const acertos = contar(av.flatMap((a) => a.acertos || []), ROTULOS.acertos);
+  const motivos = contar(av.map((a) => a.motivo_esfriou), ROTULOS.motivo);
+  const onde = contar(av.map((a) => a.onde_travou).filter((o) => o !== "nao_travou"), ROTULOS.onde).sort((a, b) => ORDEM_ONDE.indexOf(a.chave) - ORDEM_ONDE.indexOf(b.chave));
+  const andando = av.filter((a) => a.onde_travou === "nao_travou").length;
+  const notaMedia = av.reduce((s, a) => s + a.nota_atendimento, 0) / av.length;
+  const minutos = av.map((a) => a.minutos_ate_primeira_resposta).filter(Number.isFinite);
+  const tempoMedio = minutos.length ? (minutos.reduce((s, x) => s + x, 0) / minutos.length) * 60_000 : NaN;
+  const acimaDe1h = minutos.filter((x) => x > 60).length;
+  const porAtendimento = fechadas.filter((a) => a.causa_principal === "atendimento").length;
+
+  // Conclusão escrita a partir dos números.
+  const frases = [];
+  if (!fechadas.length) {
+    frases.push("Ainda não dá para concluir: as conversas avaliadas ainda estão em andamento.");
+  } else {
+    const [primeira, segunda] = causas;
+    const p1 = pct(primeira.valor, fechadas.length);
+    const textoCausa = {
+      atendimento: `O principal problema está no atendimento: em ${primeira.valor} de ${fechadas.length} conversas (${p1}%), o lead travou por algo que dava para conduzir melhor.`,
+      perfil_do_lead: `O principal problema está no perfil dos leads, ou seja, no anúncio: em ${primeira.valor} de ${fechadas.length} conversas (${p1}%), o cliente era curioso ou sem intenção real.`,
+      preco_ou_condicoes: `O principal problema está no preço ou nas condições: pesou em ${primeira.valor} de ${fechadas.length} conversas (${p1}%).`,
+      imovel: `O principal problema está no imóvel: em ${primeira.valor} de ${fechadas.length} conversas (${p1}%), ele não atendia ao que o cliente procurava.`,
+    }[primeira.chave];
+    frases.push(textoCausa);
+    if (segunda && pct(primeira.valor, fechadas.length) - pct(segunda.valor, fechadas.length) <= 15) {
+      frases.push(`Logo atrás vem ${segunda.nome.toLowerCase()} (${segunda.valor} conversas), então os dois pesam.`);
+    }
+  }
+  if (falhas.length) frases.push(`A falha de atendimento mais comum foi “${falhas[0].nome.toLowerCase()}” (${falhas[0].valor} de ${av.length} conversas).`);
+  if (minutos.length) frases.push(`Pelos horários dos prints, ela leva em média ${duracao(tempoMedio)} para dar a primeira resposta${acimaDe1h ? `; em ${acimaDe1h} de ${minutos.length} conversas passou de 1 hora` : ""}.`);
+  frases.push(`Nota média do atendimento: ${notaMedia.toFixed(1).replace(".", ",")} de 10.`);
+  if (falhas.length) frases.push(`O que treinar primeiro: ${falhas.slice(0, 2).map((f) => TREINO[f.chave] || f.nome.toLowerCase()).join("; e ")}.`);
+  if (av.length < 5) frases.push("Ainda são poucas conversas: leia como tendência, não como regra.");
+
+  const indicador = (rotulo, valor, detalhe) => `<div class="indicador"><div class="rotulo-ind">${esc(rotulo)}</div><div class="valor">${esc(valor)}</div>${detalhe ? `<div class="detalhe">${esc(detalhe)}</div>` : ""}</div>`;
+  const conversas = [...comNota].sort((a, b) => a.avaliacao.nota_atendimento - b.avaliacao.nota_atendimento);
+  return `${topo}
+    <section class="conclusao" aria-label="Conclusão">
+      <h2>Conclusão</h2>
+      ${frases.map((f) => `<p>${esc(f)}</p>`).join("")}
+    </section>
+    <section class="indicadores" aria-label="Números do diagnóstico">
+      ${indicador("Conversas avaliadas", fmtNum.format(av.length), fechadas.length < av.length ? `${av.length - fechadas.length} ainda em andamento` : "")}
+      ${indicador("Nota do atendimento", `${notaMedia.toFixed(1).replace(".", ",")}/10`, "média das conversas")}
+      ${indicador("Travaram por atendimento", fechadas.length ? `${pct(porAtendimento, fechadas.length)}%` : "—", fechadas.length ? `${porAtendimento} de ${fechadas.length} conversas` : "")}
+      ${indicador("1ª resposta (prints)", duracao(tempoMedio), minutos.length ? `média de ${minutos.length} conversa(s)` : "horários não visíveis")}
+    </section>
+    <section class="cartao">
+      <h2>Por que os leads travam</h2>
+      <p class="sub">A causa que mais pesou em cada conversa que parou (sem contar as que seguem andando).</p>
+      ${causas.length ? barras(causas, { total: fechadas.length }) : `<p class="sub">Nenhuma conversa parou ainda.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Falhas de atendimento mais comuns</h2>
+      <p class="sub">Em quantas conversas cada falha apareceu.</p>
+      ${falhas.length ? barras(falhas, { total: av.length }) : `<p class="sub">Nenhuma falha marcada.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Onde as conversas param</h2>
+      <p class="sub">${andando ? `Sem contar ${andando} conversa(s) que seguem andando.` : "Em que ponto cada conversa parou de avançar."}</p>
+      ${onde.length ? barras(onde, { total: av.length }) : `<p class="sub">Nenhuma conversa parou ainda.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Por que os leads esfriam</h2>
+      ${motivos.length ? barras(motivos, { total: av.length }) : `<p class="sub">Sem dados.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>O que ela já faz bem</h2>
+      ${acertos.length ? barras(acertos, { total: av.length }) : `<p class="sub">Nenhum acerto marcado ainda.</p>`}
+    </section>
+    <section class="cartao">
+      <h2>Conversa por conversa</h2>
+      <p class="sub">Da nota mais baixa para a mais alta.</p>
+      <div class="tabela-rolagem"><table>
+        <thead><tr><th>Cliente</th><th class="num">Nota</th><th>Travou</th><th>Causa</th><th>O que a IA viu</th></tr></thead>
+        <tbody>${conversas.map((c) => `<tr><td>${esc(nomeDoCliente(c))}</td><td class="num">${c.avaliacao.nota_atendimento}</td><td>${esc(ROTULOS.onde[c.avaliacao.onde_travou] || "—")}</td><td>${esc(ROTULOS.causa[c.avaliacao.causa_principal] || "—")}</td><td>${esc(c.avaliacao.comentario || "")}</td></tr>`).join("")}</tbody>
+      </table></div>
+    </section>`;
+}
+
 function fichaCliente(c) {
   const atrasado = c.proximoFollowup && ms(c.proximoFollowup) < Date.now();
   const opcoes = ETAPAS_FUNIL.map(([k, nome]) => `<option value="${k}"${k === c.etapa ? " selected" : ""}>${nome}</option>`).join("");
@@ -193,6 +374,8 @@ function fichaCliente(c) {
     ${c.aguardandoDesde ? `<div class="atrasado">⏳ Sem retorno dela ${esc(haQuantoTempo(c.aguardandoDesde))}</div>` : ""}
     ${c.etapa === "perdido" && c.motivoPerda ? `<div class="linha-info">Motivo: <b>${esc(c.motivoPerda)}</b></div>` : ""}
     ${c.resumo ? `<div class="linha-info">${esc(c.resumo)}</div>` : ""}
+    ${c.avaliacao?.nota_atendimento != null ? `<div class="linha-info">🧭 Atendimento <b>${c.avaliacao.nota_atendimento}/10</b>${c.avaliacao.onde_travou ? ` · travou: <b>${esc(ROTULOS.onde[c.avaliacao.onde_travou] || "")}</b>` : ""}${c.avaliacao.causa_principal ? ` · causa: <b>${esc(ROTULOS.causa[c.avaliacao.causa_principal] || "")}</b>` : ""}</div>` : ""}
+    ${c.avaliacao?.comentario ? `<div class="linha-info">💬 ${esc(c.avaliacao.comentario)}</div>` : ""}
     ${c.anotacoes ? `<div class="linha-info">📝 ${esc(c.anotacoes)}</div>` : ""}
     <details${apagando ? " open" : ""}><summary>Editar</summary>
       <div class="editar">
@@ -340,12 +523,12 @@ function abaAcesso() {
 
 TELAS.gestor = function telaGestor() {
   if (!ehDono) return TELAS.inicio();
-  const abas = [["relatorio", "Relatório"], ["funil", "Funil"], ["imoveis", "Imóveis"], ["acesso", "Acesso e ajustes"]]
+  const abas = [["relatorio", "Relatório"], ["diagnostico", "Diagnóstico"], ["funil", "Funil"], ["imoveis", "Imóveis"], ["acesso", "Acesso e ajustes"]]
     .map(([k, nome]) => `<button type="button" data-acao="g-aba" data-aba="${k}" aria-pressed="${k === gestor.aba}">${nome}</button>`).join("");
   const estado = !db
     ? `<div class="aviso-exemplo">⚠️ O banco de dados do Claude não respondeu nesta visualização. Os números abaixo são só deste aparelho.</div>`
     : modoLocal ? `<div class="aviso-exemplo">⚠️ Não consegui gravar no banco do Claude. Confira em Compartilhar se a ${esc(nomeCorretora())} tem nível Editor.</div>` : "";
-  const corpo = { relatorio: abaRelatorio, funil: abaFunil, imoveis: abaImoveis, acesso: abaAcesso }[gestor.aba]();
+  const corpo = { relatorio: abaRelatorio, diagnostico: abaDiagnostico, funil: abaFunil, imoveis: abaImoveis, acesso: abaAcesso }[gestor.aba]();
   return `<section class="tela">${barra()}
     <div class="gestor">
       <div><h1>Painel do gestor</h1><p class="sub">Só você vê esta área. A ${esc(nomeCorretora())} vê apenas os 3 botões.</p></div>
@@ -378,6 +561,12 @@ function csvClientes() {
     ["Última interação", (c) => quandoCurto(c.ultimaInteracao)],
     ["Próximo lembrete", (c) => quandoCurto(c.proximoFollowup)],
     ["Resumo", (c) => c.resumo],
+    ["Nota do atendimento", (c) => c.avaliacao?.nota_atendimento ?? ""],
+    ["Onde travou", (c) => ROTULOS.onde[c.avaliacao?.onde_travou] || ""],
+    ["Causa principal", (c) => ROTULOS.causa[c.avaliacao?.causa_principal] || ""],
+    ["Falhas do atendimento", (c) => (c.avaliacao?.falhas || []).map((f) => ROTULOS.falhas[f] || f).join(", ")],
+    ["Por que esfriou", (c) => ROTULOS.motivo[c.avaliacao?.motivo_esfriou] || ""],
+    ["Comentário da IA", (c) => c.avaliacao?.comentario || ""],
     ["Anotações", (c) => c.anotacoes],
   ];
   const celula = (v) => {
@@ -401,6 +590,10 @@ Object.assign(ACOES, {
   },
   "g-periodo"(el) {
     gestor.periodo = el.dataset.periodo;
+    desenhar();
+  },
+  "g-periodo-diag"(el) {
+    gestor.periodoDiag = el.dataset.periodo;
     desenhar();
   },
   "g-salvar-cliente"(el) {
